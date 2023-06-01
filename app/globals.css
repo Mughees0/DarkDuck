@@ -1,0 +1,108 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  @apply bg-gray-100 dark:bg-black m-0 p-0 outline-none;
+  /* z-index: 99999999999; */
+}
+/* body {
+  @apply bg-gray-50 dark:bg-gray-900;
+} */
+/* body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+} */
+
+@layer utilities {
+  @import url("https://fonts.googleapis.com/css2?family=Inconsolata:wght@500&display=swap");
+
+  :root {
+    --radius: 180px;
+    --frame-size: calc(var(--radius) / 3);
+    --d-outer: calc(var(--radius) * 2);
+    --d-inner: calc(var(--d-outer) - var(--frame-size));
+    --font-size: calc(var(--radius) / 10);
+  }
+
+  .main {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .html {
+    height: 100%;
+    background-color: transparent;
+  }
+
+  .body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100%;
+    margin-top: -200px;
+    background-color: transparent;
+  }
+
+  .para {
+    font-size: var(--font-size);
+  }
+
+  .circle {
+    position: relative;
+    width: var(--d-outer);
+    height: var(--d-outer);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+  }
+
+  .logo {
+    position: absolute;
+    width: var(--d-inner);
+    height: var(--d-inner);
+    background-size: cover;
+    border-radius: 50%;
+    filter: contrast(1.5);
+    /* z-index: 9999; */
+  }
+
+  .text-profile-pic {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    animation: rotateText 10s linear infinite;
+    background-color: transparent;
+    color: red;
+  }
+
+  @keyframes rotateText {
+    0% {
+      transform: rotate(360deg);
+    }
+
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+
+  .text-profile-pic .p span {
+    position: absolute;
+    left: 50%;
+    font-size: 1.2em;
+    transform-origin: 0 var(--radius);
+    background-color: transparent;
+  }
+}

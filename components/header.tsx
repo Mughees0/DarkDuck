@@ -1,0 +1,405 @@
+import React, { useState, useEffect } from "react";
+// import { Button, Container, Dropdown, Nav, Navbar } from "react-bootstrap";
+// import { Link, Navigate, useNavigate } from "react-router-dom";
+import { ImHome } from "react-icons/im";
+import { HiChatAlt2 } from "react-icons/hi";
+import { BsFillBellFill, BsFillPlusCircleFill } from "react-icons/bs";
+import { FaUserCircle } from "react-icons/fa";
+// import { logout } from "../../actions/auth.action";
+import { GiDuck } from "react-icons/gi";
+import { BsFillMoonFill, BsFillSunFill } from "react-icons/bs";
+import { TbMessages } from "react-icons/tb";
+import { GoHome } from "react-icons/go";
+// import { useDispatch } from "react-redux";
+// import * as auth from "../../helpers/auth";
+import axios from "axios";
+import useColorMode from "@/hooks/useColorMode";
+import { useRouter } from "next/navigation";
+// import decode from "jwt-decode";
+// import { Modal } from 'react-bootstrap';
+// import CreateAudioPost from "../posts/CreateAudioPost";
+// import { PlayerProvider } from "../posts/Player.context";
+// import useColorMode from "../../hooks/useColorMode";
+// import { Button } from 'bootstrap';
+
+const Header = ({ brand }) => {
+  //   const userDetails = decode(localStorage.getItem("accessToken"));
+  const [colorMode, setColorMode] = useColorMode();
+
+  const [open, setOpen] = useState(false);
+  const [userData, setUserData] = useState(false);
+  const [createAudio, setCreateAudio] = useState(false);
+
+  const router = useRouter();
+
+  const closeAudienceModal = () => {
+    setOpen(false);
+  };
+
+  async function getUserDetails(userId) {
+    try {
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_HOST}/user/api/v1/user/${userId}`
+      );
+      const user = await res.data;
+      console.log(user);
+      setUserData(user);
+    } catch (error) {
+      console.log("Error:> ", error.message);
+      throw error;
+    }
+  }
+
+  useEffect(() => {
+    getUserDetails(userDetails?.userId);
+  }, []);
+
+  return (
+    <>
+      {" "}
+      {/* <Navbar collapseOnSelect expand="lg">
+        <Container>
+
+          <Navbar.Brand>
+            <a href="/">
+              <strong>
+                Dark<span>Duck</span>
+              </strong>
+            </a>
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav justify-content-end">
+            <Nav className="ms-auto">
+              <Button onClick={() => setOpen(true)}>
+                <BsFillPlusCircleFill />
+              </Button>
+              <Link className="nav-link" to="/home">
+                <ImHome />
+              </Link>
+              {auth.isAuth() ? (
+                <>
+                  <Link
+                    className="nav-link"
+                    to="#"
+                    onClick={() => setOpen(true)}
+                  >
+                    <BsFillPlusCircleFill />
+                  </Link>
+                  <Link className="nav-link" to="/">
+                    <HiChatAlt2 />
+                  </Link>
+                  <Link className="nav-link" to="/">
+                    <BsFillBellFill />
+                  </Link>
+                </>
+              ) : null}
+              {!auth.isAuth() ? (
+                <Link className="nav-link" to="/login">
+                  Login
+                </Link>
+              ) : (
+                <Dropdown>
+                  <Dropdown.Toggle>
+                    <FaUserCircle />
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu>
+                    <Dropdown.Item>
+                      <Link to="/profile">Profile</Link>
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={() => dispatch(logout())}>
+                      Logout
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              )}
+            </Nav>
+          </Navbar.Collapse>
+          <PlayerProvider {...{ audioCtx, gainNode }}>
+            <CreateAudioPost
+              open_modal={open}
+              handleClose={closeAudienceModal}
+            />
+          </PlayerProvider>
+        </Container>
+      </Navbar> */}
+      <header>
+        <nav className="bg-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800 dark:border dark:border-l-0 dark:border-t-0 dark:border-b-2 dark:border-r-0 dark:border-red-700">
+          <div className="flex bg-gray-200 dark:bg-gray-800 flex-wrap justify-between items-center">
+            <div className="flex bg-gray-200 dark:bg-gray-800  justify-start items-center">
+              {/* Icon/logo */}
+              <a href="/" className="flex mr-4 bg-gray-200 dark:bg-gray-800">
+                <GiDuck className="mr-3 h-8 w-8 bg-gray-200 dark:text-red-700 dark:bg-gray-800" />
+              </a>
+            </div>
+            <div className="flex items-center bg-gray-200 dark:bg-gray-800 lg:order-2">
+              <button
+                onClick={() => setOpen(!open)}
+                type="button"
+                className="hidden sm:inline-flex items-center justify-center text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-xs px-3 py-1.5 mr-2 dark:bg-gray-600 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
+              >
+                <svg
+                  aria-hidden="true"
+                  className="mr-1 -ml-1 w-5 h-5 text-white bg-gray-800"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                    clipRule="evenodd"
+                  ></path>
+                </svg>
+                New Post
+              </button>
+
+              <PlayerProvider {...{ audioCtx, gainNode }}>
+                <CreateAudioPost
+                  open_modal={open}
+                  handleClose={closeAudienceModal}
+                  setCreateAudio={setCreateAudio}
+                  setOpen={setOpen}
+                  open={open}
+                  createAudio={createAudio}
+                />
+              </PlayerProvider>
+
+              {/* <!-- Home --> */}
+              <a
+                href="/"
+                type="button"
+                className="p-2 text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white mr-1"
+              >
+                <GoHome className="h-6 w-6 bg-gray-200" />
+              </a>
+
+              {/* <!-- Messages --> */}
+              <button
+                type="button"
+                className="p-2 text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white mr-1"
+              >
+                <TbMessages className="h-6 w-6 bg-gray-200" />
+              </button>
+
+              {/* <!-- Notifications --> */}
+              <button
+                type="button"
+                data-dropdown-toggle="notification-dropdown"
+                className="p-2 mr-1 text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+              >
+                <span className="sr-only">View notifications</span>
+                {/* <!-- Bell icon --> */}
+                <svg
+                  aria-hidden="true"
+                  className="w-6 h-6 bg-gray-200"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path>
+                </svg>
+              </button>
+              {/* <!-- Dropdown menu --> */}
+              <div
+                className="hidden overflow-hidden z-50 my-4 max-w-sm text-base list-none bg-white rounded divide-y divide-gray-100 shadow-lg dark:divide-gray-600 dark:bg-gray-700"
+                id="notification-dropdown"
+              >
+                <div className="block py-2 px-4 text-base font-medium text-center text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                  Notifications
+                </div>
+                <div>
+                  <a
+                    href="#"
+                    className="flex py-3 px-4 border-b hover:bg-gray-100 dark:hover:bg-gray-600 dark:border-gray-600"
+                  >
+                    <div className="flex-shrink-0">
+                      <img
+                        className="w-11 h-11 rounded-full"
+                        src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/bonnie-green.png"
+                        alt="Bonnie Green avatar"
+                      />
+                      <div className="flex absolute justify-center items-center ml-6 -mt-5 w-5 h-5 rounded-full border border-white bg-primary-700 dark:border-gray-700">
+                        <svg
+                          aria-hidden="true"
+                          className="w-3 h-3 text-white"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path d="M8.707 7.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l2-2a1 1 0 00-1.414-1.414L11 7.586V3a1 1 0 10-2 0v4.586l-.293-.293z"></path>
+                          <path d="M3 5a2 2 0 012-2h1a1 1 0 010 2H5v7h2l1 2h4l1-2h2V5h-1a1 1 0 110-2h1a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5z"></path>
+                        </svg>
+                      </div>
+                    </div>
+                    <div className="pl-3 w-full">
+                      <div className="text-gray-500 font-normal text-sm mb-1.5 dark:text-gray-400">
+                        New message from{" "}
+                        <span className="font-semibold text-gray-900 dark:text-white">
+                          Bonnie Green
+                        </span>
+                        : "Hey, what's up? All set for the presentation?"
+                      </div>
+                      <div className="text-xs font-medium text-primary-700 dark:text-primary-400">
+                        a few moments ago
+                      </div>
+                    </div>
+                  </a>
+                  <a
+                    href="#"
+                    className="flex py-3 px-4 border-b hover:bg-gray-100 dark:hover:bg-gray-600 dark:border-gray-600"
+                  >
+                    <div className="flex-shrink-0">
+                      <img
+                        className="w-11 h-11 rounded-full"
+                        src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/jese-leos.png"
+                        alt="Jese Leos avatar"
+                      />
+                      <div className="flex absolute justify-center items-center ml-6 -mt-5 w-5 h-5 bg-gray-900 rounded-full border border-white dark:border-gray-700">
+                        <svg
+                          aria-hidden="true"
+                          className="w-3 h-3 text-white"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"></path>
+                        </svg>
+                      </div>
+                    </div>
+                    <div className="pl-3 w-full">
+                      <div className="text-gray-500 font-normal text-sm mb-1.5 dark:text-gray-400">
+                        <span className="font-semibold text-gray-900 dark:text-white">
+                          Jese leos
+                        </span>{" "}
+                        and{" "}
+                        <span className="font-medium text-gray-900 dark:text-white">
+                          5 others
+                        </span>{" "}
+                        started following you.
+                      </div>
+                      <div className="text-xs font-medium text-primary-700 dark:text-primary-400">
+                        10 minutes ago
+                      </div>
+                    </div>
+                  </a>
+                </div>
+                <a
+                  href="#"
+                  className="block py-2 text-base font-normal text-center text-gray-900 bg-gray-50 hover:bg-gray-100 dark:bg-gray-700 dark:text-white dark:hover:underline"
+                >
+                  <div className="inline-flex items-center ">
+                    <svg
+                      aria-hidden="true"
+                      className="mr-2 w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+                      <path
+                        fillRule="evenodd"
+                        d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                        clipRule="evenodd"
+                      ></path>
+                    </svg>
+                    View all
+                  </div>
+                </a>
+              </div>
+              {/* user profile button */}
+              {!auth.isAuth() ? (
+                <Link className="nav-link" to="/login">
+                  Login
+                </Link>
+              ) : (
+                <>
+                  {" "}
+                  <button
+                    type="button"
+                    className="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                    id="user-menu-button"
+                    aria-expanded="false"
+                    data-dropdown-toggle="dropdown"
+                  >
+                    <span className="sr-only">Open user menu</span>
+                    <img
+                      className="w-8 h-8 rounded-full"
+                      src={
+                        userData?.data?.profilePicture
+                          ? userData?.data?.profilePicture
+                          : "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/joseph-mcfall.png"
+                      }
+                      alt=""
+                    />
+                  </button>
+                  {/* <!-- Dropdown menu --> */}
+                  <div
+                    className="hidden z-50 my-4 w-56 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
+                    id="dropdown"
+                  >
+                    <div className="py-3 px-4">
+                      <span className="block text-sm font-semibold text-gray-900 dark:text-white">
+                        {userData?.data?.username}
+                      </span>
+                      <span className="block text-sm font-light text-gray-500 truncate dark:text-gray-400">
+                        {userData?.data?.email}
+                      </span>
+                    </div>
+                    <ul
+                      className="py-1 font-light text-gray-500 dark:text-gray-400"
+                      aria-labelledby="dropdown"
+                    >
+                      <li>
+                        <Link
+                          className="block py-2 px-4 mx-full text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white"
+                          onClick={() => {
+                            navigate("/profile");
+                            navigate(0);
+                          }}
+                        >
+                          My profile
+                        </Link>
+                      </li>
+                      {/* <li>
+                        <a
+                          href="#"
+                          className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white"
+                        >
+                          Account settings
+                        </a>
+                      </li> */}
+                      <li className="hover:text-blue-700  hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white dark:text-gray-400">
+                        <button
+                          className="block py-2 px-6 text-sm bg-transparent"
+                          onClick={() => dispatch(logout())}
+                        >
+                          Sign out
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                </>
+              )}
+              {/* <!-- Toggle --> */}
+              <button
+                className=" text-white bg-blue-400 dark:bg-yellow-800 dark:text-white"
+                onClick={() =>
+                  setColorMode(colorMode === "light" ? "dark" : "light")
+                }
+              >
+                {colorMode === "light" ? (
+                  <BsFillMoonFill className="text-black bg-gray-200" />
+                ) : (
+                  <BsFillSunFill />
+                )}
+              </button>
+            </div>
+          </div>
+        </nav>
+      </header>
+    </>
+  );
+};
+
+export default Header;
