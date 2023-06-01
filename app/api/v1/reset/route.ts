@@ -5,11 +5,6 @@ import bcrypt from "bcrypt";
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
-interface ResponseData {
-  error?: string;
-  msg?: string;
-}
-
 const validateEmail = (email: string): boolean => {
   const regEx = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
   return regEx.test(email);
@@ -58,7 +53,7 @@ export async function POST(request: Request) {
     },
   });
 
-  let info = await transporter.sendMail({
+  await transporter.sendMail({
     from: process.env.EMAIL_FROM,
     to: email,
     subject: "Password Reset",
@@ -68,25 +63,21 @@ export async function POST(request: Request) {
   const emailUser = await User.findOne({ email: email });
   return updatedUser
     .then(() => NextResponse.json({ emailUser }, { status: 200 }))
-    .catch((err: string) =>
-      NextResponse.json(
-        { error: "Error on '/api/v1/reset': " + err },
-        { status: 400 }
-      )
-    );
+    .catch((err: string) => NextResponse.json({ error: err }, { status: 400 }));
 }
+
 export async function PUT(request: Request) {
   await dbConnect();
-  const { _id, otp }: { _id: string; otp: number } = await request.json();
+  const { _id, newPassword }: { _id: string; newPassword: string } =
+    await request.json();
 
-  const userOtpCheck = await User.findOne({ _id: _id }, "otp").exec();
+  const newHashedPassword = await bcrypt.hash(newPassword, 12);
+  const updatedUser = User.updateOne(
+    { _id },
+    { $set: { hashedPassword: newHashedPassword } }
+  );
 
-  return userOtpCheck
-    .then(() => NextResponse.json({ userOtpCheck }, { status: 200 }))
-    .catch((err: string) =>
-      NextResponse.json(
-        { error: "Error on '/api/v1/reset': " + err },
-        { status: 400 }
-      )
-    );
+  return updatedUser
+    .then(() => NextResponse.json({ success: "done" }, { status: 200 }))
+    .catch((err: string) => NextResponse.json({ error: err }, { status: 400 }));
 }

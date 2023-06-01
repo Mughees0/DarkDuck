@@ -36,8 +36,16 @@ const ResetPassword = () => {
           },
         }
       );
-      const res = await req.data;
-      redirectToReset(res?.emailUser?._id);
+      console.log(req);
+
+      if (req.statusText == "OK") {
+        setLoader(false);
+        const res = await req.data;
+        redirectToReset(res?.emailUser?._id);
+      } else {
+        setLoader(false);
+        setError("Wrong Input");
+      }
     } catch (error) {
       console.log(error);
     }

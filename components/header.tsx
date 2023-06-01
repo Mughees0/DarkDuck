@@ -15,114 +15,46 @@ import { GoHome } from "react-icons/go";
 import axios from "axios";
 import useColorMode from "@/hooks/useColorMode";
 import { useRouter } from "next/navigation";
-// import decode from "jwt-decode";
-// import { Modal } from 'react-bootstrap';
-// import CreateAudioPost from "../posts/CreateAudioPost";
-// import { PlayerProvider } from "../posts/Player.context";
-// import useColorMode from "../../hooks/useColorMode";
-// import { Button } from 'bootstrap';
+import { getSession, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
+import Link from "next/link";
+import { data } from "autoprefixer";
+import { UserInputData } from "@/types";
 
-const Header = ({ brand }) => {
+const Header = () => {
   //   const userDetails = decode(localStorage.getItem("accessToken"));
   const [colorMode, setColorMode] = useColorMode();
 
   const [open, setOpen] = useState(false);
-  const [userData, setUserData] = useState(false);
+  const [userData, setUserData] = useState<UserInputData>();
   const [createAudio, setCreateAudio] = useState(false);
-
+  const session = useSession();
   const router = useRouter();
 
   const closeAudienceModal = () => {
     setOpen(false);
   };
 
-  async function getUserDetails(userId) {
+  const fetchUserData = async (id: string) => {
     try {
-      const res = await axios.get(
-        `${process.env.REACT_APP_API_HOST}/user/api/v1/user/${userId}`
-      );
-      const user = await res.data;
-      console.log(user);
-      setUserData(user);
+      const req = await axios.get(`/api/v1/user/${id}`);
+      const res = await req.data;
+      await setUserData(res.data);
+      await console.log(res);
     } catch (error) {
-      console.log("Error:> ", error.message);
-      throw error;
+      console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
-    getUserDetails(userDetails?.userId);
-  }, []);
+    if (!session?.data?.user?.id) {
+      return;
+    }
+    fetchUserData(session?.data?.user?.id);
+  }, [session?.data?.user?.id]);
 
   return (
     <>
-      {" "}
-      {/* <Navbar collapseOnSelect expand="lg">
-        <Container>
-
-          <Navbar.Brand>
-            <a href="/">
-              <strong>
-                Dark<span>Duck</span>
-              </strong>
-            </a>
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-          <Navbar.Collapse id="responsive-navbar-nav justify-content-end">
-            <Nav className="ms-auto">
-              <Button onClick={() => setOpen(true)}>
-                <BsFillPlusCircleFill />
-              </Button>
-              <Link className="nav-link" to="/home">
-                <ImHome />
-              </Link>
-              {auth.isAuth() ? (
-                <>
-                  <Link
-                    className="nav-link"
-                    to="#"
-                    onClick={() => setOpen(true)}
-                  >
-                    <BsFillPlusCircleFill />
-                  </Link>
-                  <Link className="nav-link" to="/">
-                    <HiChatAlt2 />
-                  </Link>
-                  <Link className="nav-link" to="/">
-                    <BsFillBellFill />
-                  </Link>
-                </>
-              ) : null}
-              {!auth.isAuth() ? (
-                <Link className="nav-link" to="/login">
-                  Login
-                </Link>
-              ) : (
-                <Dropdown>
-                  <Dropdown.Toggle>
-                    <FaUserCircle />
-                  </Dropdown.Toggle>
-
-                  <Dropdown.Menu>
-                    <Dropdown.Item>
-                      <Link to="/profile">Profile</Link>
-                    </Dropdown.Item>
-                    <Dropdown.Item onClick={() => dispatch(logout())}>
-                      Logout
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-              )}
-            </Nav>
-          </Navbar.Collapse>
-          <PlayerProvider {...{ audioCtx, gainNode }}>
-            <CreateAudioPost
-              open_modal={open}
-              handleClose={closeAudienceModal}
-            />
-          </PlayerProvider>
-        </Container>
-      </Navbar> */}
       <header>
         <nav className="bg-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800 dark:border dark:border-l-0 dark:border-t-0 dark:border-b-2 dark:border-r-0 dark:border-red-700">
           <div className="flex bg-gray-200 dark:bg-gray-800 flex-wrap justify-between items-center">
@@ -154,16 +86,7 @@ const Header = ({ brand }) => {
                 New Post
               </button>
 
-              <PlayerProvider {...{ audioCtx, gainNode }}>
-                <CreateAudioPost
-                  open_modal={open}
-                  handleClose={closeAudienceModal}
-                  setCreateAudio={setCreateAudio}
-                  setOpen={setOpen}
-                  open={open}
-                  createAudio={createAudio}
-                />
-              </PlayerProvider>
+              <div>Create Audio Modal</div>
 
               {/* <!-- Home --> */}
               <a
@@ -308,8 +231,8 @@ const Header = ({ brand }) => {
                 </a>
               </div>
               {/* user profile button */}
-              {!auth.isAuth() ? (
-                <Link className="nav-link" to="/login">
+              {!session.data.user ? (
+                <Link className="nav-link" href="/login">
                   Login
                 </Link>
               ) : (
@@ -326,8 +249,8 @@ const Header = ({ brand }) => {
                     <img
                       className="w-8 h-8 rounded-full"
                       src={
-                        userData?.data?.profilePicture
-                          ? userData?.data?.profilePicture
+                        userData?.profilePicture
+                          ? userData?.profilePicture
                           : "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/joseph-mcfall.png"
                       }
                       alt=""
@@ -340,10 +263,10 @@ const Header = ({ brand }) => {
                   >
                     <div className="py-3 px-4">
                       <span className="block text-sm font-semibold text-gray-900 dark:text-white">
-                        {userData?.data?.username}
+                        {userData?.username}
                       </span>
                       <span className="block text-sm font-light text-gray-500 truncate dark:text-gray-400">
-                        {userData?.data?.email}
+                        {userData?.email}
                       </span>
                     </div>
                     <ul
@@ -353,10 +276,7 @@ const Header = ({ brand }) => {
                       <li>
                         <Link
                           className="block py-2 px-4 mx-full text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white"
-                          onClick={() => {
-                            navigate("/profile");
-                            navigate(0);
-                          }}
+                          href="/profile"
                         >
                           My profile
                         </Link>
@@ -372,7 +292,7 @@ const Header = ({ brand }) => {
                       <li className="hover:text-blue-700  hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white dark:text-gray-400">
                         <button
                           className="block py-2 px-6 text-sm bg-transparent"
-                          onClick={() => dispatch(logout())}
+                          onClick={() => signOut()}
                         >
                           Sign out
                         </button>

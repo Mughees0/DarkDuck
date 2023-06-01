@@ -1,17 +1,7 @@
 "use client";
 import { useEffect, useState, useCallback, useRef } from "react";
-// import { Container, Row, Form, Button, Col } from "react-bootstrap";
-// import { shallowEqual, useDispatch, useSelector } from "react-redux";
-// import { Link, useNavigate } from "react-router-dom";
-// import { userRegister, listCountries } from "../../actions/auth.action";
-// import { toastError, toastSuccess } from "../../helpers/toaster";
-// // import { listCountries } from '../../actions/recordModeSwing.action';
-// import Validation from "../../utils/validation";
 import { GiConsoleController, GiDuck } from "react-icons/gi";
-// import Autosuggest from "react-autosuggest";
-// // import { Countries, States, Cities } from 'countries-states-cities-service'
-// import { Country, State, City } from "country-state-city";
-// // const logo = require('../../assets/images/darkduck.png');
+
 import React from "react";
 import useColorMode from "../../hooks/useColorMode";
 import { BsFillMoonFill, BsFillSunFill } from "react-icons/bs";
@@ -232,12 +222,6 @@ const SignUp = () => {
   //     }
   //   };
 
-  interface A {
-    onChangeAssignmentStatus: (
-      selectType: string,
-      event: React.ChangeEvent<HTMLSelectElement>
-    ) => void;
-  }
   const handleCountry = (e: React.ChangeEvent<HTMLSelectElement>) => {
     // var arr = countries.filter((c) => c.name.common == e.target.value);
 

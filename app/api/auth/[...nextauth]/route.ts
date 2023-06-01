@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import clientPromise from "../../../../lib/mongodb/index";
 import dbConnect from "../../../../lib/mongodb/dbConnect";
-import EmailProvider from "next-auth/providers/email";
+// import EmailProvider from "next-auth/providers/email";
 import CredentialsProvider from "next-auth/providers/credentials";
 import User from "@/models/User";
 import { compare } from "bcrypt";
@@ -11,6 +11,20 @@ import { compare } from "bcrypt";
 // https://authjs.dev/reference/providers/oauth
 
 export const handler = NextAuth({
+  callbacks: {
+    session({ session, token }) {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.sub,
+          isAdmin: token.isAdmin,
+          vendorId: token.vendorId,
+          stripe_id: token.stripeId,
+        },
+      };
+    },
+  },
   providers: [
     CredentialsProvider({
       id: "credentials",

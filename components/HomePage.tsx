@@ -5,9 +5,12 @@ import { BsFillMoonFill, BsFillSunFill } from "react-icons/bs";
 import duck from "../../assets/images/dark-duck.jpg";
 import useColorMode from "@/hooks/useColorMode";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
+
 // const darkDuck = require('../../assets/images/darkduck.png');
 
 const Home = () => {
+  // const session = useSession();
   const [colorMode, setColorMode] = useColorMode();
 
   return (
@@ -46,7 +49,7 @@ const Home = () => {
             {/* <button className="border-2 rounded hover:bg-black hover:text-white p-2"> */}
             <Link
               className=" border-2 rounded hover:bg-black hover:text-white p-2"
-              href="/login"
+              href="/sign-in"
             >
               Login
             </Link>
