@@ -16,6 +16,10 @@ const nextConfig = {
     config.experiments = { ...config.experiments, topLevelAwait: true };
     return config;
   },
+  reactStrictMode: true,
+  env: {
+    REACT_APP_AUDIO_PATH: process.env.REACT_APP_AUDIO_PATH,
+  },
 };
 
 module.exports = nextConfig;

@@ -24,10 +24,10 @@ const UserSchema = new Schema({
     type: Number,
     default: OTP,
   },
-  profileImage: {
+  profilePicture: {
     type: String,
   },
-  bannerImage: {
+  bannerPicture: {
     type: String,
   },
   alias: {
@@ -46,7 +46,7 @@ const UserSchema = new Schema({
     type: String,
   },
 
-  languages: {
+  language: {
     type: Array,
   },
   occupation: {
