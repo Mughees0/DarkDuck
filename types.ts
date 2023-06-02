@@ -57,6 +57,19 @@ export type restCountriesApi = [
     languages: {};
   }
 ];
+
+export type CountryData = {
+  name: string;
+  code: string;
+  dial_code: string;
+};
+
+export type CountryApi = {
+  error: boolean;
+  msg: string;
+  data: CountryData[];
+};
+
 export type UserResponse = {
   emailUser: {
     languages: [];

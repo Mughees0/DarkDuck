@@ -1,13 +1,19 @@
 "use client";
+import Session from "@/models/Session";
+import axios from "axios";
+import { useSession } from "next-auth/react";
 import { useState, useRef } from "react";
 const mimeType = "audio/webm";
 const AudioRecorder = () => {
+  const { data: Session } = useSession();
   const [stream, setStream] = useState(null);
   const [permission, setPermission] = useState(false);
   const mediaRecorder = useRef(null);
   const [recordingStatus, setRecordingStatus] = useState("inactive");
   const [audioChunks, setAudioChunks] = useState([]);
   const [audio, setAudio] = useState(null);
+  const [mode, setMode] = useState("Public Mode");
+  const [uploading, setUploading] = useState(false);
 
   const getMicrophonePermission = async () => {
     if ("MediaRecorder" in window) {
@@ -101,15 +107,43 @@ const AudioRecorder = () => {
   };
   console.log(mediaRecorder.current?.state);
 
-  //   mediaRecorder.onpause = () => {
-  //     // do something in response to
-  //     // recording being paused
-  //   };
+  const handleAudioSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("audio", audio);
+      const { data } = await axios.post("/api/v1/upload/audio", formData);
+      console.log(data);
+    } catch (error: any) {
+      console.log(error.response?.data);
+    }
+    setUploading(false);
+  };
 
-  //   mediaRecorder.onresume = () => {
-  //     // do something in response to
-  //     // recording being resumed
+  // const handleAudioSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
+  //   const url = `/api/v1/upload/audio/${Session?.user?.id}`;
+  //   const data = new FormData();
+  //   data.set("userId", data.get("userId"));
+  //   data.set("comment", data.get("comment"));
+  //   data.set("audio");
+  //   const config = {
+  //     headers: {
+  //       "content-type": "multipart/form-data",
+  //     },
   //   };
+  //   axios
+  //     .post(url, data, config)
+  //     .then((response) => {
+  //       console.log(response);
+  //       // eslint-disable-next-line no-restricted-globals
+  //       setTimeout(() => location.reload(), 300);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
 
   const stopRecording = () => {
     setRecordingStatus("inactive");
@@ -124,6 +158,9 @@ const AudioRecorder = () => {
       setAudioChunks([]);
     };
   };
+
+  console.log(audio);
+
   return (
     <div className=" h-52 w-64 flex-col flex justify-center items-center gap-3  bg-red-200">
       <h2 className=" bg-transparent text-2xl">Audio Recorder</h2>
@@ -187,6 +224,30 @@ const AudioRecorder = () => {
             </a>
           </div>
         ) : null}
+        <form encType="multipart/form-data" onSubmit={handleAudioSubmit}>
+          <div>
+            <label htmlFor="mode"></label>
+            <select name="mode" id="mode">
+              <option
+                onSelect={() => setMode("Public Mode")}
+                value="Public Mode"
+              >
+                Public Mode
+              </option>
+              <option
+                onSelect={() => setMode("Private Mode")}
+                value="Private Mode"
+              >
+                Private Mode
+              </option>
+            </select>
+          </div>
+          <input name="userId" hidden value={Session?.user?.id} />
+          <input id="audio" name="audio" type="audio" hidden />
+          <button type="submit" className=" px-4 py-1 bg-green-300">
+            Post
+          </button>
+        </form>
       </main>
     </div>
   );

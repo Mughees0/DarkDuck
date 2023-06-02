@@ -8,6 +8,7 @@ import { BsFillMoonFill, BsFillSunFill } from "react-icons/bs";
 import { GoHome } from "react-icons/go";
 import axios from "axios";
 import {
+  CountryApi,
   HTMLElementEvent,
   restCountriesApi,
   UserInputData,
@@ -35,12 +36,12 @@ const SignUp = () => {
 
   const [error, setError] = useState<UserInputErrors>();
 
-  const [countries, setCountries] = useState<restCountriesApi>();
+  const [countries, setCountries] = useState<CountryApi>();
 
   async function restCountries() {
     try {
       const req = await axios.get(
-        "https://restcountries.com/v3.1/independent?status=true&fields=languages,name,idd"
+        "https://countriesnow.space/api/v0.1/countries/codes"
       );
       const res = await req.data;
       setCountries(res);
@@ -544,13 +545,10 @@ const SignUp = () => {
                       aria-label="Default select example"
                     >
                       <option>Select Country</option>
-                      {countries?.map((country) => {
+                      {countries?.data.map((country) => {
                         return (
-                          <option
-                            key={country.name.official}
-                            value={country.name.common}
-                          >
-                            {country.name.common}
+                          <option key={country.name} value={country.name}>
+                            {country.name}
                           </option>
                         );
                       })}
@@ -575,16 +573,13 @@ const SignUp = () => {
                       aria-label="Default select example"
                     >
                       <option>Select Language</option>
-                      {countries?.map(
+                      {countries?.data.map(
                         (country) =>
-                          country.languages &&
-                          Object.entries(country.languages).map(
+                          country.name &&
+                          Object.entries(country.name).map(
                             ([key, value]: [key: string, value: string]) => {
                               return (
-                                <option
-                                  key={country.name.official}
-                                  value={value}
-                                >
+                                <option key={country.name} value={value}>
                                   {value}
                                 </option>
                               );
@@ -622,13 +617,10 @@ const SignUp = () => {
                         aria-label="Default select example"
                       >
                         <option>Code</option>
-                        {countries?.map((country) => {
+                        {countries?.data.map((country) => {
                           return (
-                            <option
-                              key={country.name.official}
-                              value={country.idd.root + country?.idd?.suffixes}
-                            >
-                              {country.idd.root + country?.idd?.suffixes}
+                            <option key={country.code} value={country.code}>
+                              {country.code}
                             </option>
                           );
                         })}

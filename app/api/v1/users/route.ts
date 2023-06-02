@@ -41,52 +41,6 @@ const validateForm = async (
   return null;
 };
 
-// export default async function handler(res: NextApiResponse<ResponseData>) {
-//   // validate if it is a POST
-
-//   if (req.method !== "POST") {
-//     return res
-//       .status(200)
-//       .json({ error: "This API call only accepts POST methods" });
-//   }
-
-//   // get and validate body variables
-//   const { username, email, password } = req.body;
-
-//   const errorMessage = await validateForm(username, email, password);
-//   if (errorMessage) {
-//     return NextResponse.json(
-//       { error: "Internal Server Error" },
-//       { status: 500 }
-//     );
-//   }
-
-//   // hash password
-//   const hashedPassword = await bcrypt.hash(password, 12);
-
-//   // create new User on MongoDB
-//   const newUser = new User({
-//     name: username,
-//     email,
-//     hashedPassword,
-//   });
-
-//   newUser
-//     .save()
-//     .then(() =>
-//       res.status(200).json({ msg: "Successfuly created new User: " + newUser })
-//     )
-//     .catch((err: string) =>
-//       res.status(400).json({ error: "Error on '/api/register': " + err })
-//     );
-// }
-
-// export async function GET({ params }) {
-//   const { id } = params;
-//   await dbConnect();
-//   return NextResponse.json(await User.find());
-// }
-
 export async function POST(request: Request) {
   await dbConnect();
   const { username, email, password } = await request.json();

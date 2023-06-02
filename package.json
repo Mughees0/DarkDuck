@@ -17,6 +17,7 @@
     "axios": "^1.4.0",
     "bcrypt": "^5.1.0",
     "flowbite": "^1.6.5",
+    "formidable": "^3.2.5",
     "mongodb": "^5.5.0",
     "mongoose": "^7.2.2",
     "next": "13.4.4",
