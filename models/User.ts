@@ -47,7 +47,7 @@ const UserSchema = new Schema({
   },
 
   language: {
-    type: Array,
+    type: String,
   },
   occupation: {
     type: String,

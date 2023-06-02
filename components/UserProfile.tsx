@@ -10,19 +10,8 @@ import modal from "flowbite/lib/esm/components/modal";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-// import { shallowEqual, useDispatch, useSelector } from "react-redux";
-// import { listFreshPosts } from "../../actions/post.action";
 import { GiDuck, GiGuitarBassHead, GiPlasticDuck } from "react-icons/gi";
 import { MdLanguage, MdWork } from "react-icons/md";
-// import decode from "jwt-decode";
-// import { render_like } from "../../helpers/likeHelpers";
-// import { LIKE_POST } from "../../actions/types";
-// import { socket } from "../../actions/socket.action";
-// import axios from "axios";
-// import CircleType from "circletype";
-// import ReactDOM, { useHistory } from "react-dom/client";
-// import Footer from "../Footer/Footer";
-// import ReplyComment from "../Dashboard/ReplyComment";
 
 function importAll(r) {
   let images = {};

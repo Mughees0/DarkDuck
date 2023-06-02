@@ -7,7 +7,7 @@ export type UserInputData = {
   phone?: string;
   age?: string;
   country?: string;
-  languages?: string[];
+  language?: string;
   occupation?: string;
   instruments?: string[];
   research?: string;
@@ -28,7 +28,7 @@ export type UserInputErrors = {
   phone?: string;
   age?: string;
   country?: string;
-  languages?: string;
+  language?: string;
   occupation?: string;
   instruments?: string;
   research?: string;
@@ -72,7 +72,7 @@ export type CountryApi = {
 
 export type UserResponse = {
   emailUser: {
-    languages: [];
+    language: string;
     instruments: [];
     _id: string;
     email: string;
@@ -102,7 +102,7 @@ export type UserDataResponse = {
   phone?: string;
   age?: string;
   country?: string;
-  language?: string[];
+  language?: string;
   occupation?: string;
   instruments?: string[];
   research?: string;
