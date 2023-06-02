@@ -3,7 +3,9 @@ import Session from "@/models/Session";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useState, useRef } from "react";
+import { Directus } from "@directus/sdk";
 const mimeType = "audio/webm";
+
 const AudioRecorder = () => {
   const { data: Session } = useSession();
   const [stream, setStream] = useState(null);
@@ -109,25 +111,34 @@ const AudioRecorder = () => {
 
   const handleAudioSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setUploading(true);
-    try {
-      const formData = new FormData();
-      formData.append("audio", audio);
-      const { data } = await axios.post("/api/v1/upload/audio", formData);
-      console.log(data);
-    } catch (error: any) {
-      console.log(error.response?.data);
+    const form = new FormData(event.currentTarget);
+    const directus = new Directus<any>("/api/v1/upload/audio");
+    form.append("folder", "887b5198-6b28-4289-8117-87deb4df5e71");
+    const file = form.get("file");
+    if (file instanceof Blob) {
+      form.append("file", file);
+    } else {
+      throw new Error("Invalid file data");
     }
-    setUploading(false);
+    console.log("Before fileResponse");
+    const fileRes = directus.files
+      .createOne(form)
+      .then(async (Response) => {
+        return await Response?.data.id;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    console.log(await fileRes);
   };
 
   // const handleAudioSubmit = (event: React.FormEvent<HTMLFormElement>) => {
   //   event.preventDefault();
-  //   const url = `/api/v1/upload/audio/${Session?.user?.id}`;
-  //   const data = new FormData();
-  //   data.set("userId", data.get("userId"));
-  //   data.set("comment", data.get("comment"));
-  //   data.set("audio");
+  //   const url = `/api/v1/upload/audio`;
+  //   const data = new FormData(event.target.value);
+  //   // data.set("userId", data.get("userId"));
+  //   // data.set("comment", data.get("comment"));
+  //   data.set("audio", data.get("audio"));
   //   const config = {
   //     headers: {
   //       "content-type": "multipart/form-data",
@@ -137,7 +148,6 @@ const AudioRecorder = () => {
   //     .post(url, data, config)
   //     .then((response) => {
   //       console.log(response);
-  //       // eslint-disable-next-line no-restricted-globals
   //       setTimeout(() => location.reload(), 300);
   //     })
   //     .catch((error) => {
@@ -243,7 +253,7 @@ const AudioRecorder = () => {
             </select>
           </div>
           <input name="userId" hidden value={Session?.user?.id} />
-          <input id="audio" name="audio" type="audio" hidden />
+          <input id="audio" name="audio" type="audio" hidden value={audio} />
           <button type="submit" className=" px-4 py-1 bg-green-300">
             Post
           </button>

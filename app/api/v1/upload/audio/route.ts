@@ -1,60 +1,56 @@
-import dbConnect from "@/lib/mongodb/dbConnect";
-import Post from "@/models/Post";
-import formidable from "formidable";
-import path from "path";
-import fs from "fs/promises";
-import { NextRequest, NextResponse } from "next/server";
+// working fine
 
-import type { NextApiRequest } from "next";
-// import mime from "mime";
-import { join } from "path";
+import { NextResponse } from "next/server";
+import { Directus } from "@directus/sdk";
+import { Blob } from "node:buffer";
+import FormData from "form-data";
 
-import { mkdir, stat } from "fs/promises";
+export async function POST(request: Request) {
+  // Get Directus configuration
+  const token: string = process.env.DIRECTUS_JOB_TOKEN!;
+  const url: string = process.env.DIRECTUS_URL!;
 
-export const FormidableError = formidable.errors.FormidableError;
+  const directus = new Directus<any>(url);
+  await directus.auth.static(token).then((res) => {
+    console.log("res", res);
+  });
 
-export const parseForm = async (
-  req: NextApiRequest
-): Promise<{ fields: formidable.Fields; files: formidable.Files }> => {
-  return new Promise(async (resolve, reject) => {
-    const uploadDir = join(
-      process.env.ROOT_DIR || process.cwd(),
-      `/uploads/${Date.now()}`
-    );
+  // Get formData from request
+  const formData = await request.formData();
 
-    try {
-      await stat(uploadDir);
-    } catch (e: any) {
-      if (e.code === "ENOENT") {
-        await mkdir(uploadDir, { recursive: true });
-      } else {
-        console.error(e);
-        reject(e);
-        return;
-      }
+  // Get file from formData
+  const file = formData.get("file");
+
+  if (file instanceof Blob) {
+    // Convert file to stream
+    const stream = file.stream();
+
+    // Convert stream to buffer
+    const chunks = [];
+    for await (const chunk of stream as unknown as NodeJS.ReadableStream) {
+      chunks.push(chunk);
+    }
+    const buffer = Buffer.concat(chunks);
+
+    // Make a new FormData
+    const directusFormData = new FormData();
+    directusFormData.append("folder", "887b5198-6b28-4289-8117-87deb4df5e71");
+    if (file instanceof File) {
+      directusFormData.append("file", buffer, file.name);
     }
 
-    const form = formidable({
-      maxFiles: 2,
-      maxFileSize: 1024 * 1024, // 1mb
-      uploadDir,
-      filename: (_name, _ext, part) => {
-        const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-        const filename = `${part.name || "unknown"}-${uniqueSuffix}.${
-          mime.getExtension(part.mimetype || "") || "unknown"
-        }`;
-        return filename;
-      },
-      filter: (part) => {
-        return (
-          part.name === "media" && (part.mimetype?.includes("image") || false)
-        );
-      },
-    });
-
-    form.parse(req, function (err, fields, files) {
-      if (err) reject(err);
-      else resolve({ fields, files });
-    });
-  });
-};
+    try {
+      // const response = await directus.files.createOne(directusFormData);
+      const response = await directus.files
+        .createOne(directusFormData)
+        .then(async (response) => {
+          return response;
+        });
+      console.log("response", response);
+      return NextResponse.json({ message: "Hello, Next.js!" });
+    } catch (error) {
+      console.log(error);
+      return NextResponse.json({ message: "Error" });
+    }
+  }
+}
