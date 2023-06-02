@@ -7,6 +7,8 @@ import {
 } from "@/types";
 import axios from "axios";
 import modal from "flowbite/lib/esm/components/modal";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 // import { shallowEqual, useDispatch, useSelector } from "react-redux";
 // import { listFreshPosts } from "../../actions/post.action";
@@ -35,9 +37,11 @@ function importAll(r) {
 // );
 
 const UserBio = () => {
-  //   const userDetails = decode(localStorage.getItem("accessToken"));
-  //   const userDetails = [{ userId: "646cc0cb0d8423fec509fb25" }];
-  const userId = "646cc0cb0d8423fec509fb25";
+  const { data: session } = useSession();
+  const router = useRouter();
+  const userIdFormSession = session?.user?.id;
+  console.log("User Id here >", userIdFormSession);
+
   const [file, setFile] = useState(null);
   const [userData, setUserData] = useState<UserDataResponse>();
   const [posts, setPosts] = useState<PostsResponse>(null);
@@ -55,17 +59,19 @@ const UserBio = () => {
   // apis
   const getUserDetails = async (userId: string) => {
     try {
-      const res = await axios.get(`/api/v1/user/${userId}`);
+      const id = session?.user?.id;
+      const res = await axios.get(`/api/v1/user/${id}`);
       const user = await res.data;
+      console.log("this is User ferom api >", user);
+
       setUserData(user);
     } catch (error) {
       console.log("Error:> ", error.message);
       throw error;
     }
   };
-  console.log(userData);
 
-  async function getUserPosts(userId) {
+  async function getUserPosts(userId: string) {
     try {
       const res = await axios.get(
         `${process.env.REACT_APP_API_HOST}/api/v1/posts/${userId}`
@@ -80,12 +86,13 @@ const UserBio = () => {
   const [reply, setReply] = useState(false);
 
   useEffect(() => {
-    getUserDetails(userId);
+    getUserDetails(userIdFormSession);
   }, []);
+  console.log(userData);
 
   const handleProfilePicSubmit = (event) => {
     event.preventDefault();
-    const url = `${process.env.REACT_APP_API_HOST}/api/v1/user/upload/profilepic/${userId}`;
+    const url = `${process.env.REACT_APP_API_HOST}/api/v1/user/upload/profilepic/${userIdFormSession}`;
     const data = new FormData(event.target);
     data.set("userId", data.get("userId"));
     data.set("comment", data.get("comment"));
@@ -109,7 +116,7 @@ const UserBio = () => {
 
   const handleBannerPicSubmit = (event) => {
     event.preventDefault();
-    const url = `${process.env.REACT_APP_API_HOST}/api/v1/user/upload/bannerpic/${userId}`;
+    const url = `${process.env.REACT_APP_API_HOST}/api/v1/user/upload/bannerpic/${userIdFormSession}`;
     const data = new FormData(event.target);
     data.set("userId", data.get("userId"));
     data.set("comment", data.get("comment"));
@@ -200,7 +207,11 @@ const UserBio = () => {
               className="hidden"
               onChange={changeHandler}
             />
-            <input name="comment" className="hidden" value={userId} />
+            <input
+              name="comment"
+              className="hidden"
+              value={userIdFormSession}
+            />
             <input name="userId" className="hidden" value={"profile Picture"} />
           </label>
           <input
@@ -242,15 +253,16 @@ const UserBio = () => {
                   <div className="circle dark:bg-transparent">
                     <div className="text-profile-pic dark:bg-transparent">
                       <p className="p">
-                        {userData?.username.split("").map((char, i) => {
-                          return (
-                            <span
-                              style={{ transform: `rotate(${i * 5.8}deg)` }}
-                            >
-                              {char}
-                            </span>
-                          );
-                        })}
+                        {userData?.username &&
+                          userData?.username?.split("").map((char, i) => {
+                            return (
+                              <span
+                                style={{ transform: `rotate(${i * 5.8}deg)` }}
+                              >
+                                {char}
+                              </span>
+                            );
+                          })}
                       </p>
                     </div>
                     <img

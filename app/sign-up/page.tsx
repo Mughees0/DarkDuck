@@ -14,7 +14,7 @@ import {
   UserInputErrors,
 } from "@/types";
 import type { NextPage } from "next";
-import { signIn, getProviders } from "next-auth/react";
+import { signIn, getProviders, useSession } from "next-auth/react";
 import { useRouter, usePathname } from "next/navigation";
 
 import email from "next-auth/providers/email";
@@ -26,6 +26,7 @@ const SignUp = () => {
   const [colorMode, setColorMode] = useColorMode();
   const pathname = usePathname();
   const router = useRouter();
+  const { data: session } = useSession();
   const [totalLanguagesSuggestions, setTotalLanguagesSuggestions] = useState(
     []
   );
@@ -398,501 +399,511 @@ const SignUp = () => {
     // }
   };
 
-  return (
-    <>
-      <section>
-        <div className="flex justify-end">
-          {/* <!-- Home --> */}
-          <Link
-            href="/home"
-            type="button"
-            className="py-4 bg-transparent text-gray-500 rounded-lg hover:text-gray-900 dark:text-gray-400 dark:hover:text-white mr-1"
-          >
-            <GoHome className="h-6 w-6 bg-gray-200" />
-          </Link>
-          <button
-            className=" text-white dark:text-white p-4"
-            onClick={() =>
-              setColorMode(colorMode === "light" ? "dark" : "light")
-            }
-          >
-            {colorMode === "light" ? (
-              <BsFillMoonFill className="text-black" />
-            ) : (
-              <BsFillSunFill />
-            )}
-          </button>
-        </div>
-        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto  md:h-full lg:py-0 ">
-          <div className="w-full bg-white rounded-lg shadow my-5 dark:border md:mt-0 sm:max-w-xl xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-            <div className="p-6 space-y-4 md:space-y-6 sm:p-8 border border-white outline-none rounded-md ">
-              <div className="flex justify-center">
-                <GiDuck className=" text-[50px] dark:text-white" />
-              </div>
-              <h1 className="text-xl text-center font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                Create your account
-              </h1>
-              <form className="space-y-4 md:space-y-6  " onSubmit={formSubmit}>
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="name@company.com"
-                    required
-                    value={user?.email || ""}
-                    onChange={(e) =>
-                      setUser({ ...user!, email: e.target.value! })
-                    }
-                  />
-                  {error?.email && (
-                    <span className="text-red-400">{error?.email}</span>
-                  )}
+  if (!session) {
+    return (
+      <>
+        <section>
+          <div className="flex justify-end">
+            {/* <!-- Home --> */}
+            <Link
+              href="/home"
+              type="button"
+              className="py-4 bg-transparent text-gray-500 rounded-lg hover:text-gray-900 dark:text-gray-400 dark:hover:text-white mr-1"
+            >
+              <GoHome className="h-6 w-6 bg-gray-200" />
+            </Link>
+            <button
+              className=" text-white dark:text-white p-4"
+              onClick={() =>
+                setColorMode(colorMode === "light" ? "dark" : "light")
+              }
+            >
+              {colorMode === "light" ? (
+                <BsFillMoonFill className="text-black" />
+              ) : (
+                <BsFillSunFill />
+              )}
+            </button>
+          </div>
+          <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto  md:h-full lg:py-0 ">
+            <div className="w-full bg-white rounded-lg shadow my-5 dark:border md:mt-0 sm:max-w-xl xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+              <div className="p-6 space-y-4 md:space-y-6 sm:p-8 border border-white outline-none rounded-md ">
+                <div className="flex justify-center">
+                  <GiDuck className=" text-[50px] dark:text-white" />
                 </div>
-
-                <div>
-                  <label
-                    htmlFor="username"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Full Name
-                  </label>
-                  <input
-                    type="text"
-                    name="username"
-                    id="username"
-                    required
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Enter Name"
-                    value={user?.username || ""}
-                    onChange={(e) =>
-                      setUser({ ...user!, username: e.target.value! })
-                    }
-                  />
-                  {error?.username && (
-                    <span className="text-red-400">{error.username}</span>
-                  )}
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="name"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Username (Optional)
-                  </label>
-                  <input
-                    type="text"
-                    name="alias"
-                    id="alias"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Enter username"
-                    value={user?.alias || ""}
-                    onChange={(e) =>
-                      setUser({ ...user!, alias: e.target.value! })
-                    }
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="password"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    placeholder="••••••••"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    value={user?.password || ""}
-                    onChange={(e) =>
-                      setUser({ ...user!, password: e.target.value! })
-                    }
-                  />
-                  {error?.password && (
-                    <span className="text-red-400">{error.password}</span>
-                  )}
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="country"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Select Country
-                  </label>
-                  <select
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    id="country"
-                    value={user?.country}
-                    onChange={handleCountry}
-                    aria-label="Default select example"
-                  >
-                    <option>Select Country</option>
-                    {countries?.map((country) => {
-                      return (
-                        <option
-                          key={country.name.official}
-                          value={country.name.common}
-                        >
-                          {country.name.common}
-                        </option>
-                      );
-                    })}
-                  </select>
-                  <span className="text-red-400">
-                    {error?.country ? "Country is required" : ""}
-                  </span>
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="language"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Language
-                  </label>
-                  <select
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    id="language"
-                    value={user?.languages}
-                    onChange={handleLanguage}
-                    aria-label="Default select example"
-                  >
-                    <option>Select Language</option>
-                    {countries?.map(
-                      (country) =>
-                        country.languages &&
-                        Object.entries(country.languages).map(
-                          ([key, value]: [key: string, value: string]) => {
-                            return (
-                              <option key={country.name.official} value={value}>
-                                {value}
-                              </option>
-                            );
-                          }
-                        )
-                    )}
-                  </select>
-                  <span className="text-red-400">
-                    {error?.languages ? "Language is required" : ""}
-                  </span>
-                </div>
-
-                <div className="flex justify-between gap-2">
-                  {" "}
-                  <div className=" w-28">
+                <h1 className="text-xl text-center font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                  Create your account
+                </h1>
+                <form
+                  className="space-y-4 md:space-y-6  "
+                  onSubmit={formSubmit}
+                >
+                  <div>
                     <label
-                      htmlFor="countryCode"
+                      htmlFor="email"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
-                      Country Code
+                      Email
                     </label>
-                    {/* <input
+                    <input
+                      type="email"
+                      name="email"
+                      id="email"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="name@company.com"
+                      required
+                      value={user?.email || ""}
+                      onChange={(e) =>
+                        setUser({ ...user!, email: e.target.value! })
+                      }
+                    />
+                    {error?.email && (
+                      <span className="text-red-400">{error?.email}</span>
+                    )}
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="username"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Full Name
+                    </label>
+                    <input
+                      type="text"
+                      name="username"
+                      id="username"
+                      required
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="Enter Name"
+                      value={user?.username || ""}
+                      onChange={(e) =>
+                        setUser({ ...user!, username: e.target.value! })
+                      }
+                    />
+                    {error?.username && (
+                      <span className="text-red-400">{error.username}</span>
+                    )}
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="name"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Username (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      name="alias"
+                      id="alias"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="Enter username"
+                      value={user?.alias || ""}
+                      onChange={(e) =>
+                        setUser({ ...user!, alias: e.target.value! })
+                      }
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="password"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Password
+                    </label>
+                    <input
+                      type="password"
+                      name="password"
+                      id="password"
+                      placeholder="••••••••"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      value={user?.password || ""}
+                      onChange={(e) =>
+                        setUser({ ...user!, password: e.target.value! })
+                      }
+                    />
+                    {error?.password && (
+                      <span className="text-red-400">{error.password}</span>
+                    )}
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="country"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Select Country
+                    </label>
+                    <select
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      id="country"
+                      value={user?.country}
+                      onChange={handleCountry}
+                      aria-label="Default select example"
+                    >
+                      <option>Select Country</option>
+                      {countries?.map((country) => {
+                        return (
+                          <option
+                            key={country.name.official}
+                            value={country.name.common}
+                          >
+                            {country.name.common}
+                          </option>
+                        );
+                      })}
+                    </select>
+                    <span className="text-red-400">
+                      {error?.country ? "Country is required" : ""}
+                    </span>
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="language"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Language
+                    </label>
+                    <select
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      id="language"
+                      value={user?.languages}
+                      onChange={handleLanguage}
+                      aria-label="Default select example"
+                    >
+                      <option>Select Language</option>
+                      {countries?.map(
+                        (country) =>
+                          country.languages &&
+                          Object.entries(country.languages).map(
+                            ([key, value]: [key: string, value: string]) => {
+                              return (
+                                <option
+                                  key={country.name.official}
+                                  value={value}
+                                >
+                                  {value}
+                                </option>
+                              );
+                            }
+                          )
+                      )}
+                    </select>
+                    <span className="text-red-400">
+                      {error?.languages ? "Language is required" : ""}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between gap-2">
+                    {" "}
+                    <div className=" w-28">
+                      <label
+                        htmlFor="countryCode"
+                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      >
+                        Country Code
+                      </label>
+                      {/* <input
                       type="text"
                       className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       value={user?.countryCode || ""}
                       onChange={({ target }) => handleChangeInput(target)}
                     /> */}
-                    <select
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      id="countryCode"
-                      placeholder="Country Code"
-                      name="countryCode"
-                      value={user?.countryCode}
-                      onChange={handleCountryCode}
-                      aria-label="Default select example"
-                    >
-                      <option>Code</option>
-                      {countries?.map((country) => {
-                        return (
-                          <option
-                            key={country.name.official}
-                            value={country.idd.root + country?.idd?.suffixes}
-                          >
-                            {country.idd.root + country?.idd?.suffixes}
-                          </option>
-                        );
-                      })}
-                    </select>
-                    {error?.countryCode && (
-                      <span className="text-red-400">{error.countryCode}</span>
-                    )}
+                      <select
+                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        id="countryCode"
+                        placeholder="Country Code"
+                        name="countryCode"
+                        value={user?.countryCode}
+                        onChange={handleCountryCode}
+                        aria-label="Default select example"
+                      >
+                        <option>Code</option>
+                        {countries?.map((country) => {
+                          return (
+                            <option
+                              key={country.name.official}
+                              value={country.idd.root + country?.idd?.suffixes}
+                            >
+                              {country.idd.root + country?.idd?.suffixes}
+                            </option>
+                          );
+                        })}
+                      </select>
+                      {error?.countryCode && (
+                        <span className="text-red-400">
+                          {error.countryCode}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex-grow">
+                      <label
+                        htmlFor="phone"
+                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      >
+                        Phone Number
+                      </label>
+                      <input
+                        type="text"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        id="phone"
+                        placeholder="Enter Phone"
+                        name="phone"
+                        value={user?.phone || ""}
+                        onChange={(e) =>
+                          setUser({ ...user!, phone: e.target.value! })
+                        }
+                      />
+                      {error?.phone && (
+                        <span className="text-red-400">{error.phone}</span>
+                      )}
+                    </div>
                   </div>
-                  <div className="flex-grow">
+                  <div>
                     <label
-                      htmlFor="phone"
+                      htmlFor="age"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
-                      Phone Number
+                      Age
                     </label>
                     <input
                       type="text"
                       className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      id="phone"
-                      placeholder="Enter Phone"
-                      name="phone"
-                      value={user?.phone || ""}
+                      id="age"
+                      placeholder="Enter Age"
+                      name="age"
+                      value={user?.age || ""}
                       onChange={(e) =>
-                        setUser({ ...user!, phone: e.target.value! })
+                        setUser({ ...user!, age: e.target.value! })
                       }
                     />
-                    {error?.phone && (
-                      <span className="text-red-400">{error.phone}</span>
+                    {error?.age && (
+                      <span className="text-red-400">{error.age}</span>
                     )}
                   </div>
-                </div>
-                <div>
-                  <label
-                    htmlFor="age"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Age
-                  </label>
-                  <input
-                    type="text"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    id="age"
-                    placeholder="Enter Age"
-                    name="age"
-                    value={user?.age || ""}
-                    onChange={(e) =>
-                      setUser({ ...user!, age: e.target.value! })
-                    }
-                  />
-                  {error?.age && (
-                    <span className="text-red-400">{error.age}</span>
-                  )}
-                </div>
-                <div>
-                  <label
-                    htmlFor="occupation"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Occupation (Optional)
-                  </label>
-                  <input
-                    type="text"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    id="occupation"
-                    placeholder="Enter Occupation"
-                    name="occupation"
-                    value={user?.occupation || ""}
-                    onChange={(e) =>
-                      setUser({ ...user!, occupation: e.target.value! })
-                    }
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="instruments"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Instruments Used (Optional)
-                  </label>
-                  <input
-                    type="text"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    id="instruments"
-                    placeholder="Enter Instruments Used"
-                    name="instruments"
-                    value={user?.instruments || ""}
-                    onChange={(e) =>
-                      setUser({
-                        ...user!,
-                        instruments: [...user.instruments, e.target.value]!,
-                      })
-                    }
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="research"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Research Projects (Optional)
-                  </label>
-                  <input
-                    type="text"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    id="projects"
-                    placeholder="Enter Research Projects"
-                    name="research"
-                    value={user?.research || ""}
-                    onChange={(e) =>
-                      setUser({ ...user!, research: e.target.value! })
-                    }
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="software"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Software Used (Optional)
-                  </label>
-                  <input
-                    type="text"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    id="software"
-                    placeholder="Enter Software Used"
-                    name="software"
-                    value={user?.software || ""}
-                    onChange={(e) =>
-                      setUser({ ...user!, software: e.target.value! })
-                    }
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="education"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Education (Optional)
-                  </label>
-                  <input
-                    type="text"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    id="education"
-                    placeholder="Enter Education"
-                    name="highEducation"
-                    value={user?.highEducation || ""}
-                    onChange={(e) =>
-                      setUser({ ...user!, highEducation: e.target.value! })
-                    }
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="zipCode"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Zip Code (Optional)
-                  </label>
-                  <input
-                    type="text"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    id="zipCode"
-                    placeholder="Enter Zip Code"
-                    name="zipCode"
-                    value={user?.zipCode || ""}
-                    onChange={(e) =>
-                      setUser({ ...user!, zipCode: e.target.value! })
-                    }
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="cityCode"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    City
-                  </label>
-                  <input
-                    type="text"
-                    id="cityCode"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    name="cityCode"
-                    value={user?.city}
-                    onChange={(e) =>
-                      setUser({ ...user!, city: e.target.value! })
-                    }
-                    placeholder="City"
-                  />
-
-                  <span className="text-red-400">
-                    {error?.city ? "City is required" : ""}
-                  </span>
-                </div>
-                <div>
-                  <label
-                    htmlFor="address"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Address (Optional)
-                  </label>
-                  <input
-                    type="text"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    id="address"
-                    placeholder="Enter Address"
-                    name="address"
-                    value={user?.address || ""}
-                    onChange={(e) =>
-                      setUser({ ...user!, address: e.target.value! })
-                    }
-                  />
-                </div>
-                <div className="flex items-start">
-                  <div className="flex items-center h-5">
+                  <div>
+                    <label
+                      htmlFor="occupation"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Occupation (Optional)
+                    </label>
                     <input
-                      id="terms"
-                      aria-describedby="terms"
-                      type="checkbox"
-                      className="w-4 h-4 border border-gray-300  rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                      required
-                      onClick={handleTerms}
+                      type="text"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      id="occupation"
+                      placeholder="Enter Occupation"
+                      name="occupation"
+                      value={user?.occupation || ""}
+                      onChange={(e) =>
+                        setUser({ ...user!, occupation: e.target.value! })
+                      }
                     />
                   </div>
-                  <div className="ml-3 text-sm">
+                  <div>
                     <label
-                      htmlFor="terms"
-                      className="font-light text-gray-500 dark:text-gray-300"
-                      //   checked={user.termsCondition}
-                      onChange={handleTerms}
+                      htmlFor="instruments"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
-                      I accept the{" "}
-                      <a
-                        className="font-medium dark:text-gray-300 text-gray-600 hover:text-black dark:hover:text-white"
-                        href="/DarkDuck Terms of Service and User Agreement (1).pdf"
-                      >
-                        Terms and Conditions
-                      </a>{" "}
-                      &{" "}
-                      <a
-                        className="font-medium dark:text-gray-300 text-gray-600 hover:text-black dark:hover:text-white"
-                        href="/DarkduckPrivacy.pdf"
-                      >
-                        Privacy Policy
-                      </a>
+                      Instruments Used (Optional)
                     </label>
+                    <input
+                      type="text"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      id="instruments"
+                      placeholder="Enter Instruments Used"
+                      name="instruments"
+                      value={user?.instruments || ""}
+                      onChange={(e) =>
+                        setUser({
+                          ...user!,
+                          instruments: [...user.instruments, e.target.value]!,
+                        })
+                      }
+                    />
                   </div>
-                </div>
-                <span className="text-red-400">
-                  {error?.termsCondition ? "Please accept to continue" : ""}
-                </span>
-                <input
-                  type="submit"
-                  className="w-full text-gray-200 dark:text-gray-700 bg-gray-600 hover:bg-black  focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-300 dark:hover:bg-white dark:focus:ring-primary-800"
-                  disabled={loading}
-                  value={loading ? "Please Wait..." : "Sign Up"}
-                />
-                <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                  Already have an account?{" "}
-                  <Link
-                    href="/sign-in"
-                    className="font-medium  dark:text-gray-300 text-gray-600 hover:text-black dark:hover:text-white"
-                  >
-                    Login here
-                  </Link>
-                </p>
-              </form>
+                  <div>
+                    <label
+                      htmlFor="research"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Research Projects (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      id="projects"
+                      placeholder="Enter Research Projects"
+                      name="research"
+                      value={user?.research || ""}
+                      onChange={(e) =>
+                        setUser({ ...user!, research: e.target.value! })
+                      }
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="software"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Software Used (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      id="software"
+                      placeholder="Enter Software Used"
+                      name="software"
+                      value={user?.software || ""}
+                      onChange={(e) =>
+                        setUser({ ...user!, software: e.target.value! })
+                      }
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="education"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Education (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      id="education"
+                      placeholder="Enter Education"
+                      name="highEducation"
+                      value={user?.highEducation || ""}
+                      onChange={(e) =>
+                        setUser({ ...user!, highEducation: e.target.value! })
+                      }
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="zipCode"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Zip Code (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      id="zipCode"
+                      placeholder="Enter Zip Code"
+                      name="zipCode"
+                      value={user?.zipCode || ""}
+                      onChange={(e) =>
+                        setUser({ ...user!, zipCode: e.target.value! })
+                      }
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="cityCode"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      City
+                    </label>
+                    <input
+                      type="text"
+                      id="cityCode"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      name="cityCode"
+                      value={user?.city}
+                      onChange={(e) =>
+                        setUser({ ...user!, city: e.target.value! })
+                      }
+                      placeholder="City"
+                    />
+
+                    <span className="text-red-400">
+                      {error?.city ? "City is required" : ""}
+                    </span>
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="address"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Address (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      id="address"
+                      placeholder="Enter Address"
+                      name="address"
+                      value={user?.address || ""}
+                      onChange={(e) =>
+                        setUser({ ...user!, address: e.target.value! })
+                      }
+                    />
+                  </div>
+                  <div className="flex items-start">
+                    <div className="flex items-center h-5">
+                      <input
+                        id="terms"
+                        aria-describedby="terms"
+                        type="checkbox"
+                        className="w-4 h-4 border border-gray-300  rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
+                        required
+                        onClick={handleTerms}
+                      />
+                    </div>
+                    <div className="ml-3 text-sm">
+                      <label
+                        htmlFor="terms"
+                        className="font-light text-gray-500 dark:text-gray-300"
+                        //   checked={user.termsCondition}
+                        onChange={handleTerms}
+                      >
+                        I accept the{" "}
+                        <a
+                          className="font-medium dark:text-gray-300 text-gray-600 hover:text-black dark:hover:text-white"
+                          href="/DarkDuck Terms of Service and User Agreement (1).pdf"
+                        >
+                          Terms and Conditions
+                        </a>{" "}
+                        &{" "}
+                        <a
+                          className="font-medium dark:text-gray-300 text-gray-600 hover:text-black dark:hover:text-white"
+                          href="/DarkduckPrivacy.pdf"
+                        >
+                          Privacy Policy
+                        </a>
+                      </label>
+                    </div>
+                  </div>
+                  <span className="text-red-400">
+                    {error?.termsCondition ? "Please accept to continue" : ""}
+                  </span>
+                  <input
+                    type="submit"
+                    className="w-full text-gray-200 dark:text-gray-700 bg-gray-600 hover:bg-black  focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-300 dark:hover:bg-white dark:focus:ring-primary-800"
+                    disabled={loading}
+                    value={loading ? "Please Wait..." : "Sign Up"}
+                  />
+                  <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+                    Already have an account?{" "}
+                    <Link
+                      href="/sign-in"
+                      className="font-medium  dark:text-gray-300 text-gray-600 hover:text-black dark:hover:text-white"
+                    >
+                      Login here
+                    </Link>
+                  </p>
+                </form>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
-    </>
-  );
+        </section>
+      </>
+    );
+  }
 };
 
 export default SignUp;

@@ -15,25 +15,20 @@ import { GoHome } from "react-icons/go";
 import axios from "axios";
 import useColorMode from "@/hooks/useColorMode";
 import { useRouter } from "next/navigation";
-import { getSession, useSession } from "next-auth/react";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { data } from "autoprefixer";
-import { UserInputData } from "@/types";
+import { UserDataResponse, UserInputData } from "@/types";
+import AudioRecorder from "./AudioRecorder";
 
 const Header = () => {
   //   const userDetails = decode(localStorage.getItem("accessToken"));
   const [colorMode, setColorMode] = useColorMode();
-
-  const [open, setOpen] = useState(false);
-  const [userData, setUserData] = useState<UserInputData>();
-  const [createAudio, setCreateAudio] = useState(false);
-  const session = useSession();
+  const [audioRecordingModel, setAudioRecordingModel] = useState(false);
+  const [userData, setUserData] = useState<UserDataResponse>();
+  const [toggleUserModal, setToggleUserModal] = useState(false);
+  const { data: session } = useSession();
   const router = useRouter();
-
-  const closeAudienceModal = () => {
-    setOpen(false);
-  };
 
   const fetchUserData = async (id: string) => {
     try {
@@ -46,12 +41,14 @@ const Header = () => {
     }
   };
 
+  console.log("user data form session >", session?.user);
+
   useEffect(() => {
-    if (!session?.data?.user?.id) {
+    if (!session?.user?.id) {
       return;
     }
-    fetchUserData(session?.data?.user?.id);
-  }, [session?.data?.user?.id]);
+    fetchUserData(session?.user?.id);
+  }, [session?.user?.id]);
 
   return (
     <>
@@ -66,7 +63,7 @@ const Header = () => {
             </div>
             <div className="flex items-center bg-gray-200 dark:bg-gray-800 lg:order-2">
               <button
-                onClick={() => setOpen(!open)}
+                onClick={() => setAudioRecordingModel(!audioRecordingModel)}
                 type="button"
                 className="hidden sm:inline-flex items-center justify-center text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-xs px-3 py-1.5 mr-2 dark:bg-gray-600 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
               >
@@ -85,9 +82,15 @@ const Header = () => {
                 </svg>
                 New Post
               </button>
-
-              <div>Create Audio Modal</div>
-
+              <div
+                className={
+                  audioRecordingModel
+                    ? "h-screen w-screen absolute flex justify-center items-center bg-opacity-25 bg-gay-400 top-0 left-0 right-0 bottom-0"
+                    : "hidden"
+                }
+              >
+                <AudioRecorder />
+              </div>
               {/* <!-- Home --> */}
               <a
                 href="/"
@@ -96,7 +99,6 @@ const Header = () => {
               >
                 <GoHome className="h-6 w-6 bg-gray-200" />
               </a>
-
               {/* <!-- Messages --> */}
               <button
                 type="button"
@@ -104,7 +106,6 @@ const Header = () => {
               >
                 <TbMessages className="h-6 w-6 bg-gray-200" />
               </button>
-
               {/* <!-- Notifications --> */}
               <button
                 type="button"
@@ -231,7 +232,7 @@ const Header = () => {
                 </a>
               </div>
               {/* user profile button */}
-              {!session.data.user ? (
+              {!session ? (
                 <Link className="nav-link" href="/login">
                   Login
                 </Link>
@@ -244,6 +245,7 @@ const Header = () => {
                     id="user-menu-button"
                     aria-expanded="false"
                     data-dropdown-toggle="dropdown"
+                    onClick={() => setToggleUserModal(!toggleUserModal)}
                   >
                     <span className="sr-only">Open user menu</span>
                     <img
@@ -258,15 +260,19 @@ const Header = () => {
                   </button>
                   {/* <!-- Dropdown menu --> */}
                   <div
-                    className="hidden z-50 my-4 w-56 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
+                    className={
+                      toggleUserModal
+                        ? " absolute z-50 my-4 w-56 h-50 right-4 top-8 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
+                        : "hidden"
+                    }
                     id="dropdown"
                   >
                     <div className="py-3 px-4">
                       <span className="block text-sm font-semibold text-gray-900 dark:text-white">
-                        {userData?.username}
+                        {session?.user?.name}
                       </span>
                       <span className="block text-sm font-light text-gray-500 truncate dark:text-gray-400">
-                        {userData?.email}
+                        {session?.user?.email}
                       </span>
                     </div>
                     <ul
@@ -292,7 +298,9 @@ const Header = () => {
                       <li className="hover:text-blue-700  hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white dark:text-gray-400">
                         <button
                           className="block py-2 px-6 text-sm bg-transparent"
-                          onClick={() => signOut()}
+                          onClick={() => {
+                            signOut();
+                          }}
                         >
                           Sign out
                         </button>
