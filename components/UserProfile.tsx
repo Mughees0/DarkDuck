@@ -190,7 +190,7 @@ const UserBio = () => {
           className="object-cover w-full absolute h-80"
           src={
             userData?.bannerPicture
-              ? userData.bannerPicture
+              ? process.env.REACT_APP_IMAGES_PATH + userData?.bannerPicture
               : "/assets/dummy-banner.jpeg"
           }
           alt="User Banner Picture"
@@ -227,7 +227,8 @@ const UserBio = () => {
                     <img
                       src={
                         userData?.profilePicture
-                          ? userData.profilePicture
+                          ? process.env.REACT_APP_IMAGES_PATH +
+                            userData?.profilePicture
                           : "/assets/avatar.png"
                       }
                       className="logo absolute"

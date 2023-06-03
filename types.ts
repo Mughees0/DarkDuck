@@ -114,7 +114,7 @@ export type UserDataResponse = {
   highEducation?: string;
   zipCode?: string;
   address?: string;
-  cityCode?: string;
+  city?: string;
   termsCondition: boolean;
   profilePicture?: string;
   bannerPicture?: string;

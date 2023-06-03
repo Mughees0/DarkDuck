@@ -19,6 +19,7 @@ const nextConfig = {
   reactStrictMode: true,
   env: {
     REACT_APP_AUDIO_PATH: process.env.REACT_APP_AUDIO_PATH,
+    REACT_APP_IMAGES_PATH: process.env.REACT_APP_IMAGES_PATH,
   },
 };
 

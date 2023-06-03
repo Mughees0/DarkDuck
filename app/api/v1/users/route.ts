@@ -6,8 +6,8 @@ import bcrypt from "bcrypt";
 import { NextResponse } from "next/server";
 
 interface ResponseData {
-  error?: string;
-  msg?: string;
+  error;
+  msg;
 }
 
 const validateEmail = (email: string): boolean => {
@@ -43,7 +43,29 @@ const validateForm = async (
 
 export async function POST(request: Request) {
   await dbConnect();
-  const { username, email, password } = await request.json();
+  const {
+    username,
+    email,
+    password,
+    alias,
+    countryCode,
+    phone,
+    age,
+    country,
+    language,
+    occupation,
+    instruments,
+    research,
+    software,
+    highEducation,
+    zipCode,
+    address,
+    city,
+    termsCondition,
+    profilePicture,
+    bannerPicture,
+    createdAt,
+  } = await request.json();
   const errorMessage = await validateForm(username, email, password);
   if (errorMessage) {
     return NextResponse.json(errorMessage, { status: 400 });
@@ -54,9 +76,27 @@ export async function POST(request: Request) {
 
   // create new User on MongoDB
   const newUser = new User({
-    name: username,
     email,
     hashedPassword,
+    username,
+    alias,
+    countryCode,
+    phone,
+    age,
+    country,
+    language,
+    occupation,
+    instruments,
+    research,
+    software,
+    highEducation,
+    zipCode,
+    address,
+    city,
+    termsCondition,
+    profilePicture,
+    bannerPicture,
+    createdAt,
   });
 
   return newUser
