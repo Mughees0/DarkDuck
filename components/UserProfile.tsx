@@ -197,22 +197,22 @@ const UserBio = () => {
         />
         <div className="bg-gray-200 rounded-full overflow-hidden  cursor-pointer absolute top-56 right-0 mt-32 ml-100 p-1 hover:shadow-outline">
           <BsFillCameraFill
-            className=" text-end bg-transparent text-gray-700 hover:text-black"
+            className=" bg-transparent text-gray-700 w-5 h-5 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-50"
             onClick={() => setProfileModal(!bannerModal)}
           />
         </div>
       </div>
       <div className="h-screen">
         <div className="container-user w-auto mx-2 flex flex-col lg:flex-row">
-          <aside className="sm:w-2/10 -mx-10 dark:bg-transparent flex flex-col items-center mb-2">
+          <aside className="sm:w-2/10 lg:-mx-10 dark:bg-transparent flex flex-col items-center mb-2">
             <div className="main dark:bg-transparent">
               <div className="html dark:bg-transparent">
                 <div className="body dark:bg-transparent">
                   <div className="circle dark:bg-transparent">
                     <div className="text-profile-pic dark:bg-transparent">
-                      <p className="p">
+                      <p className="para">
                         {userData?.username &&
-                          userData?.username?.split("").map((char, i) => {
+                          userData.username?.split("").map((char, i) => {
                             return (
                               <span
                                 style={{ transform: `rotate(${i * 5.8}deg)` }}
@@ -236,7 +236,7 @@ const UserBio = () => {
                     />
                     <div className="bg-gray-200 rounded-full overflow-hidden  cursor-pointer absolute top-[3.7rem] left-18 mt-32 ml-40 p-2 hover:shadow-outline">
                       <BsFillCameraFill
-                        className=" bg-transparent text-gray-700 w-5 h-5 hover:text-black dark:text-gray-50 dark:hover:text-white"
+                        className=" bg-transparent text-gray-700 w-5 h-5 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-50"
                         onClick={() => setProfileModal(!profileModal)}
                       />
                     </div>
@@ -244,46 +244,51 @@ const UserBio = () => {
                 </div>
               </div>
             </div>
-            <h1 className="text-lg mt-3 font-bold dark:text-white">
-              {userData?.username}
-            </h1>
-            <p className="w-3/4 dark:text-white">
-              ❤️ Simply passionate about creating and transforming interfaces!
-            </p>
+            <div className="flex flex-col items-center">
+              <h1 className="text-lg mt-3 font-bold dark:text-white">
+                {userData?.username}
+              </h1>
+              <p className="w-2/4 dark:text-white">
+                ❤️ Simply passionate about creating and transforming interfaces!
+              </p>
 
-            <ul className="list-user mt-3 list-none text-sm text-gray-400">
-              <li className="gap-2 items-center flex">
-                <img src={"/assets/place.svg"} alt="Place" />
-                {userData?.city ? userData.city : "none"}
-              </li>
-              <li className="gap-2 items-center flex">
-                <img src={"/assets/url.svg"} alt="URL" />
-                {userData?.email}
-              </li>
-              <li className="gap-2 items-center flex">
-                <GiGuitarBassHead />
-                {userData?.instruments ? userData.instruments : "none"}
-              </li>
-              <li className="gap-2 items-center flex">
-                <MdWork />
-                {userData?.occupation ? userData.occupation : "none"}
-              </li>
-              <li className="gap-2 items-center flex">
-                <MdLanguage />
-                {userData?.language ? userData.language : "none"}
-              </li>
-              <li className="gap-1 items-center flex">
-                <img src={"/assets/joined.svg"} alt="Joined" />
-                Created At{" "}
-                {userData?.createdAt
-                  ? new Date(userData.createdAt).toLocaleDateString(undefined, {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })
-                  : "null"}
-              </li>
-            </ul>
+              <ul className="mt-3 list-none text-sm text-gray-400">
+                <li className="gap-2 items-center flex">
+                  <img src={"/assets/place.svg"} alt="Place" />
+                  {userData?.city ? userData.city : "none"}
+                </li>
+                <li className="gap-2 items-center flex">
+                  <img src={"/assets/url.svg"} alt="URL" />
+                  {userData?.email}
+                </li>
+                <li className="gap-2 items-center flex">
+                  <GiGuitarBassHead />
+                  {userData?.instruments ? userData.instruments : "none"}
+                </li>
+                <li className="gap-2 items-center flex">
+                  <MdWork />
+                  {userData?.occupation ? userData.occupation : "none"}
+                </li>
+                <li className="gap-2 items-center flex">
+                  <MdLanguage />
+                  {userData?.language ? userData.language : "none"}
+                </li>
+                <li className="gap-1 items-center flex">
+                  <img src={"/assets/joined.svg"} alt="Joined" />
+                  Created At{" "}
+                  {userData?.createdAt
+                    ? new Date(userData.createdAt).toLocaleDateString(
+                        undefined,
+                        {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        }
+                      )
+                    : "..."}
+                </li>
+              </ul>
+            </div>
           </aside>
           <section className="grow sm:w-6/10 mt-3 border-t-2 lg:border-none lg:mr-10">
             <nav>
@@ -431,7 +436,7 @@ const UserBio = () => {
                 </h3>
                 <ul className="divide-y divide-gray-200 dark:divide-gray-700">
                   <li className="flex items-center space-x-4 pb-2">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-purple-600">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ">
                       <img
                         className="rounded-full"
                         src={"/assets/avatar.png"}
@@ -447,7 +452,7 @@ const UserBio = () => {
                     </div>
                   </li>
                   <li className="flex items-center space-x-4">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-900">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ">
                       <img
                         className="rounded-full"
                         src={"/assets/avatar.png"}

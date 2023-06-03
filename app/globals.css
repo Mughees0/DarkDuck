@@ -77,7 +77,6 @@ code {
     background-color: white;
     border-radius: 50%;
     filter: contrast(1.5);
-    /* z-index: 9999; */
   }
 
   .text-profile-pic {
@@ -86,7 +85,7 @@ code {
     height: 100%;
     animation: rotateText 10s linear infinite;
     background-color: transparent;
-    color: red;
+    color: crimson;
   }
 
   @keyframes rotateText {
@@ -99,11 +98,13 @@ code {
     }
   }
 
-  .text-profile-pic .p span {
+  .text-profile-pic .para span {
     position: absolute;
     left: 50%;
     font-size: 1.2em;
     transform-origin: 0 var(--radius);
     background-color: transparent;
+    font-family: monospace;
+    font-weight: bold;
   }
 }
