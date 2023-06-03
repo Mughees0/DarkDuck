@@ -21,14 +21,11 @@ const Dashboard = () => {
     const res = await axios
       .get("/api/v1/posts")
       .then(async (res) => {
-        console.log(res);
-
         setPosts(res.data);
       })
       .catch((error) => {
-        console.log(error);
+        throw error;
       });
-    console.log(res);
   };
 
   useEffect(() => {

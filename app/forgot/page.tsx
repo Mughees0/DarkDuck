@@ -10,7 +10,6 @@ const ResetPassword = () => {
   const [disable, setDisable] = useState(false);
   const [loader, setLoader] = useState(false);
   const [error, setError] = useState("");
-  const check = [null, undefined, "null", "undefined", ""];
   const [email, setEmail] = useState("");
   const pathname = usePathname();
   const router = useRouter();
@@ -47,7 +46,7 @@ const ResetPassword = () => {
         setError("Wrong Input");
       }
     } catch (error) {
-      console.log(error);
+      throw new Error("There is a problem:> " + error.message);
     }
   };
 

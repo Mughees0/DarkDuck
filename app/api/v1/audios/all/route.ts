@@ -12,7 +12,6 @@ export async function GET(req: Request) {
   try {
     const existing = gridFSBucket.find();
     const file = await existing.toArray();
-    console.log(file);
     return NextResponse.json({ success: true, data: file }, { status: 200 });
   } catch (err) {
     return NextResponse.json({ success: false, error: err }, { status: 400 });

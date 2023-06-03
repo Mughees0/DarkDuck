@@ -13,7 +13,6 @@ export async function POST(request: Request) {
   const { _id, otp }: { _id: string; otp: number } = await request.json();
 
   const userOtpCheck = await User.findById({ _id });
-  console.log(userOtpCheck);
 
   if (otp == userOtpCheck.otp) {
     return NextResponse.json({ success: "Done" }, { status: 200 });

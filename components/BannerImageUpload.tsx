@@ -37,7 +37,6 @@ const ImageUploader = () => {
       if (storageReq.status == 200) {
         storageRes = await storageReq.data;
       }
-      console.log(storageRes.success);
     } catch (error) {}
     // 2. Use the FileName and store the Post Data in MongoDB
     try {
@@ -55,9 +54,8 @@ const ImageUploader = () => {
         }
       );
       const res = await req.data;
-      console.log(res);
     } catch (err) {
-      console.log("error in update post", err);
+      throw err;
     }
     setUploading(false);
   };

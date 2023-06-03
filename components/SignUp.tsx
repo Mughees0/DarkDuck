@@ -274,9 +274,9 @@ const SignUp = () => {
         redirectToHome();
       })
       .catch((error) => {
-        console.log(error);
+        throw error;
       });
-    console.log(res);
+
     setLoading(false);
   };
 
@@ -288,12 +288,11 @@ const SignUp = () => {
       callbackUrl: `${window.location.origin}`,
     });
 
-    res.error ? console.log(res.error) : redirectToHome();
+    res.error ? res.error : redirectToHome();
   };
 
   const formSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // console.log('user',user)
     if (isValid()) {
       registerUser();
     }

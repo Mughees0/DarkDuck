@@ -11,7 +11,7 @@ export async function GET(req: Request, { params }: Params) {
   // 1. get GridFS bucket
   await dbConnect();
   const gridFSBucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
-    bucketName: "images",
+    bucketName: "image",
   });
 
   const { filename } = params;

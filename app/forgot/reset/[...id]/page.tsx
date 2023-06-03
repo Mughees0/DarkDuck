@@ -22,10 +22,9 @@ function ResetPage() {
     try {
       const req = await axios.get(`/api/v1/users/user/${id}`);
       const res = await req.data;
-      await setUserData(res.data);
-      await console.log(res);
+      setUserData(res.data);
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   };
 
@@ -52,13 +51,12 @@ function ResetPage() {
         }
       );
       const res = await req.data;
-      console.log(res);
       if (res) {
         setOtpVerified(true);
         // redirectToSignIn();
       }
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   };
 
@@ -83,20 +81,20 @@ function ResetPage() {
       }
       redirectToSignIn();
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   };
 
   const handleReset = (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    // console.log('user',user)
+
     // if (isValid()) {
     resetPassword();
     // }
   };
   const handleChangePassword = (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    // console.log('user',user)
+
     // if (isValid()) {
     updatePassword();
     // }

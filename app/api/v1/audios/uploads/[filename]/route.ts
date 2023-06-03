@@ -15,7 +15,6 @@ export async function GET(req: Request, { params }: Params) {
   });
 
   const { filename } = params;
-  console.log(filename);
 
   // 2. validate the filename
   if (!filename) {

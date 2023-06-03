@@ -69,7 +69,6 @@ const AudioRecorder = () => {
       setRecordingStatus("recording");
     }
   };
-  console.log(mediaRecorder.current?.state);
 
   // 1. add reference to input element
   const ref = useRef<HTMLInputElement>(null);
@@ -101,7 +100,6 @@ const AudioRecorder = () => {
       if (storageReq.status == 200) {
         storageRes = await storageReq.data;
       }
-      console.log(storageRes.success);
     } catch (error) {}
     // 2. Use the FileName and store the Post Data in MongoDB
     try {
@@ -123,9 +121,8 @@ const AudioRecorder = () => {
         }
       );
       const res = await req.data;
-      console.log(res);
     } catch (err) {
-      console.log("error in update post", err);
+      throw err;
     }
     setUploading(false);
   };

@@ -35,14 +35,11 @@ const Header = () => {
     try {
       const req = await axios.get(`/api/v1/users/user/${id}`);
       const res = await req.data;
-      await setUserData(res.data);
-      await console.log(res);
+      setUserData(res.data);
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   };
-
-  console.log("user data form session >", session?.user);
 
   useEffect(() => {
     if (!session?.user?.id) {

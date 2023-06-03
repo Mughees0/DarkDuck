@@ -13,6 +13,7 @@ const PostSchema = new Schema(
     recordModeSwingId: { type: Schema.Types.ObjectId, ref: RecordModeSwing },
     updatedAt: { type: Date, default: Date.now() },
     createdAt: { type: Date, default: Date.now() },
+    likes: { type: Array },
   }
   //   {
   //     strict: true,

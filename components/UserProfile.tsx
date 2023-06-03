@@ -33,7 +33,6 @@ const UserBio = () => {
   const { data: session } = useSession();
   const router = useRouter();
   const userIdFormSession = session?.user?.id;
-  console.log("User Id here >", userIdFormSession);
 
   const [file, setFile] = useState(null);
   const [userData, setUserData] = useState<UserDataResponse>();
@@ -56,11 +55,9 @@ const UserBio = () => {
       const id = session?.user?.id;
       const res = await axios.get(`/api/v1/users/user/${id}`);
       const user = await res.data;
-      console.log("this is User ferom api >", user);
 
       setUserData(user);
     } catch (error) {
-      console.log("Error:> ", error.message);
       throw error;
     }
   };
@@ -73,7 +70,6 @@ const UserBio = () => {
       const posts = await res.data;
       setPosts(posts);
     } catch (error) {
-      console.log("Error:> ", error.message);
       throw error;
     }
   }
@@ -82,7 +78,6 @@ const UserBio = () => {
   useEffect(() => {
     getUserDetails(userIdFormSession);
   }, []);
-  console.log(userData);
 
   const handleProfilePicSubmit = (event) => {
     event.preventDefault();
@@ -99,12 +94,11 @@ const UserBio = () => {
     axios
       .post(url, data, config)
       .then((response) => {
-        console.log(response);
         // eslint-disable-next-line no-restricted-globals
         setTimeout(() => location.reload(), 300);
       })
       .catch((error) => {
-        console.log(error);
+        throw error;
       });
   };
 
@@ -123,24 +117,13 @@ const UserBio = () => {
     axios
       .post(url, data, config)
       .then((response) => {
-        console.log(response);
         // eslint-disable-next-line no-restricted-globals
         setTimeout(() => location.reload(), 300);
       })
       .catch((error) => {
-        console.log(error);
+        throw error;
       });
   };
-  // console.log(freshPosts);
-  // console.log("userdetails", userDetails);
-
-  const changeHandler = async (event) => {
-    // setFile(event.target.value);
-  };
-
-  // if (userData != undefined) {
-  //   console.log(userData.data.bannerPicture);
-  // }
 
   return (
     <>
