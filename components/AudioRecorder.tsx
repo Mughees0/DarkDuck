@@ -1,4 +1,5 @@
 "use client";
+import { useTimer } from "@/hooks/useTimer";
 import Session from "@/models/Session";
 import { StorageRes } from "@/types";
 import axios from "axios";
@@ -17,6 +18,8 @@ const AudioRecorder = () => {
   const [audioBlob, setAudioBlob] = useState<Blob>(null);
   const [mode, setMode] = useState("Public Mode");
   const [uploading, setUploading] = useState(false);
+  const { milliseconds, setTime, startAndStop, seconds, hours, minutes } =
+    useTimer();
 
   const getMicrophonePermission = async () => {
     if ("MediaRecorder" in window) {
@@ -131,6 +134,11 @@ const AudioRecorder = () => {
     <div className=" h-52 w-64 flex-col flex justify-center items-center gap-3  bg-red-200">
       <h2 className=" bg-transparent text-2xl">Audio Recorder</h2>
       <main className="bg-transparent flex flex-col gap-3 items-center">
+        <p id="counter">
+          {hours}:{minutes.toString().padStart(2, "0")}:
+          {seconds.toString().padStart(2, "0")}:
+          {milliseconds.toString().padStart(2, "0")}
+        </p>
         <div className=" bg-transparent w-auto ">
           {" "}
           {!permission ? (
@@ -143,7 +151,10 @@ const AudioRecorder = () => {
           ) : null}
           {permission && recordingStatus === "inactive" ? (
             <button
-              onClick={startRecording}
+              onClick={() => {
+                startRecording();
+                startAndStop();
+              }}
               className=" bg-green-400 px-4 py-1 text-sm rounded-md"
             >
               Start Recording
@@ -151,7 +162,10 @@ const AudioRecorder = () => {
           ) : null}
           {recordingStatus === "recording" ? (
             <button
-              onClick={pauseRecording}
+              onClick={() => {
+                pauseRecording();
+                startAndStop();
+              }}
               className=" bg-blue-400 px-4 py-1 text-sm rounded-md"
             >
               Pause Recording
@@ -159,7 +173,10 @@ const AudioRecorder = () => {
           ) : null}
           {recordingStatus === "paused" ? (
             <button
-              onClick={resumeRecording}
+              onClick={() => {
+                resumeRecording();
+                startAndStop();
+              }}
               className=" bg-purple-400 px-4 py-1 text-sm rounded-md"
             >
               Resume Recording
@@ -167,7 +184,11 @@ const AudioRecorder = () => {
           ) : null}
           {recordingStatus === "recording" ? (
             <button
-              onClick={stopRecording}
+              onClick={() => {
+                startAndStop();
+                setTime(0);
+                stopRecording();
+              }}
               className=" bg-red-400 px-4 py-1 text-sm rounded-md"
             >
               Stop Recording

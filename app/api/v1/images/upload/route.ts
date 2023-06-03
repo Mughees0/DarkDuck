@@ -12,7 +12,7 @@ export async function POST(req: Request) {
   });
   // get the form data
   const data = await req.formData();
-
+  let filename: string;
   try {
     // map through all the entries
     for (const entry of Array.from(data.entries())) {
@@ -23,7 +23,7 @@ export async function POST(req: Request) {
 
       if (isFile) {
         const blob = value as Blob;
-        const filename = blob.name;
+        filename = blob.name;
         const existing = gridFSBucket.find();
         const file = await existing.toArray();
         console.log(file.at(0).filename);
@@ -49,8 +49,8 @@ export async function POST(req: Request) {
     }
 
     // return the response after all the entries have been processed.
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: filename });
   } catch (error) {
-    return NextResponse.json({ success: false }, { status: 400 });
+    return NextResponse.json({ failed: true }, { status: 400 });
   }
 }

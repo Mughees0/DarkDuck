@@ -56,7 +56,7 @@ const ImageUploader = () => {
     // 2. Use the FileName and store the Post Data in MongoDB
     try {
       const req = await axios.post(
-        "/api/v1/user",
+        "/api/v1/user/upload/bannerimg",
         {
           id: Session?.user?.id,
           profilePicture: storageRes?.success,

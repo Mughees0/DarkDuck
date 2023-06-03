@@ -21,21 +21,6 @@ const ImageUploader = () => {
     setPreviewImage(URL.createObjectURL(event.target.files[0]));
   };
 
-  // const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-
-  //   // 2. get reference to the input element
-  //   const input = ref.current!;
-
-  //   // 3. build form data
-  //   const formData = new FormData();
-  //   for (const file of Array.from(input.files ?? [])) {
-  //     formData.append(file.name, file);
-  //   }
-  //   // 4. use axios to send the FormData
-  //   await axios.post("/api/v1/images/upload", formData);
-  // };
-
   const handleImageSubmit = async (e: FormEvent<HTMLFormElement>) => {
     setUploading(true);
     let storageRes: StorageRes;
@@ -56,10 +41,10 @@ const ImageUploader = () => {
     // 2. Use the FileName and store the Post Data in MongoDB
     try {
       const req = await axios.post(
-        "/api/v1/user",
+        "/api/v1/user/upload/bannerimg",
         {
           id: Session?.user?.id,
-          profilePicture: storageRes?.success,
+          bannerPicture: storageRes?.success,
         },
         {
           headers: {
