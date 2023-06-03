@@ -248,6 +248,18 @@ const SignUp = () => {
           password: user?.password,
           country: user?.country,
           language: user?.language,
+          countryCode: user?.countryCode,
+          phone: user?.phone,
+          age: user?.age,
+          occupation: user?.occupation ? user.occupation : "none",
+          instruments: user?.instruments ? user.instruments : "none",
+          research: user?.research ? user.research : "none",
+          software: user?.software ? user.software : "none",
+          highEducation: user?.highEducation ? user.highEducation : "none",
+          city: user?.city,
+          zipCode: user?.zipCode ? user.zipCode : "none",
+          address: user?.address ? user.address : "none",
+          termsCondition: user?.termsCondition,
         },
         {
           headers: {
@@ -660,16 +672,16 @@ const SignUp = () => {
                   </div>
                   <>
                     <label
-                      htmlFor="cityCode"
+                      htmlFor="city"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
                       City
                     </label>
                     <input
                       type="text"
-                      id="cityCode"
+                      id="city"
                       className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      name="cityCode"
+                      name="city"
                       value={user?.city}
                       onChange={handleCity}
                       placeholder="Enter City"
