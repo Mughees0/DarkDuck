@@ -87,7 +87,10 @@ const Header = () => {
                     : "hidden"
                 }
               >
-                <AudioRecorder />
+                <AudioRecorder
+                  setAudioRecordingModel={setAudioRecordingModel}
+                  audioRecordingModel={audioRecordingModel}
+                />
               </div>
               {/* <!-- Home --> */}
               <a
