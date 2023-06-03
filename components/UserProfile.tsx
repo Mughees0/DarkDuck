@@ -54,7 +54,7 @@ const UserBio = () => {
   const getUserDetails = async (userId: string) => {
     try {
       const id = session?.user?.id;
-      const res = await axios.get(`/api/v1/user/${id}`);
+      const res = await axios.get(`/api/v1/users/user/${id}`);
       const user = await res.data;
       console.log("this is User ferom api >", user);
 

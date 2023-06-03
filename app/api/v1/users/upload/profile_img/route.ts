@@ -4,12 +4,12 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   await dbConnect();
-  const { id, bannerPicture } = await request.json();
+  const { id, profilePicture } = await request.json();
 
   // create new Post on MongoDB
-  const updatedUser = User.updateOne(
+  const updatedUser = User.findOneAndUpdate(
     { _id: id },
-    { $set: { bannerPicture: bannerPicture } }
+    { profilePicture: profilePicture }
   );
 
   return updatedUser

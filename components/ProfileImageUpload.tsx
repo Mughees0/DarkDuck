@@ -37,6 +37,7 @@ const ImageUploader = () => {
   // };
 
   const handleImageSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setUploading(true);
     let storageRes: StorageRes;
     const input = ref.current!;
@@ -56,7 +57,7 @@ const ImageUploader = () => {
     // 2. Use the FileName and store the Post Data in MongoDB
     try {
       const req = await axios.post(
-        "/api/v1/user/upload/bannerimg",
+        "/api/v1/users/upload/profile_img",
         {
           id: Session?.user?.id,
           profilePicture: storageRes?.success,

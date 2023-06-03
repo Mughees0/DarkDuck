@@ -33,7 +33,7 @@ const Header = () => {
 
   const fetchUserData = async (id: string) => {
     try {
-      const req = await axios.get(`/api/v1/user/${id}`);
+      const req = await axios.get(`/api/v1/users/user/${id}`);
       const res = await req.data;
       await setUserData(res.data);
       await console.log(res);

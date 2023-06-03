@@ -12,7 +12,7 @@ export async function POST(req: Request) {
   });
   // get the form data
   const data = await req.formData();
-  let filename: string;
+  let fileName: string;
   try {
     // map through all the entries
     for (const entry of Array.from(data.entries())) {
@@ -20,18 +20,18 @@ export async function POST(req: Request) {
       // FormDataEntryValue can either be type `Blob` or `string`
       // if its type is object then it's a Blob
       const isFile = typeof value == "object";
-
+      fileName = key;
       if (isFile) {
         const blob = value as Blob;
-        filename = blob.name;
+        const filename = blob.name;
         const existing = gridFSBucket.find();
         const file = await existing.toArray();
         console.log(file.at(0).filename);
-        if (existing) {
-          // If file already exists, let's skip it.
-          // If you want a different behavior such as override, modify this part.
-          continue;
-        }
+        // if (existing) {
+        //   // If file already exists, let's skip it.
+        //   // If you want a different behavior such as override, modify this part.
+        //   continue;
+        // }
 
         //conver the blob to stream
         const buffer = Buffer.from(await blob.arrayBuffer());
@@ -49,7 +49,7 @@ export async function POST(req: Request) {
     }
 
     // return the response after all the entries have been processed.
-    return NextResponse.json({ success: filename });
+    return NextResponse.json({ success: fileName });
   } catch (error) {
     return NextResponse.json({ failed: true }, { status: 400 });
   }
