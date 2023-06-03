@@ -298,7 +298,7 @@ const Header = () => {
                       </li> */}
                       <li className="hover:text-blue-700  hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white dark:text-gray-400">
                         <button
-                          className="block py-2 px-6 text-sm bg-transparent"
+                          className="block py-2 px-4 text-sm bg-transparent  dark:bg-transparent"
                           onClick={() => {
                             signOut();
                           }}

@@ -214,7 +214,7 @@ const UserBio = () => {
                             userData?.profilePicture
                           : "/assets/avatar.png"
                       }
-                      className="logo absolute"
+                      className="logo absolute object-cover object-center"
                       alt="User Profile Picture"
                     />
                     <div className="bg-gray-200 rounded-full overflow-hidden  cursor-pointer absolute top-[3.7rem] left-18 mt-32 ml-40 p-2 hover:shadow-outline">
