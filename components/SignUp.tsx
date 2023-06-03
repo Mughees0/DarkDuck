@@ -242,9 +242,12 @@ const SignUp = () => {
       .post(
         "/api/v1/users",
         {
-          username: user?.username,
           email: user?.email,
+          username: user?.username,
+          alias: user?.alias ? user.alias : "none",
           password: user?.password,
+          country: user?.country,
+          language: user?.language,
         },
         {
           headers: {

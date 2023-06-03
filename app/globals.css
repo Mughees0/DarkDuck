@@ -27,7 +27,7 @@ code {
   @import url("https://fonts.googleapis.com/css2?family=Inconsolata:wght@500&display=swap");
 
   :root {
-    --radius: 180px;
+    --radius: 8rem;
     --frame-size: calc(var(--radius) / 3);
     --d-outer: calc(var(--radius) * 2);
     --d-inner: calc(var(--d-outer) - var(--frame-size));
@@ -50,7 +50,7 @@ code {
     justify-content: center;
     align-items: center;
     min-height: 100%;
-    margin-top: -200px;
+    margin-top: -150px;
     background-color: transparent;
   }
 
@@ -74,6 +74,7 @@ code {
     width: var(--d-inner);
     height: var(--d-inner);
     background-size: cover;
+    background-color: white;
     border-radius: 50%;
     filter: contrast(1.5);
     /* z-index: 9999; */

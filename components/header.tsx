@@ -242,7 +242,7 @@ const Header = () => {
                   {" "}
                   <button
                     type="button"
-                    className="flex mr-2 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                    className="flex mx-2 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                     id="user-menu-button"
                     aria-expanded="false"
                     data-dropdown-toggle="dropdown"
@@ -312,7 +312,7 @@ const Header = () => {
               )}
               {/* <!-- Toggle --> */}
               <button
-                className=" text-white bg-blue-400 dark:bg-yellow-800 mx-2 dark:text-white"
+                className=" text-white bg-blue-400 dark:bg-yellow-800 ml-3 dark:text-white"
                 onClick={() =>
                   setColorMode(colorMode === "light" ? "dark" : "light")
                 }

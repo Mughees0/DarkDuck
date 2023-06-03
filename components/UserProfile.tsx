@@ -14,6 +14,8 @@ import { GiDuck, GiGuitarBassHead, GiPlasticDuck } from "react-icons/gi";
 import { BsFillCameraFill } from "react-icons/bs";
 import { MdLanguage, MdWork } from "react-icons/md";
 import ImageUpload from "./ProfileImageUpload";
+import ProfileImageUpload from "./ProfileImageUpload";
+import BannerImageUpload from "./BannerImageUpload";
 
 function importAll(r) {
   let images = {};
@@ -39,7 +41,8 @@ const UserBio = () => {
 
   const circle = useRef(null);
   const [profile, setProfile] = useState(false);
-  const [modal, setModal] = useState(false);
+  const [profileModal, setProfileModal] = useState(false);
+  const [bannerModal, setBannerModal] = useState(false);
 
   const [param, setParam] = useState({
     like: [],
@@ -141,35 +144,67 @@ const UserBio = () => {
 
   return (
     <>
+      {/* profile modal */}
       <div
         // onClick={() => setModal(!modal)}
         className={
-          modal
+          profileModal
             ? " flex flex-col items-center justify-center absolute top-0 bg-opacity-40 z-40 h-screen w-screen bg-gray-500"
             : "hidden"
         }
       >
-        <ImageUpload />
+        <ProfileImageUpload />
         <button
           className="text-white bg-gray-600 m-3 p-2 rounded dark:bg-gray-400"
-          onClick={() => setModal(!modal)}
+          onClick={() => setProfileModal(!profileModal)}
         >
           Go Back
         </button>
       </div>
+
+      {/* banner modal */}
+      <div
+        // onClick={() => setModal(!modal)}
+        className={
+          bannerModal
+            ? " flex flex-col items-center justify-center absolute top-0 bg-opacity-40 z-40 h-screen w-screen bg-gray-500"
+            : "hidden"
+        }
+      >
+        <BannerImageUpload />
+        <button
+          className="text-white bg-gray-600 m-3 p-2 rounded dark:bg-gray-400"
+          onClick={() => setBannerModal(!bannerModal)}
+        >
+          Go Back
+        </button>
+      </div>
+
       {/* Saba's code */}
 
-      <div onClick={() => setModal(!modal)} className="h-80 overflow-hidden">
+      <div
+        onClick={() => setBannerModal(!bannerModal)}
+        className="h-80 overflow-hidden"
+      >
         <img
-          className="object-cover w-full"
-          src={userData?.bannerPicture}
-          alt=""
+          className="object-cover w-full absolute h-80"
+          src={
+            userData?.bannerPicture
+              ? userData.bannerPicture
+              : "/assets/dummy-banner.jpeg"
+          }
+          alt="User Banner Picture"
         />
-        {/* <h1 className="bg-black">Dark Duck User Profile</h1> */}
+        <div className="bg-gray-200 rounded-full overflow-hidden  cursor-pointer absolute top-56 right-0 mt-32 ml-100 p-1 hover:shadow-outline">
+          <BsFillCameraFill
+            className=" text-end bg-transparent text-gray-700 hover:text-black"
+            onClick={() => setProfileModal(!bannerModal)}
+          />
+        </div>
       </div>
       <div className="h-screen">
         <div className="container-user w-auto mx-2 flex flex-col lg:flex-row">
-          <aside className="profile-user w-2/8 dark:bg-transparent flex flex-col items-center mb-2">
+          <aside className="sm:w-2/10 -mx-10 dark:bg-transparent flex flex-col items-center mb-2">
             <div className="main dark:bg-transparent">
               <div className="html dark:bg-transparent">
                 <div className="body dark:bg-transparent">
@@ -197,10 +232,12 @@ const UserBio = () => {
                       }
                       className="logo absolute"
                       alt="User Profile Picture"
-                      onClick={() => setModal(!modal)}
                     />
-                    <div className="bg-gray-200 rounded-full overflow-hidden  cursor-pointer absolute top-36 left-20 mt-32 ml-40 p-2 hover:shadow-outline">
-                      <BsFillCameraFill className=" bg-transparent w-10 h-10" />
+                    <div className="bg-gray-200 rounded-full overflow-hidden  cursor-pointer absolute top-[3.7rem] left-18 mt-32 ml-40 p-2 hover:shadow-outline">
+                      <BsFillCameraFill
+                        className=" bg-transparent text-gray-700 w-5 h-5 hover:text-black dark:text-gray-50 dark:hover:text-white"
+                        onClick={() => setProfileModal(!profileModal)}
+                      />
                     </div>
                   </div>
                 </div>
@@ -209,14 +246,14 @@ const UserBio = () => {
             <h1 className="text-lg mt-3 font-bold dark:text-white">
               {userData?.username}
             </h1>
-            <p className="w-2/4 dark:text-white">
+            <p className="w-3/4 dark:text-white">
               ❤️ Simply passionate about creating and transforming interfaces!
             </p>
 
             <ul className="list-user mt-3 list-none text-sm text-gray-400">
               <li className="gap-2 items-center flex">
                 <img src={"/assets/place.svg"} alt="Place" />
-                {userData?.cityCode}
+                {userData?.cityCode ? userData.cityCode : "none"}
               </li>
               <li className="gap-2 items-center flex">
                 <img src={"/assets/url.svg"} alt="URL" />
@@ -224,15 +261,15 @@ const UserBio = () => {
               </li>
               <li className="gap-2 items-center flex">
                 <GiGuitarBassHead />
-                {userData?.instruments}
+                {userData?.instruments ? userData.instruments : "none"}
               </li>
               <li className="gap-2 items-center flex">
                 <MdWork />
-                {userData?.occupation}
+                {userData?.occupation ? userData.occupation : "none"}
               </li>
               <li className="gap-2 items-center flex">
                 <MdLanguage />
-                {userData?.language}
+                {userData?.language ? userData.language : "none"}
               </li>
               <li className="gap-1 items-center flex">
                 <img src={"/assets/joined.svg"} alt="Joined" />
@@ -243,11 +280,11 @@ const UserBio = () => {
                       month: "long",
                       day: "numeric",
                     })
-                  : null}
+                  : "null"}
               </li>
             </ul>
           </aside>
-          <section className="timeline-user grow sm:w-4/8 mt-3 border-t-2 lg:border-none lg:mr-10">
+          <section className="grow sm:w-6/10 mt-3 border-t-2 lg:border-none lg:mr-10">
             <nav>
               <h3 className="text-3xl font-bold pl-2 pt-3 dark:text-white text-center lg:text-left lg:w-44">
                 Your Posts
@@ -375,7 +412,7 @@ const UserBio = () => {
                   );
                 })
               ) : (
-                <li className="flex h-full flex-col justify-center gap-4 p-4 rounded-lg border-2 overflow-hidden border-black dark:border-white m-3">
+                <li className="flex h-full flex-col justify-center gap-4 p-4 rounded-lg border-2 overflow-hidden border-black dark:border-white dark:text-white m-3">
                   <div className="flex items-center justify-center space-x-4">
                     <h1>No posts found</h1>
                   </div>
@@ -384,7 +421,7 @@ const UserBio = () => {
             </ul>
           </section>
 
-          <aside className="widgets-user mt-3 sm:w-2/8 ">
+          <aside className="mt-3 sm:w-2/10 ">
             {/* new layout */}
             <div className="hidden w-full space-y-10 py-2 px-4 lg:mt-8 xl:sticky xl:flex xl:flex-col dark:border dark:border-l-1 dark:border-t-0 dark:border-b-0 dark:border-r-0 dark:border-red-700">
               <div>
@@ -394,7 +431,10 @@ const UserBio = () => {
                 <ul className="divide-y divide-gray-200 dark:divide-gray-700">
                   <li className="flex items-center space-x-4 pb-2">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-purple-600">
-                      <img src={"/assets/avatar.png"} />
+                      <img
+                        className="rounded-full"
+                        src={"/assets/avatar.png"}
+                      />
                     </div>
                     <div>
                       <div className="text-base font-semibold text-gray-900 dark:text-white">
@@ -407,7 +447,10 @@ const UserBio = () => {
                   </li>
                   <li className="flex items-center space-x-4">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-900">
-                      <img src={"/assets/avatar.png"} />
+                      <img
+                        className="rounded-full"
+                        src={"/assets/avatar.png"}
+                      />
                     </div>
                     <div>
                       <div className="text-base font-semibold text-gray-900 dark:text-white">
@@ -420,7 +463,10 @@ const UserBio = () => {
                   </li>
                   <li className="flex items-center space-x-4 pt-2">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg">
-                      <img src={"/assets/avatar.png"} />
+                      <img
+                        className="rounded-full"
+                        src={"/assets/avatar.png"}
+                      />
                     </div>
                     <div>
                       <div className="text-base font-semibold text-gray-900 dark:text-white">
@@ -470,7 +516,6 @@ const UserBio = () => {
           </aside>
         </div>
       </div>
-      {/* <Footer /> */}
     </>
   );
 };
