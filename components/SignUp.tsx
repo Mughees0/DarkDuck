@@ -1,25 +1,16 @@
 "use client";
-import { useEffect, useState, useCallback, useRef, use } from "react";
-import { GiConsoleController, GiDuck } from "react-icons/gi";
-
+import { useEffect, useState } from "react";
+import { GiDuck } from "react-icons/gi";
 import React from "react";
 import useColorMode from "../hooks/useColorMode";
 import { BsFillMoonFill, BsFillSunFill } from "react-icons/bs";
 import { GoHome } from "react-icons/go";
 import axios from "axios";
-import {
-  CountryApi,
-  HTMLElementEvent,
-  restCountriesApi,
-  UserInputData,
-  UserInputErrors,
-} from "@/types";
-import type { NextPage } from "next";
-import { signIn, getProviders, useSession } from "next-auth/react";
+import { CountryApi, UserInputData, UserInputErrors } from "@/types";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import Validation from "@/utils/validator/validators";
-import { log } from "console";
 
 const SignUp = () => {
   const [loading, setLoading] = useState(false);
@@ -47,8 +38,6 @@ const SignUp = () => {
       throw new Error(err);
     }
   }
-
-  //   console.log(dialCode);
 
   async function restLanguages() {
     try {
@@ -104,7 +93,7 @@ const SignUp = () => {
       }
 
       if (user.phone && !Validation.numericPhone(user.phone)) {
-        error.phone = "Please provide 10 digit number";
+        error.phone = "Please provide 9 digit number";
         isValid = false;
       }
 
@@ -158,67 +147,47 @@ const SignUp = () => {
   };
 
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // var arr = countries.filter((c) => c.name.common == e.target.value);
-
     setUser({
       ...user!,
       email: e.target.value!,
-      // countryCode: "+" + arr[0].phone,
     });
     setError({ ...error, email: "" });
     // }
   };
 
   const handleUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // var arr = countries.filter((c) => c.name.common == e.target.value);
-
     setUser({
       ...user!,
       username: e.target.value!,
-      // countryCode: "+" + arr[0].phone,
     });
     setError({ ...error, username: "" });
-    // }
   };
 
   const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // var arr = countries.filter((c) => c.name.common == e.target.value);
-
     setUser({
       ...user!,
       password: e.target.value!,
-      // countryCode: "+" + arr[0].phone,
     });
     setError({ ...error, password: "" });
-    // }
   };
 
   const handleCountry = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    // var arr = countries.filter((c) => c.name.common == e.target.value);
-
     setUser({
       ...user!,
       country: e.target.value!,
-      // countryCode: "+" + arr[0].phone,
     });
     setError({ ...error, country: "" });
-    // }
   };
 
   const handlePhoneNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // var arr = countries.filter((c) => c.name.common == e.target.value);
-
     setUser({
       ...user!,
       phone: e.target.value!,
-      // countryCode: "+" + arr[0].phone,
     });
     setError({ ...error, phone: "" });
-    // }
   };
 
   const handleLanguage = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    // var arr = countries.filter((c) => c.name.common == e.target.value);
     setUser({
       ...user!,
       language: e.target.value!,
@@ -227,32 +196,24 @@ const SignUp = () => {
   };
 
   const handleAge = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // var arr = countries.filter((c) => c.name.common == e.target.value);
-
     setUser({
       ...user!,
       age: e.target.value!,
-      // countryCode: "+" + arr[0].phone,
     });
     setError({ ...error, age: "" });
     // }
   };
 
   const handleCity = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // var arr = countries.filter((c) => c.name.common == e.target.value);
-
     setUser({
       ...user!,
       city: e.target.value!,
-      // countryCode: "+" + arr[0].phone,
     });
     setError({ ...error, city: "" });
     // }
   };
 
   const handleTerms = () => {
-    // var arr = countries.filter((c) => c.name.common == e.target.value);
-
     setUser({
       ...user!,
       termsCondition: !user.termsCondition,
@@ -262,17 +223,12 @@ const SignUp = () => {
   };
 
   const handleCountryCode = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    // var arr = countries.filter((c) => c.name.common == e.target.value);
-
     setUser({
       ...user!,
       countryCode: e.target.value!,
     });
     setError({ ...error, countryCode: "" });
   };
-  //   const escapeRegexCharacters = (str: string) => {
-  //     return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  //   };
 
   const redirectToHome = () => {
     if (pathname === "/sign-up" || pathname === "/sign-in") {

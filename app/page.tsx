@@ -1,31 +1,37 @@
 "use client";
-import AudioRecorder from "@/components/AudioRecorder";
 import Dashboard from "@/components/Dashboard";
 import Header from "@/components/header";
 import HomePage from "@/components/HomePage";
-import ImageUpload from "@/components/ImageUpload";
-import ImageUploader from "@/components/ImageUpload";
-import Test from "@/components/test";
-import UserProfile from "@/components/UserProfile";
+import { Loader } from "../components/Loader";
 import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   const { data: session } = useSession();
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+
+  useEffect(() => {
+    setIsLoaded((isLoaded) => true);
+  }, []);
 
   if (session) {
-    return (
+    return isLoaded ? (
       <main>
-        <>
-          <Header />
-          <Dashboard />
-        </>
+        <Header />
+        <Dashboard />
+        <Footer />
       </main>
+    ) : (
+      <Loader />
     );
   } else {
-    return (
+    return isLoaded ? (
       <main>
         <HomePage />
       </main>
+    ) : (
+      <Loader />
     );
   }
 }

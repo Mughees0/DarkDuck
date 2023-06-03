@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from "react";
 // import { Button, Container, Dropdown, Nav, Navbar } from "react-bootstrap";
 // import { Link, Navigate, useNavigate } from "react-router-dom";
@@ -241,7 +242,7 @@ const Header = () => {
                   {" "}
                   <button
                     type="button"
-                    className="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                    className="flex mr-2 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                     id="user-menu-button"
                     aria-expanded="false"
                     data-dropdown-toggle="dropdown"
@@ -253,7 +254,7 @@ const Header = () => {
                       src={
                         userData?.profilePicture
                           ? userData?.profilePicture
-                          : "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/joseph-mcfall.png"
+                          : "/assets/avatar.png"
                       }
                       alt=""
                     />
@@ -311,7 +312,7 @@ const Header = () => {
               )}
               {/* <!-- Toggle --> */}
               <button
-                className=" text-white bg-blue-400 dark:bg-yellow-800 dark:text-white"
+                className=" text-white bg-blue-400 dark:bg-yellow-800 mx-2 dark:text-white"
                 onClick={() =>
                   setColorMode(colorMode === "light" ? "dark" : "light")
                 }

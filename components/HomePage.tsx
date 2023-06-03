@@ -1,14 +1,20 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { GiDuck } from "react-icons/gi";
 import { BsFillMoonFill, BsFillSunFill } from "react-icons/bs";
 import useColorMode from "@/hooks/useColorMode";
 import Link from "next/link";
+import { Loader } from "./Loader";
 
 const Home = () => {
   const [colorMode, setColorMode] = useColorMode();
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
-  return (
+  useEffect(() => {
+    setIsLoaded((isLoaded) => true);
+  }, []);
+
+  return isLoaded ? (
     <>
       <nav className="flex justify-between py-3 px-3 dark:text-white">
         <div>
@@ -17,15 +23,14 @@ const Home = () => {
         <div>
           <div className="flex text-lg gap-3">
             <button
-              className=" text-white dark:text-white"
               onClick={() =>
                 setColorMode(colorMode === "light" ? "dark" : "light")
               }
             >
               {colorMode === "light" ? (
-                <BsFillMoonFill className="text-black" />
+                <BsFillMoonFill className="text-black dark:text-white" />
               ) : (
-                <BsFillSunFill />
+                <BsFillSunFill className="text-black dark:text-white" />
               )}
             </button>
           </div>
@@ -34,7 +39,7 @@ const Home = () => {
       <div className=" h-screen mt-22 flex justify-center items-center dark:text-white ">
         <div className="flex flex-col gap-3 pb-10 items-center">
           <GiDuck className="text-[100px]" />
-          <h3 className="text-[20px] w-2/3 lg:w-1/3 text-center leading-relaxed">
+          <h3 className="text-sm lg:text-2xl w-2/3 lg:w-1/3 text-center leading-relaxed">
             "Experience the future of comprehensive digital interaction with
             DarkDuck, an all-in-one solution for housing, supply chain
             management, musical collaboration, and social connectivity –
@@ -58,6 +63,8 @@ const Home = () => {
         </div>
       </div>
     </>
+  ) : (
+    <Loader />
   );
 };
 

@@ -11,6 +11,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { GiDuck, GiGuitarBassHead, GiPlasticDuck } from "react-icons/gi";
+import { BsFillCameraFill } from "react-icons/bs";
 import { MdLanguage, MdWork } from "react-icons/md";
 import ImageUpload from "./ImageUpload";
 
@@ -187,12 +188,20 @@ const UserBio = () => {
                           })}
                       </p>
                     </div>
+
                     <img
-                      src={userData?.profilePicture}
-                      className="logo"
-                      alt="Gabriel de Jesus"
+                      src={
+                        userData?.profilePicture
+                          ? userData.profilePicture
+                          : "/assets/avatar.png"
+                      }
+                      className="logo absolute"
+                      alt="User Profile Picture"
                       onClick={() => setModal(!modal)}
                     />
+                    <div className="bg-gray-200 rounded-full overflow-hidden  cursor-pointer absolute top-36 left-20 mt-32 ml-40 p-2 hover:shadow-outline">
+                      <BsFillCameraFill className=" bg-transparent w-10 h-10" />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -366,9 +375,9 @@ const UserBio = () => {
                   );
                 })
               ) : (
-                <li className="flex h-full flex-col justify-center gap-4 p-10">
-                  <div className="flex items-center space-x-4">
-                    <h1>No posts</h1>
+                <li className="flex h-full flex-col justify-center gap-4 p-4 rounded-lg border-2 overflow-hidden border-black dark:border-white m-3">
+                  <div className="flex items-center justify-center space-x-4">
+                    <h1>No posts found</h1>
                   </div>
                 </li>
               )}

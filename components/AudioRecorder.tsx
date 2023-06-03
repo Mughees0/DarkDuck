@@ -4,7 +4,6 @@ import { StorageRes } from "@/types";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useState, useRef } from "react";
-
 const mimeType = "audio/webm";
 
 const AudioRecorder = () => {

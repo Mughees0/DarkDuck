@@ -81,7 +81,7 @@ export const email = (value) => {
 
 export const numericPhone = (value) => {
   const reNum = /^[0-9]*$/;
-  return !empty(value) && value.length === 10 && reNum.test(value);
+  return !empty(value) && value.length === 9 && reNum.test(value);
 };
 
 export const phone = (value) => {

@@ -4,6 +4,7 @@ import axios from "axios";
 import React, { Component, useState, useEffect } from "react";
 import { BsFillArrowRightCircleFill } from "react-icons/bs";
 import { SiAudiomack } from "react-icons/si";
+import { Loader } from "./Loader";
 
 const convertDate = (TZdate) => {
   let date = new Date(TZdate);
@@ -14,6 +15,7 @@ const convertDate = (TZdate) => {
 const Dashboard = () => {
   const [reply, setReply] = useState(false);
   const [posts, setPosts] = useState<PostsResponse>();
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   const getPosts = async () => {
     const res = await axios
@@ -30,16 +32,19 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
+    setIsLoaded((isLoaded) => true);
     getPosts();
   }, []);
 
-  return (
+  return isLoaded ? (
     <>
       <main className="bg-gray-50">
-        <section className="bg-cover bg-center bg-bgCover text-black text-center flex flex-col items-center">
-          <h1 className="bg-transparent pt-20 text-3xl font-bold">DarkDuck</h1>
+        <section className="bg-cover bg-center bg-bgCover text-black text-center flex flex-col items-center dark:text-white">
+          <h1 className="bg-transparent dark:bg-transparent pt-20 text-3xl font-bold">
+            DarkDuck
+          </h1>
 
-          <p className="bg-transparent pt-2 text-2xl w-2/4 pb-3">
+          <p className="bg-transparent dark:bg-transparent pt-2 text-sm lg:text-2xl w-3/4 lg:w-2/4 pb-3">
             "Experience the future of comprehensive digital interaction with
             DarkDuck, an all-in-one solution for housing, supply chain
             management, musical collaboration, and social connectivity –
@@ -50,7 +55,7 @@ const Dashboard = () => {
             the time to read.
           </p> */}
           <div className=" text-black rounded items-center p-2 m-5 bg-gray-200 dark:bg-gray-400 hover:text-white hover:bg-gray-400 hover:text-lg dark:hover:bg-gray-600 px-3">
-            <button className="flex items-center gap-2 dark:text-white bg-transparent ">
+            <button className="flex items-center gap-2 dark:text-white bg-transparent dark:bg-transparent">
               View Posts
               <BsFillArrowRightCircleFill className=" bg-transparent dark:bg-transparent dark:text-white" />
             </button>
@@ -62,119 +67,125 @@ const Dashboard = () => {
               Fresh Posts
             </h1>
             <ul>
-              {posts && posts?.length ? (
-                posts?.map((post) => {
-                  return (
-                    <li key={post?._id}>
-                      <div className="col-span-2 m-auto h-full max-w-3xl space-y-6 overflow-hidden overflow-y-auto mt-3 lg:pt-6 ">
-                        <div className="flex rounded-lg border-2 overflow-hidden border-black bg-white dark:border-gray-700 dark:bg-gray-800 flex-col shadow ">
-                          <div className="flex h-full flex-col justify-center gap-3 p-6 pb-0">
-                            <div className="flex items-center space-x-4">
-                              <div className="shrink-0">
-                                <img
-                                  alt="Portrait Neil Sims"
-                                  src={
-                                    post.userId?.profilePicture
-                                      ? post.userId.profilePicture
-                                      : "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/joseph-mcfall.png"
-                                  }
-                                  className="h-10 w-10 rounded-full"
-                                />
-                              </div>
-                              <div className="min-w-0 flex-1 items-start flex flex-col gap-2 h-20  ">
-                                <strong className=" justify-self-start p-1 px-2 bg-gray-900 text-gray-50 rounded dark:bg-white dark:text-black ">
-                                  {post?.recordModeSwingId ==
-                                  "633919ee9729ead90e0f6ac4"
-                                    ? "Public World Mode"
-                                    : "Private World Mode"}
-                                </strong>
-                                <p className="truncate text-sm  font-semibold text-gray-900 dark:text-white">
-                                  {post?.userId?.username}
-                                </p>
-                                <p className="truncate text-sm font-normal text-gray-500 dark:text-gray-400">
-                                  12 April at 09.28 PM
-                                </p>
-                              </div>
-                              <a
-                                href="#"
-                                className="inline-flex cursor-pointer justify-center rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                              >
-                                <svg
-                                  stroke="currentColor"
-                                  fill="currentColor"
-                                  strokeWidth="0"
-                                  viewBox="0 0 20 20"
-                                  className="text-2xl"
-                                  height="1em"
-                                  width="1em"
-                                  xmlns="http://www.w3.org/2000/svg"
+              {posts ? (
+                posts?.length ? (
+                  posts?.map((post) => {
+                    return (
+                      <li key={post?._id}>
+                        <div className="col-span-2 m-auto h-full max-w-3xl space-y-6 overflow-hidden overflow-y-auto mt-3 lg:pt-6 ">
+                          <div className="flex rounded-lg border-2 overflow-hidden border-black bg-white dark:border-gray-700 dark:bg-gray-800 flex-col shadow ">
+                            <div className="flex h-full flex-col justify-center gap-3 p-6 pb-0">
+                              <div className="flex items-center space-x-4">
+                                <div className="shrink-0">
+                                  <img
+                                    alt="Portrait Neil Sims"
+                                    src={
+                                      post.userId?.profilePicture
+                                        ? post.userId.profilePicture
+                                        : "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/joseph-mcfall.png"
+                                    }
+                                    className="h-10 w-10 rounded-full"
+                                  />
+                                </div>
+                                <div className="min-w-0 flex-1 items-start flex flex-col gap-2 h-20  ">
+                                  <strong className=" justify-self-start p-1 px-2 bg-gray-900 text-gray-50 rounded dark:bg-white dark:text-black ">
+                                    {post?.recordModeSwingId ==
+                                    "633919ee9729ead90e0f6ac4"
+                                      ? "Public World Mode"
+                                      : "Private World Mode"}
+                                  </strong>
+                                  <p className="truncate text-sm  font-semibold text-gray-900 dark:text-white">
+                                    {post?.userId?.username}
+                                  </p>
+                                  <p className="truncate text-sm font-normal text-gray-500 dark:text-gray-400">
+                                    12 April at 09.28 PM
+                                  </p>
+                                </div>
+                                <a
+                                  href="#"
+                                  className="inline-flex cursor-pointer justify-center rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                                 >
-                                  <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path>
-                                </svg>
-                              </a>
-                            </div>
-                            <div className="space-y-4">
-                              {/* <p className="text-base font-normal text-gray-500 dark:text-gray-400">
+                                  <svg
+                                    stroke="currentColor"
+                                    fill="currentColor"
+                                    strokeWidth="0"
+                                    viewBox="0 0 20 20"
+                                    className="text-2xl"
+                                    height="1em"
+                                    width="1em"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  >
+                                    <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path>
+                                  </svg>
+                                </a>
+                              </div>
+                              <div className="space-y-4">
+                                {/* <p className="text-base font-normal text-gray-500 dark:text-gray-400">
                                 Hi @everyone, the new designs are attached. Go
                                 check them out and let me know if I missed
                                 anything. Thanks!
                               </p> */}
-                              <div className="flex flex-wrap">
-                                {post?.audio ? (
-                                  <audio controls>
-                                    <source
-                                      src={
-                                        process.env.REACT_APP_AUDIO_PATH +
-                                        post?.audio
-                                      }
-                                      type="audio/mp3"
-                                    />
-                                  </audio>
-                                ) : (
-                                  <></>
-                                )}
+                                <div className="flex flex-wrap">
+                                  {post?.audio ? (
+                                    <audio controls>
+                                      <source
+                                        src={
+                                          process.env.REACT_APP_AUDIO_PATH +
+                                          post?.audio
+                                        }
+                                        type="audio/mp3"
+                                      />
+                                    </audio>
+                                  ) : (
+                                    <></>
+                                  )}
+                                </div>
                               </div>
-                            </div>
-                            <div className="flex space-x-6 border-y border-gray-200 py-3 dark:border-gray-700">
-                              <a className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white">
-                                <svg
-                                  stroke="currentColor"
-                                  fill="currentColor"
-                                  stroke-width="0"
-                                  viewBox="0 0 24 24"
-                                  className="mr-2 text-lg"
-                                  height="1em"
-                                  width="1em"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
-                                  <path fill="none" d="M0 0h24v24H0z"></path>
-                                  <path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18zM18 14H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"></path>
-                                </svg>
-                                <button
-                                  data-accordion-target="#accordion-collapse-body-1"
-                                  aria-expanded="true"
-                                  aria-controls="accordion-collapse-body-1"
-                                  onClick={() => {
-                                    setReply(!reply);
-                                  }}
-                                >
-                                  Reply
-                                </button>
-                              </a>
+                              <div className="flex space-x-6 border-y border-gray-200 py-3 dark:border-gray-700">
+                                <a className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white">
+                                  <svg
+                                    stroke="currentColor"
+                                    fill="currentColor"
+                                    stroke-width="0"
+                                    viewBox="0 0 24 24"
+                                    className="mr-2 text-lg"
+                                    height="1em"
+                                    width="1em"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  >
+                                    <path fill="none" d="M0 0h24v24H0z"></path>
+                                    <path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18zM18 14H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"></path>
+                                  </svg>
+                                  <button
+                                    data-accordion-target="#accordion-collapse-body-1"
+                                    aria-expanded="true"
+                                    aria-controls="accordion-collapse-body-1"
+                                    onClick={() => {
+                                      setReply(!reply);
+                                    }}
+                                  >
+                                    Reply
+                                  </button>
+                                </a>
 
-                              <a
-                                href="#"
-                                className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white"
-                              ></a>
+                                <a
+                                  href="#"
+                                  className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white"
+                                ></a>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </li>
-                  );
-                })
+                      </li>
+                    );
+                  })
+                ) : (
+                  <li className="col-span-2 m-auto h-full max-w-3xl space-y-6 overflow-hidden overflow-y-auto mt-3 lg:pt-6 ">
+                    No Posts Found
+                  </li>
+                )
               ) : (
-                <li>No Posts Found</li>
+                <Loader />
               )}
             </ul>
           </section>
@@ -302,6 +313,8 @@ const Dashboard = () => {
       </main>
       {/* <Footer /> */}
     </>
+  ) : (
+    <Loader />
   );
 };
 

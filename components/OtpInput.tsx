@@ -1,4 +1,5 @@
-import React, { useMemo } from "react";
+"use client";
+import React, { useEffect, useMemo, useState } from "react";
 
 export type Props = {
   value: string;
@@ -10,7 +11,11 @@ export const RE_DIGIT = new RegExp(/^\d+$/);
 export default function OtpInput({ value, valueLength, onChange }: Props) {
   const items: Array<string> = [];
   let valueArray = [];
-  const valueItems = useMemo(() => {
+
+  const [valueItems, setValueItems] = useState<string[]>();
+
+  function getValueItems() {
+
     valueArray = value?.split("");
 
     for (let i = 0; i < valueLength; i++) {
@@ -23,8 +28,12 @@ export default function OtpInput({ value, valueLength, onChange }: Props) {
       }
     }
 
-    return items;
-  }, [value, valueLength]);
+    setValueItems(items);
+  }
+
+  useEffect(() => {
+    getValueItems();
+  }, [value]);
 
   const focusToNextInput = (target: HTMLElement) => {
     const nextElementSibling =
@@ -42,6 +51,7 @@ export default function OtpInput({ value, valueLength, onChange }: Props) {
       previousElementSibling.focus();
     }
   };
+
   const inputOnChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     idx: number
@@ -82,6 +92,7 @@ export default function OtpInput({ value, valueLength, onChange }: Props) {
       target.blur();
     }
   };
+
   const inputOnKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const { key } = e;
     const target = e.target as HTMLInputElement;
@@ -108,6 +119,7 @@ export default function OtpInput({ value, valueLength, onChange }: Props) {
 
     focusToPrevInput(target);
   };
+
   const inputOnFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     const { target } = e;
 
@@ -125,7 +137,7 @@ export default function OtpInput({ value, valueLength, onChange }: Props) {
 
   return (
     <>
-      {valueItems.map((digit, idx) => (
+      {valueItems?.map((digit, idx) => (
         <input
           key={idx}
           type="text"
@@ -133,7 +145,7 @@ export default function OtpInput({ value, valueLength, onChange }: Props) {
           autoComplete="one-time-code"
           pattern="\d{1}"
           maxLength={valueLength}
-          className=" h-12 border w-11 border border-blue-400 hover:border-2 hover:border-blue-600 enabled:border-3 rounded-md p-0 text-center text-lg font-bold leading-3"
+          className=" h-12 border w-11 border-blue-400 hover:border-2 hover:border-blue-600 enabled:border-3 rounded-md p-0 text-center text-lg font-bold leading-3"
           value={digit}
           onChange={(e) => inputOnChange(e, idx)}
           onKeyDown={inputOnKeyDown}
