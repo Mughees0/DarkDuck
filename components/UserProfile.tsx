@@ -254,7 +254,7 @@ const UserBio = () => {
             <ul className="list-user mt-3 list-none text-sm text-gray-400">
               <li className="gap-2 items-center flex">
                 <img src={"/assets/place.svg"} alt="Place" />
-                {userData?.cityCode ? userData.cityCode : "none"}
+                {userData?.city ? userData.city : "none"}
               </li>
               <li className="gap-2 items-center flex">
                 <img src={"/assets/url.svg"} alt="URL" />

@@ -64,7 +64,6 @@ export async function POST(request: Request) {
     termsCondition,
     profilePicture,
     bannerPicture,
-    createdAt,
   } = await request.json();
   const errorMessage = await validateForm(username, email, password);
   if (errorMessage) {
@@ -96,7 +95,8 @@ export async function POST(request: Request) {
     termsCondition,
     profilePicture,
     bannerPicture,
-    createdAt,
+    updatedAt: Date.now(),
+    createdAt: Date.now(),
   });
 
   return newUser

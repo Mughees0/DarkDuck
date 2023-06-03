@@ -57,6 +57,7 @@ const SignIn = () => {
   };
 
   const loginUser = async () => {
+    setLoading(true);
     const res: any = await signIn("credentials", {
       redirect: false,
       email: user?.email,
@@ -64,6 +65,7 @@ const SignIn = () => {
       callbackUrl: `${window.location.origin}`,
     });
     res.error ? setApiError(res.error) : redirectToHome();
+    setLoading(false);
   };
   let notify;
   if (apiError !== undefined) {

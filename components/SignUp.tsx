@@ -238,6 +238,7 @@ const SignUp = () => {
   };
 
   const registerUser = async () => {
+    setLoading(true);
     const res = await axios
       .post(
         "/api/v1/users",
@@ -276,6 +277,7 @@ const SignUp = () => {
         console.log(error);
       });
     console.log(res);
+    setLoading(false);
   };
 
   const loginUser = async () => {
