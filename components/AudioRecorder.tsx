@@ -1,9 +1,10 @@
 "use client";
 import Session from "@/models/Session";
+import { StorageRes } from "@/types";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useState, useRef } from "react";
-import { Directus } from "@directus/sdk";
+
 const mimeType = "audio/webm";
 
 const AudioRecorder = () => {
@@ -14,6 +15,7 @@ const AudioRecorder = () => {
   const [recordingStatus, setRecordingStatus] = useState("inactive");
   const [audioChunks, setAudioChunks] = useState([]);
   const [audio, setAudio] = useState(null);
+  const [audioBlob, setAudioBlob] = useState<Blob>(null);
   const [mode, setMode] = useState("Public Mode");
   const [uploading, setUploading] = useState(false);
 
@@ -31,48 +33,6 @@ const AudioRecorder = () => {
       }
     } else {
       alert("The MediaRecorder API is not supported in your browser.");
-    }
-  };
-
-  // Audio Gain
-  const audioCtx = new AudioContext();
-  const gainNode = audioCtx.createGain();
-  const mute = useRef(null);
-  let source;
-
-  const audioGain = async () => {
-    if (navigator.mediaDevices.getUserMedia) {
-      try {
-        navigator.mediaDevices.getUserMedia(
-          // constraints - only audio needed for this app
-          {
-            audio: true,
-          }
-        );
-        source = audioCtx.createMediaStreamSource(stream);
-      } catch (error) {
-        console.error(`The following gUM error occurred: ${error}`);
-      }
-    } else {
-      console.error("getUserMedia not supported on your browser!");
-    }
-    source.connect(gainNode);
-    gainNode.connect(audioCtx.destination);
-  };
-
-  // …
-
-  const HandleAudioGain = () => {
-    if (mute.current.id === "") {
-      // 0 means mute. If you still hear something, make sure you haven't
-      // connected your source into the output in addition to using the GainNode.
-      gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-      mute.current.id = "activated";
-      mute.current.textContent = "Unmute";
-    } else {
-      gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
-      mute.current.id = "";
-      mute.current.textContent = "Mute";
     }
   };
 
@@ -109,51 +69,8 @@ const AudioRecorder = () => {
   };
   console.log(mediaRecorder.current?.state);
 
-  const handleAudioSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const form = new FormData(event.currentTarget);
-    const directus = new Directus<any>("/api/v1/upload/audio");
-    form.append("folder", "887b5198-6b28-4289-8117-87deb4df5e71");
-    const file = form.get("file");
-    if (file instanceof Blob) {
-      form.append("file", file);
-    } else {
-      throw new Error("Invalid file data");
-    }
-    console.log("Before fileResponse");
-    const fileRes = directus.files
-      .createOne(form)
-      .then(async (Response) => {
-        return await Response?.data.id;
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    console.log(await fileRes);
-  };
-
-  // const handleAudioSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  //   const url = `/api/v1/upload/audio`;
-  //   const data = new FormData(event.target.value);
-  //   // data.set("userId", data.get("userId"));
-  //   // data.set("comment", data.get("comment"));
-  //   data.set("audio", data.get("audio"));
-  //   const config = {
-  //     headers: {
-  //       "content-type": "multipart/form-data",
-  //     },
-  //   };
-  //   axios
-  //     .post(url, data, config)
-  //     .then((response) => {
-  //       console.log(response);
-  //       setTimeout(() => location.reload(), 300);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // };
+  // 1. add reference to input element
+  const ref = useRef<HTMLInputElement>(null);
 
   const stopRecording = () => {
     setRecordingStatus("inactive");
@@ -163,13 +80,53 @@ const AudioRecorder = () => {
       //creates a blob file from the audiochunks data
       const audioBlob = new Blob(audioChunks, { type: mimeType });
       //creates a playable URL from the blob file.
+      setAudioBlob(audioBlob);
       const audioUrl = URL.createObjectURL(audioBlob);
       setAudio(audioUrl);
       setAudioChunks([]);
     };
   };
 
-  console.log(audio);
+  const handleAudioSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    setUploading(true);
+    let storageRes: StorageRes;
+    // 1. Store Audio Data In Mongo Blob
+    try {
+      const formData = new FormData();
+      formData.append(`${Date.now()}.webm`, audioBlob);
+      const storageReq = await axios.post("/api/v1/audios/upload", formData);
+
+      if (storageReq.status == 200) {
+        storageRes = await storageReq.data;
+      }
+      console.log(storageRes.success);
+    } catch (error) {}
+    // 2. Use the FileName and store the Post Data in MongoDB
+    try {
+      const req = await axios.post(
+        "/api/v1/posts",
+        {
+          userId: Session?.user?.id,
+          audio: storageRes?.success,
+          recordModeSwingId:
+            mode === "Public Mode"
+              ? "633919ee9729ead90e0f6ac4"
+              : "63391b065ef1e76cfdcf539c",
+        },
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const res = await req.data;
+      console.log(res);
+    } catch (err) {
+      console.log("error in update post", err);
+    }
+    setUploading(false);
+  };
 
   return (
     <div className=" h-52 w-64 flex-col flex justify-center items-center gap-3  bg-red-200">
@@ -234,30 +191,22 @@ const AudioRecorder = () => {
             </a>
           </div>
         ) : null}
-        <form encType="multipart/form-data" onSubmit={handleAudioSubmit}>
-          <div>
-            <label htmlFor="mode"></label>
-            <select name="mode" id="mode">
-              <option
-                onSelect={() => setMode("Public Mode")}
-                value="Public Mode"
-              >
-                Public Mode
-              </option>
-              <option
-                onSelect={() => setMode("Private Mode")}
-                value="Private Mode"
-              >
-                Private Mode
-              </option>
-            </select>
-          </div>
-          <input name="userId" hidden value={Session?.user?.id} />
-          <input id="audio" name="audio" type="audio" hidden value={audio} />
-          <button type="submit" className=" px-4 py-1 bg-green-300">
-            Post
-          </button>
-        </form>
+
+        <label htmlFor="mode"></label>
+        <select name="mode" id="mode">
+          <option onSelect={() => setMode("Public Mode")} value="Public Mode">
+            Public Mode
+          </option>
+          <option onSelect={() => setMode("Private Mode")} value="Private Mode">
+            Private Mode
+          </option>
+        </select>
+
+        <input name="userId" hidden value={Session?.user?.id} />
+        <input id="audio" name="audio" type="audio" hidden value={audio} />
+        <button onClick={handleAudioSubmit} className=" px-4 py-1 bg-green-300">
+          Post
+        </button>
       </main>
     </div>
   );

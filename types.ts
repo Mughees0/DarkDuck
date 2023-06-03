@@ -19,6 +19,10 @@ export type UserInputData = {
   termsCondition: boolean;
 };
 
+export type StorageRes = {
+  success: string;
+};
+
 export type UserInputErrors = {
   username?: string;
   alias?: string;

@@ -16,3 +16,5 @@ export async function GET(request: Request, { params }) {
   const { id } = params;
   return NextResponse.json(await Post.findOne({ userId: id }));
 }
+
+
