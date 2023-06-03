@@ -99,7 +99,7 @@ const ImageUploader = () => {
           className="px-2 py-1 rounded-md bg-violet-50 text-violet-500"
           disabled={!currentFile}
           type="submit"
-          value="Upload"
+          value="Change Profile Image"
         />
       </form>
 

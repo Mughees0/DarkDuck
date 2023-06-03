@@ -13,7 +13,7 @@ import { useEffect, useRef, useState } from "react";
 import { GiDuck, GiGuitarBassHead, GiPlasticDuck } from "react-icons/gi";
 import { BsFillCameraFill } from "react-icons/bs";
 import { MdLanguage, MdWork } from "react-icons/md";
-import ImageUpload from "./ImageUpload";
+import ImageUpload from "./ProfileImageUpload";
 
 function importAll(r) {
   let images = {};
