@@ -105,7 +105,17 @@ const AudioRecorder = ({
       if (storageReq.status == 200) {
         storageRes = await storageReq.data;
       }
-    } catch (error) {}
+    } catch (error) {
+      if (error.response.status === 400) {
+        console.log(
+          "Audio recording not uploaded." +
+            " The error message:> " +
+            error.message
+        );
+      } else {
+        console.log("Wrong call to the api.");
+      }
+    }
     // 2. Use the FileName and store the Post Data in MongoDB
     try {
       const req = await axios.post(
@@ -133,7 +143,9 @@ const AudioRecorder = ({
     } catch (err) {
       if (err.response.status === 400) {
         console.log(
-          "User not fetched by the API, probably the user is not found or request failed."
+          "Audio is uploaded but new post was not created." +
+            " The error message:> " +
+            err.message
         );
       } else {
         console.log("Wrong call to the api.");

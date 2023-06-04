@@ -37,7 +37,13 @@ const SignUp = () => {
       setCountries(res);
       setDialCodes(dialCode);
     } catch (err: any) {
-      throw new Error(err);
+      if (err.response.status === 400) {
+        console.log(
+          "Not able to fetch dial codes and country names, API request failed."
+        );
+      } else {
+        console.log("Wrong call to the api.");
+      }
     }
   }
 
@@ -47,7 +53,13 @@ const SignUp = () => {
       const res = req.data;
       setLanguages(res);
     } catch (err: any) {
-      throw new Error(err);
+      if (err.response.status === 400) {
+        console.log(
+          "Not able to fetch languages from the public of our server."
+        );
+      } else {
+        console.log("Wrong call to the api.");
+      }
     }
   }
 
@@ -243,7 +255,7 @@ const SignUp = () => {
     setLoading(true);
     const res = await axios
       .post(
-        "/api/v1/users",
+        "/api/v1/users/register",
         {
           email: user?.email,
           username: user?.username,
@@ -276,7 +288,11 @@ const SignUp = () => {
         redirectToHome();
       })
       .catch((error) => {
-        throw error;
+        if (error.response.status === 400) {
+          console.log("Not able to register user, API request failed.");
+        } else {
+          console.log("Wrong call to the api, wrong route maybe.");
+        }
       });
 
     setLoading(false);

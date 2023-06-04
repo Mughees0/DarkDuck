@@ -29,7 +29,9 @@ function ResetPage() {
     } catch (error) {
       if (error.response.status === 400) {
         console.log(
-          "User not fetched by the API, probably the user is not found or request failed."
+          "User not fetched by the API, probably the user is not found or request failed." +
+            " The error message:> " +
+            error.message
         );
       } else {
         console.log("Wrong call to the api.");

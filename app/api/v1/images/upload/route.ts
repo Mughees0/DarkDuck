@@ -54,6 +54,6 @@ export async function POST(req: Request) {
     // return the response after all the entries have been processed.
     return NextResponse.json({ success: fileName });
   } catch (error) {
-    return NextResponse.json({ failed: true }, { status: 400 });
+    return NextResponse.json({ success: false, error: error }, { status: 400 });
   }
 }

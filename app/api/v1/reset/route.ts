@@ -36,7 +36,10 @@ export async function POST(request: Request) {
   const { email }: { email: string } = await request.json();
   const errorMessage = await validateForm(email);
   if (errorMessage) {
-    return NextResponse.json(errorMessage, { status: 400 });
+    return NextResponse.json(
+      { success: false, error: errorMessage },
+      { status: 400 }
+    );
   }
 
   const OTP = Math.floor(100000 + Math.random() * 900000);
@@ -63,7 +66,9 @@ export async function POST(request: Request) {
   const emailUser = await User.findOne({ email: email });
   return updatedUser
     .then(() => NextResponse.json({ emailUser }, { status: 200 }))
-    .catch((err: string) => NextResponse.json({ error: err }, { status: 400 }));
+    .catch((err: string) =>
+      NextResponse.json({ success: false, error: err }, { status: 400 })
+    );
 }
 
 export async function PUT(request: Request) {
@@ -79,5 +84,7 @@ export async function PUT(request: Request) {
 
   return updatedUser
     .then(() => NextResponse.json({ success: "done" }, { status: 200 }))
-    .catch((err: string) => NextResponse.json({ error: err }, { status: 400 }));
+    .catch((err: string) =>
+      NextResponse.json({ success: false, error: err }, { status: 400 })
+    );
 }

@@ -11,7 +11,13 @@ const useLocalStorage = (key: string, initialValue: string) => {
       return item ? JSON.parse(item) : initialValue;
     } catch (error) {
       // If error also return initialValue
-      throw error;
+      if (error.response.status === 400) {
+        console.log(
+          "Not able to fetch localstorage data to use in dark mode, API request failed."
+        );
+      } else {
+        console.log("Wrong call to the api.");
+      }
       return initialValue;
     }
   });
@@ -28,7 +34,13 @@ const useLocalStorage = (key: string, initialValue: string) => {
       window.localStorage.setItem(key, JSON.stringify(valueToStore));
     } catch (error) {
       // A more advanced implementation would handle the error case
-      throw error;
+      if (error.response.status === 400) {
+        console.log(
+          "Not able to set localstorage data to current theme (dark or light), API request failed."
+        );
+      } else {
+        console.log("Wrong call to the api.");
+      }
     }
   }, [key, storedValue]);
 

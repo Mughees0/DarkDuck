@@ -67,7 +67,10 @@ export async function POST(request: Request) {
   } = await request.json();
   const errorMessage = await validateForm(username, email, password);
   if (errorMessage) {
-    return NextResponse.json(errorMessage, { status: 400 });
+    return NextResponse.json(
+      { success: false, error: errorMessage },
+      { status: 400 }
+    );
   }
 
   // hash password
@@ -101,17 +104,9 @@ export async function POST(request: Request) {
 
   return newUser
     .save()
-    .then(() =>
-      NextResponse.json(
-        { msg: "Successfuly created new User: " + newUser },
-        { status: 200 }
-      )
-    )
+    .then(() => NextResponse.json({ success: true }, { status: 200 }))
     .catch((err: string) =>
-      NextResponse.json(
-        { error: "Error on '/api/register': " + err },
-        { status: 400 }
-      )
+      NextResponse.json({ success: false, error: err }, { status: 400 })
     );
 }
 

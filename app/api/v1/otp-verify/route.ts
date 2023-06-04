@@ -5,7 +5,13 @@ import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   await dbConnect();
-  return NextResponse.json(await User.find());
+
+  try {
+    const users = await User.find();
+    return NextResponse.json(users, { status: 200 });
+  } catch (error) {
+    return NextResponse.json({ success: false, error: error }, { status: 400 });
+  }
 }
 
 export async function POST(request: Request) {
@@ -17,6 +23,9 @@ export async function POST(request: Request) {
   if (otp == userOtpCheck.otp) {
     return NextResponse.json({ success: "Done" }, { status: 200 });
   } else {
-    return NextResponse.json({ error: "Incorrect OTP" }, { status: 400 });
+    return NextResponse.json(
+      { success: false, error: "Incorrect OTP" },
+      { status: 400 }
+    );
   }
 }

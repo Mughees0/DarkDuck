@@ -15,11 +15,8 @@ export async function POST(request: NextRequest) {
 
   return newPost
     .save()
-    .then(() =>
-      NextResponse.json(
-        { msg: "Successfuly created new User: " + newPost },
-        { status: 200 }
-      )
-    )
-    .catch((err: string) => NextResponse.json({ error: err }, { status: 400 }));
+    .then(() => NextResponse.json({ success: true }, { status: 200 }))
+    .catch((err: string) =>
+      NextResponse.json({ success: false, error: err }, { status: 400 })
+    );
 }

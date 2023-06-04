@@ -39,7 +39,15 @@ const ImageUploader = ({
       if (storageReq.status == 200) {
         storageRes = await storageReq.data;
       }
-    } catch (error) {}
+    } catch (error) {
+      if (error.response.status === 400) {
+        console.log(
+          "Banner Image not uploaded." + " The error message:> " + error.message
+        );
+      } else {
+        console.log("Wrong call to the api.");
+      }
+    }
     // 2. Use the FileName and store the Post Data in MongoDB
     try {
       const req = await axios.post(
@@ -62,9 +70,7 @@ const ImageUploader = ({
       const res = await req.data;
     } catch (err) {
       if (err.response.status === 400) {
-        console.log(
-          "User not fetched by the API, probably the user is not found or request failed."
-        );
+        console.log("Banner Image is uploaded but profile did not update.");
       } else {
         console.log("Wrong call to the api.");
       }

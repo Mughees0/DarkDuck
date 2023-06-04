@@ -26,7 +26,13 @@ function LikeButton({ userId, postId }: { userId: string; postId: string }) {
         setLiked(!liked);
       }
     } catch (error) {
-      throw new Error("Like doesn't work:> " + error);
+      if (error.response.status === 400) {
+        console.log(
+          "post not liked by the API, probably the post is not found or request failed."
+        );
+      } else {
+        console.log("Wrong call to the api.");
+      }
     }
   }
 

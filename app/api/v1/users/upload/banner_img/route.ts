@@ -15,6 +15,6 @@ export async function POST(request: NextRequest) {
   return updatedUser
     .then(() => NextResponse.json({ success: true }, { status: 200 }))
     .catch((err: string) =>
-      NextResponse.json({ failed: err }, { status: 400 })
+      NextResponse.json({ success: false, error: err }, { status: 400 })
     );
 }

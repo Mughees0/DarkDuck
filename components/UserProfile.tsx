@@ -36,7 +36,11 @@ const UserBio = ({ updatePosts }) => {
 
       setUserData(user);
     } catch (error) {
-      throw error;
+      if (error.response.status === 400) {
+        console.log("Not able to fetch user, API request failed.");
+      } else {
+        console.log("Wrong call to the api.");
+      }
     }
   };
 
@@ -46,7 +50,11 @@ const UserBio = ({ updatePosts }) => {
       const posts = await res.data;
       setPosts(posts);
     } catch (error) {
-      throw error;
+      if (error.response.status === 400) {
+        console.log("Not able to fetch post, API request failed.");
+      } else {
+        console.log("Wrong call to the api.");
+      }
     }
   }
 
@@ -127,7 +135,7 @@ const UserBio = ({ updatePosts }) => {
             />
           </div>
         </div>
-        <div className="h-screen">
+        <div className="h-full">
           <div className="container-user w-auto mx-2 flex flex-col lg:flex-row">
             <aside className="sm:w-2/10 lg:-mx-10 dark:bg-transparent flex flex-col items-center mb-2">
               <div className="main dark:bg-transparent">
