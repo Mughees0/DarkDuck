@@ -24,7 +24,6 @@ function Profile() {
       <>
         <Header updatePosts={updatePosts} setUpdatePosts={setUpdatePosts} />
         <UserProfile updatePosts={updatePosts} />
-        <Footer />
       </>
     ) : (
       <Loader />

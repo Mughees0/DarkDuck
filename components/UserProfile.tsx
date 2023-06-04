@@ -14,6 +14,7 @@ import ProfileImageUpload from "./ProfileImageUpload";
 import BannerImageUpload from "./BannerImageUpload";
 import LikeButton from "./LikeButton";
 import Loader from "./Loader";
+import Footer from "./Footer";
 
 const UserBio = ({ updatePosts }) => {
   const { data: session } = useSession();
@@ -425,6 +426,7 @@ const UserBio = ({ updatePosts }) => {
               </div>
             </aside>
           </div>
+          <Footer />
         </div>
       </>
     );

@@ -95,7 +95,7 @@ const Header = ({ setUpdatePosts, updatePosts }) => {
               <div
                 className={
                   audioRecordingModel
-                    ? "h-screen w-screen absolute flex justify-center items-center bg-opacity-25 bg-gray-400 top-0 left-0 right-0 bottom-0 dark:border-2 dark:border-neutral-200"
+                    ? "h-screen w-screen absolute flex justify-center items-center bg-opacity-25 dark:bg-opacity-25 bg-gray-400 top-0 left-0 right-0 bottom-0 "
                     : "hidden"
                 }
               >

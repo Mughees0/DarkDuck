@@ -137,7 +137,7 @@ const AudioRecorder = ({
   };
 
   return (
-    <div className="pointer-events-none relative w-[80%] lg:w-[30%] translate-y-[-50px] transition-all duration-300 ease-in-out z-[9999] transform-none opacity-100 dark:text-neutral-200 ">
+    <div className="pointer-events-none dark:border-2 dark:border-gray-100 relative w-[90%] lg:w-[30%] translate-y-[-50px] transition-all duration-300 ease-in-out z-[9999] transform-none opacity-100 dark:text-neutral-200 ">
       <div className="min-[576px]:shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] pointer-events-auto relative flex w-full flex-col rounded-md bg-white bg-clip-padding text-current shadow-lg outline-none space-y-5">
         <div className="flex flex-shrink-0 items-center justify-between rounded-t-md p-4">
           <h2 className="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200">
@@ -167,7 +167,7 @@ const AudioRecorder = ({
         </div>
         <main className="bg-transparent flex flex-col gap-3 items-center">
           <div className="bg-transparent flex flex-col gap-3 items-center ">
-            <div className="space-y-3 p-7 m-2 bg-transparent border-2 rounded border-gray-200">
+            <div className="space-y-3 sm:p-7 sm:m-2 bg-transparent border-2 py-2  rounded border-gray-200">
               <p id="counter" className=" bg-transparent text-3x text-center">
                 {hours}:{minutes.toString().padStart(2, "0")}:
                 {seconds.toString().padStart(2, "0")}:
@@ -178,7 +178,7 @@ const AudioRecorder = ({
                 {!permission ? (
                   <button
                     onClick={getMicrophonePermission}
-                    className=" bg-yellow-400 p-2 text-sm rounded-md"
+                    className=" bg-yellow-400 dark:text-gray-900 dark:bg-yellow-400 p-2 text-sm rounded-md"
                   >
                     Get Microphone
                   </button>
@@ -189,7 +189,7 @@ const AudioRecorder = ({
                       startRecording();
                       startAndStop();
                     }}
-                    className=" bg-green-400 px-4 py-1 text-sm rounded-md"
+                    className=" bg-green-400 dark:bg-green-400 dark:text-gray-900 px-4 py-1 text-sm rounded-md"
                   >
                     Start Recording
                   </button>
@@ -200,7 +200,7 @@ const AudioRecorder = ({
                       pauseRecording();
                       startAndStop();
                     }}
-                    className=" bg-blue-400 px-3 py-1 text-sm rounded-md"
+                    className=" bg-blue-400 dark:bg-blue-400 dark:text-gray-900 px-3 py-1 text-sm rounded-md"
                   >
                     Pause Recording
                   </button>
@@ -211,7 +211,7 @@ const AudioRecorder = ({
                       resumeRecording();
                       startAndStop();
                     }}
-                    className=" bg-purple-400 px-4 py-1 text-sm rounded-md"
+                    className=" bg-purple-400 dark:text-gray-900 dark:bg-purple-400 px-4 py-1 text-sm rounded-md"
                   >
                     Resume Recording
                   </button>
@@ -223,7 +223,7 @@ const AudioRecorder = ({
                       setTime(0);
                       stopRecording();
                     }}
-                    className=" bg-red-400 px-4 py-1 my-3 text-sm rounded-md"
+                    className=" bg-red-400 dark:text-gray-900 dark:bg-red-400 px-4 py-1 my-3 text-sm rounded-md"
                   >
                     Stop Recording
                   </button>
@@ -239,7 +239,7 @@ const AudioRecorder = ({
                   <a
                     download
                     href={audio}
-                    className=" w-52 gap-2 p-1 self-center rounded-lg hover:text-green-700 active:bg-yellow-700 flex justify-center items-center"
+                    className=" w-52 gap-2 p-1 self-center  rounded-lg hover:text-green-700 active:bg-yellow-700 flex justify-center items-center"
                   >
                     <HiOutlineDownload />
                     Download Recording
@@ -281,7 +281,7 @@ const AudioRecorder = ({
           <div className="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md bg-transparent border-opacity-100 p-4 dark:border-opacity-50">
             <button
               onClick={handleAudioSubmit}
-              className=" py-1 bg-green-300 inline-block rounded bg-primary-100 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-primary-accent-100 focus:bg-primary-accent-100 focus:outline-none focus:ring-0 active:bg-primary-accent-200"
+              className=" py-1 bg-green-300 inline-block rounded bg-primary-100 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-primary-accent-100 dark:bg-gray-100 dark:text-gray-900 focus:bg-primary-accent-100 focus:outline-none focus:ring-0 active:bg-primary-accent-200"
             >
               {uploading ? "Uploading..." : "Post"}
             </button>

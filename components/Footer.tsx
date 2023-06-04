@@ -128,10 +128,10 @@ const Footer = () => {
             </div>
           </ul>
         </div>
+        <p className=" text-center text-sm text-gray-500 bg-transparent dark:text-gray-300  p-3">
+          © DarkDuck 2023
+        </p>
       </footer>
-      <p className=" text-center text-sm text-gray-500 bg-transparent dark:text-gray-300  p-3">
-        © DarkDuck 2023
-      </p>
     </>
   );
 };
