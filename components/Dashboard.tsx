@@ -4,7 +4,7 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { BsFillArrowRightCircleFill } from "react-icons/bs";
 import { SiAudiomack } from "react-icons/si";
-import { Loader } from "./Loader";
+import Loader from "./Loader";
 import { useSession } from "next-auth/react";
 import LikeButton from "./LikeButton";
 

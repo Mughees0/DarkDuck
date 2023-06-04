@@ -1,6 +1,7 @@
 "use client";
 
-import { Loader } from "../../components/Loader";
+import UnAuthRedirect from "@/components/UnAuthRedirect";
+import Loader from "../../components/Loader";
 import SignIn from "@/components/SignIn";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -15,7 +16,9 @@ function Signin() {
     setIsLoaded((isLoaded) => true);
   }, []);
 
-  if (status === "unauthenticated") {
+  if (status === "loading") {
+    return <Loader />;
+  } else if (status === "unauthenticated") {
     return isLoaded ? (
       <>
         <SignIn />
@@ -24,11 +27,7 @@ function Signin() {
       <Loader />
     );
   } else {
-    return (
-      <main className="flex h-screen w-screen justify-center items-center">
-        <div>Please SignOut First</div>
-      </main>
-    );
+    return <UnAuthRedirect />;
   }
 }
 

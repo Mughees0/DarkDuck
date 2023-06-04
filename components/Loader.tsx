@@ -1,4 +1,5 @@
-export function Loader() {
+"use client";
+const Loader = () => {
   return (
     <div className="text-center flex justify-center items-center w-screen h-screen">
       <div role="status">
@@ -22,4 +23,6 @@ export function Loader() {
       </div>
     </div>
   );
-}
+};
+
+export default Loader;

@@ -9,7 +9,7 @@ import { MdLanguage, MdWork } from "react-icons/md";
 import ProfileImageUpload from "./ProfileImageUpload";
 import BannerImageUpload from "./BannerImageUpload";
 import LikeButton from "./LikeButton";
-import { Loader } from "./Loader";
+import Loader from "./Loader";
 
 const UserBio = ({ updatePosts }) => {
   const { data: session } = useSession();
@@ -218,7 +218,7 @@ const UserBio = ({ updatePosts }) => {
               </nav>
 
               <ul className="tweets-user">
-                {posts ? (
+                {posts.length ? (
                   posts?.map((post) => {
                     return (
                       <li

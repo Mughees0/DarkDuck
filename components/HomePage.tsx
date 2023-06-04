@@ -4,7 +4,7 @@ import { GiDuck } from "react-icons/gi";
 import { BsFillMoonFill, BsFillSunFill } from "react-icons/bs";
 import useColorMode from "@/hooks/useColorMode";
 import Link from "next/link";
-import { Loader } from "./Loader";
+import Loader from "./Loader";
 
 const Home = () => {
   const [colorMode, setColorMode] = useColorMode();

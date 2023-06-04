@@ -2,7 +2,7 @@
 import Dashboard from "@/components/Dashboard";
 import Header from "@/components/header";
 import HomePage from "@/components/HomePage";
-import { Loader } from "../components/Loader";
+import Loader from "../components/Loader";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import Footer from "@/components/Footer";
@@ -26,6 +26,8 @@ export default function Home() {
     ) : (
       <Loader />
     );
+  } else if (status === "loading") {
+    return <Loader />;
   } else {
     return isLoaded ? (
       <main>
