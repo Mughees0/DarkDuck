@@ -109,7 +109,7 @@ const UserBio = ({ updatePosts }) => {
         {/* Saba's code */}
 
         <div
-          onClick={() => setBannerModal(!bannerModal)}
+          // onClick={() => setBannerModal(!bannerModal)}
           className="h-80 overflow-hidden"
         >
           <img

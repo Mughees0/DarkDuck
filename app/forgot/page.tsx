@@ -34,7 +34,6 @@ const ResetPassword = () => {
           },
         }
       );
-      console.log(req);
 
       if (req.statusText == "OK") {
         setLoader(false);

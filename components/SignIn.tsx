@@ -8,7 +8,7 @@ import React, { useState } from "react";
 
 import { GiDuck } from "@react-icons/all-files/gi/GiDuck";
 import { BsMoon } from "@react-icons/all-files/bs/BsMoon";
-import { BiSun } from "@react-icons/all-files/Bi/BiSun";
+import { BiSun } from "@react-icons/all-files/bi/BiSun";
 import { GoHome } from "@react-icons/all-files/go/GoHome";
 
 import { ToastContainer, toast } from "react-toastify";

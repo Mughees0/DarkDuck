@@ -172,6 +172,7 @@ const Dashboard = ({ updatePosts }) => {
                                       onClick={() => {
                                         setReply(!reply);
                                       }}
+                                      className=" mr-3"
                                     >
                                       Reply
                                     </button>

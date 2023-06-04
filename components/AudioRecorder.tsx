@@ -5,7 +5,7 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useState, useRef } from "react";
 const mimeType = "audio/webm";
-import HiOutlineDownload from "@react-icons/all-files/hi/HiOutlineDownload";
+import { HiOutlineDownload } from "@react-icons/all-files/hi/HiOutlineDownload";
 
 const AudioRecorder = ({
   setAudioRecordingModel,

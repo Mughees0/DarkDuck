@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 
 import { GiDuck } from "@react-icons/all-files/gi/GiDuck";
 import { BsMoon } from "@react-icons/all-files/bs/BsMoon";
-import { BiSun } from "@react-icons/all-files/Bi/BiSun";
+import { BiSun } from "@react-icons/all-files/bi/BiSun";
 
 import useColorMode from "@/hooks/useColorMode";
 import Link from "next/link";

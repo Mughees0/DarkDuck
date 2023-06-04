@@ -5,7 +5,7 @@ import useColorMode from "../hooks/useColorMode";
 
 import { GiDuck } from "@react-icons/all-files/gi/GiDuck";
 import { BsMoon } from "@react-icons/all-files/bs/BsMoon";
-import { BiSun } from "@react-icons/all-files/Bi/BiSun";
+import { BiSun } from "@react-icons/all-files/bi/BiSun";
 import { GoHome } from "@react-icons/all-files/go/GoHome";
 import axios from "axios";
 import { CountryApi, UserInputData, UserInputErrors } from "@/types";

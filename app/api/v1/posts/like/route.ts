@@ -8,10 +8,8 @@ export async function POST(reqest: NextRequest) {
 
   try {
     const post = await Post.findOne({ _id: postId });
-    console.log(post);
 
     const likeIds = post.likes;
-    console.log(likeIds);
 
     if (likeIds.includes(userId)) {
       await post.likes.pull(userId);
