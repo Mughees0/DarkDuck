@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import React from "react";
 import useColorMode from "../hooks/useColorMode";
 
-import { GiDuck } from "@react-icons/all-files/gi/GiDuck";
 import { BsMoon } from "@react-icons/all-files/bs/BsMoon";
 import { BiSun } from "@react-icons/all-files/bi/BiSun";
 import { GoHome } from "@react-icons/all-files/go/GoHome";
@@ -378,7 +377,11 @@ const SignUp = () => {
               <div className="p-6 space-y-4 md:space-y-6 sm:p-8 border border-white outline-none rounded-md ">
                 <div className="flex justify-center">
                   <img
-                    src="/assets/logo.png"
+                    src={
+                      colorMode === "light"
+                        ? "/assets/logo.png"
+                        : "/assets/solid-red-duck.png"
+                    }
                     className="w-16 h-16 dark:text-white"
                   />
                 </div>
@@ -781,15 +784,17 @@ const SignUp = () => {
                       >
                         I accept the{" "}
                         <a
+                          download
                           className="font-medium dark:text-gray-300 text-gray-600 hover:text-black dark:hover:text-white"
-                          href="/DarkDuck Terms of Service and User Agreement (1).pdf"
+                          href="/assets/DarkDuckTermsofService-and-UserAgreement.pdf"
                         >
                           Terms and Conditions
                         </a>{" "}
                         &{" "}
                         <a
+                          download
                           className="font-medium dark:text-gray-300 text-gray-600 hover:text-black dark:hover:text-white"
-                          href="/DarkduckPrivacy.pdf"
+                          href="/assets/DarkduckPrivacy.pdf"
                         >
                           Privacy Policy
                         </a>

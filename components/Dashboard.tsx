@@ -50,12 +50,12 @@ const Dashboard = ({ updatePosts }) => {
       <>
         <main className="bg-gray-50">
           <section className="bg-cover bg-center bg-bgCover text-black text-center flex flex-col items-center">
-            <h1 className="bg-transparent dark:bg-transparent pt-20 font-bold">
+            <div className="bg-transparent dark:bg-transparent pt-5 md:pt-10 font-bold">
               <img
                 src="/assets/name.png"
-                className="w-96 h-24 bg-transparent dark:bg-transparent "
+                className=" w-36 h-10 md:w-96 md:h-24 bg-transparent dark:bg-transparent "
               />
-            </h1>
+            </div>
 
             <p className="bg-transparent dark:bg-transparent pt-2 text-sm lg:text-2xl w-3/4 lg:w-2/4 pb-3">
               "Experience the future of comprehensive digital interaction with

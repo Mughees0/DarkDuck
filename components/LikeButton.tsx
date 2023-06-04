@@ -3,7 +3,6 @@
 import axios from "axios";
 
 import { useEffect, useState } from "react";
-import { GiDuck } from "@react-icons/all-files/gi/GiDuck";
 
 function LikeButton({ userId, postId, setUpdateLikes, updateLikes, post }) {
   const [liked, setLiked] = useState(false);
@@ -93,7 +92,7 @@ function LikeButton({ userId, postId, setUpdateLikes, updateLikes, post }) {
         <img
           src={
             liked && post.likes.includes(userId)
-              ? "/assets/red-duck.png"
+              ? "/assets/solid-red-duck.png"
               : "/assets/yellow-duck.png"
           }
           className={liked ? " w-6 h-6" : " w-6 h-6"}

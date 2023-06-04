@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
-import { GiDuck } from "@react-icons/all-files/gi/GiDuck";
 import { BsMoon } from "@react-icons/all-files/bs/BsMoon";
 import { BiSun } from "@react-icons/all-files/bi/BiSun";
 import { GoHome } from "@react-icons/all-files/go/GoHome";
@@ -87,7 +86,11 @@ const SignIn = () => {
               <div className="p-6 space-y-4 md:space-y-6 sm:p-8 border border-white rounded-lg outline-none ">
                 <div className="flex justify-center">
                   <img
-                    src="/assets/logo.png"
+                    src={
+                      colorMode === "light"
+                        ? "/assets/logo.png"
+                        : "/assets/solid-red-duck.png"
+                    }
                     className="w-16 h-16 dark:text-white"
                   />
                 </div>

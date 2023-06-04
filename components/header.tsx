@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
 
-import { GiDuck } from "@react-icons/all-files/gi/GiDuck";
 import { BsMoon } from "@react-icons/all-files/bs/BsMoon";
 import { BiSun } from "@react-icons/all-files/bi/BiSun";
 import { FiMessageCircle } from "@react-icons/all-files/fi/FiMessageCircle";
@@ -59,9 +58,9 @@ const Header = ({ setUpdatePosts, updatePosts }) => {
                   src={
                     colorMode === "light"
                       ? "/assets/logo.png"
-                      : "/assets/red-duck.png"
+                      : "/assets/solid-red-duck.png"
                   }
-                  className="mr-3 h-8 w-8 bg-gray-200 dark:text-red-700 dark:bg-gray-800"
+                  className="mr-3 h-8 w-8 bg-gray-200  dark:bg-gray-800"
                 />
               </a>
             </div>

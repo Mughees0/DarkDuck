@@ -11,10 +11,20 @@ const Footer = () => {
           >
             <li className="last:mr-0 md:mr-6 mr-3 mb-3 lg:mb-0">
               <a
-                href="../../DarkDuck Terms of Service and User Agreement (1).pdf"
+                download
+                href="/assets/DarkDuckTermsofService-and-UserAgreement.pdf"
                 className="hover:underline"
               >
                 Terms and conditions
+              </a>
+            </li>
+            <li className="last:mr-0 md:mr-6 mr-3 mb-3 lg:mb-0">
+              <a
+                download
+                href="/assets/DarkduckPrivacy.pdf"
+                className="hover:underline"
+              >
+                Privacy Policy
               </a>
             </li>
             <li className="last:mr-0 md:mr-6 mr-3 mb-3 lg:mb-0">

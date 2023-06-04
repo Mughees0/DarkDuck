@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 
-import { GiDuck } from "@react-icons/all-files/gi/GiDuck";
 import { BsMoon } from "@react-icons/all-files/bs/BsMoon";
 import { BiSun } from "@react-icons/all-files/bi/BiSun";
 
@@ -22,8 +21,12 @@ const Home = () => {
       <nav className="flex justify-between py-3 px-3 dark:text-white">
         <div>
           <img
-            src="/assets/logo.png"
-            className=" dark:text-red-400 w-8 h-8 text-3xl"
+            src={
+              colorMode === "light"
+                ? "/assets/logo.png"
+                : "/assets/solid-red-duck.png"
+            }
+            className=" w-8 h-8 text-3xl"
           />
         </div>
         <div>
@@ -44,7 +47,14 @@ const Home = () => {
       </nav>
       <div className=" h-screen mt-22 flex justify-center items-center dark:text-white ">
         <div className="flex flex-col gap-3 pb-10 items-center">
-          <img src="/assets/logo.png" className="w-40 h-40" />
+          <img
+            src={
+              colorMode === "light"
+                ? "/assets/logo.png"
+                : "/assets/solid-red-duck.png"
+            }
+            className="w-40 h-40"
+          />
           <h3 className="text-sm lg:text-2xl w-2/3 lg:w-1/3 text-center leading-relaxed">
             "Experience the future of comprehensive digital interaction with
             DarkDuck, an all-in-one solution for housing, supply chain
