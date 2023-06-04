@@ -61,7 +61,13 @@ const ImageUploader = ({
       }
       const res = await req.data;
     } catch (err) {
-      throw err;
+      if (err.response.status === 400) {
+        console.log(
+          "User not fetched by the API, probably the user is not found or request failed."
+        );
+      } else {
+        console.log("Wrong call to the api.");
+      }
     }
     setUploading(false);
   };

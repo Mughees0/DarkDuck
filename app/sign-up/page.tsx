@@ -9,7 +9,6 @@ import { useEffect, useState } from "react";
 
 function Signup() {
   const { data: session, status } = useSession();
-  const router = useRouter();
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   useEffect(() => {
@@ -21,7 +20,7 @@ function Signup() {
   } else if (status === "unauthenticated") {
     return isLoaded ? (
       <>
-        <Signup />
+        <SignUp />
       </>
     ) : (
       <Loader />

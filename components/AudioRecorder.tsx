@@ -131,21 +131,27 @@ const AudioRecorder = ({
       }
       const res = await req.data;
     } catch (err) {
-      throw err;
+      if (err.response.status === 400) {
+        console.log(
+          "User not fetched by the API, probably the user is not found or request failed."
+        );
+      } else {
+        console.log("Wrong call to the api.");
+      }
     }
     setUploading(false);
   };
 
   return (
-    <div className="pointer-events-none dark:border-2 dark:border-gray-100 relative w-max px-7 rounded-lg lg:w-[30%] translate-y-[-50px] transition-all duration-300 ease-in-out z-[9999] transform-none opacity-100 dark:text-neutral-200 sm:w-max sm:px-10 ">
+    <div className="pointer-events-none dark:border-2 dark:border-gray-100 relative rounded-lg lg:w-[30%] translate-y-[-50px] transition-all duration-300 ease-in-out z-[9999] transform-none opacity-100 dark:text-neutral-200 w-[80%] sm:w-[450px] ">
       <div className="min-[576px]:shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] pointer-events-auto relative flex w-full flex-col rounded-md bg-clip-padding text-current outline-none space-y-5">
-        <div className="flex flex-shrink-0 items-center justify-between rounded-t-md p-4">
-          <h2 className="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200">
+        <div className="flex flex-shrink-0 items-center justify-between  sm:w-full bg-gray-300 rounded-t-md p-4">
+          <h2 className="text-xl bg-gray-300 font-medium leading-normal text-neutral-800 dark:text-neutral-200">
             Create Post
           </h2>
           <button
             type="button"
-            className="box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none"
+            className="box-content bg-gray-300 rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none"
             aria-label="Close"
             onClick={() => setAudioRecordingModel(!audioRecordingModel)}
           >
@@ -155,7 +161,7 @@ const AudioRecorder = ({
               viewBox="0 0 24 24"
               strokeWidth="1.5"
               stroke="currentColor"
-              className="h-6 w-6 dark:text-neutral-200"
+              className="h-6 w-6 bg-gray-300 dark:text-neutral-200"
             >
               <path
                 strokeLinecap="round"
@@ -239,9 +245,9 @@ const AudioRecorder = ({
                   <a
                     download
                     href={audio}
-                    className=" w-52 gap-2 p-1 self-center  rounded-lg hover:text-green-700 active:bg-yellow-700 flex justify-center items-center"
+                    className=" w-52 gap-2 p-1 self-center bg-blue-300 dark:bg-blue-300 dark:text-gray-900 rounded-lg hover:text-green-700 active:bg-yellow-700 flex justify-center items-center"
                   >
-                    <HiOutlineDownload />
+                    <HiOutlineDownload className="bg-blue-300 dark:bg-blue-300 " />
                     Download Recording
                   </a>
                 </div>

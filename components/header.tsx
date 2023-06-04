@@ -28,7 +28,13 @@ const Header = ({ setUpdatePosts, updatePosts }) => {
       const res = await req.data;
       setUserData(res);
     } catch (error) {
-      throw error;
+      if (error.response.status === 400) {
+        console.log(
+          "User not fetched by the API, probably the user is not found or request failed."
+        );
+      } else {
+        console.log("Wrong call to the api.");
+      }
     }
   };
 
