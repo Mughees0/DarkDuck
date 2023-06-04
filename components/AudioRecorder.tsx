@@ -5,6 +5,7 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useState, useRef } from "react";
 const mimeType = "audio/webm";
+import { HiOutlineDownload } from "react-icons/hi";
 
 const AudioRecorder = ({
   setAudioRecordingModel,
@@ -135,9 +136,9 @@ const AudioRecorder = ({
   };
 
   return (
-    <div className="pointer-events-none relative w-[40%] translate-y-[-50px] transition-all duration-300 ease-in-out z-[9999] transform-none opacity-100">
-      <div className="min-[576px]:shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none dark:bg-neutral-600 space-y-5">
-        <div className="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
+    <div className="pointer-events-none relative w-[80%] lg:w-[40%] translate-y-[-50px] transition-all duration-300 ease-in-out z-[9999] transform-none opacity-100">
+      <div className="min-[576px]:shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] pointer-events-auto relative flex w-full flex-col rounded-md bg-white bg-clip-padding text-current shadow-lg outline-none dark:bg-neutral-600 space-y-5">
+        <div className="flex flex-shrink-0 items-center justify-between rounded-t-md p-4">
           <h2 className="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200">
             Create Post
           </h2>
@@ -163,42 +164,42 @@ const AudioRecorder = ({
             </svg>
           </button>
         </div>
-        <main className="bg-transparent flex flex-col gap-3 items-center ">
-          <div className="space-y-3 p-3 bg-transparent ">
-            <p id="counter" className=" bg-transparent text-3x text-center">
-              {hours}:{minutes.toString().padStart(2, "0")}:
-              {seconds.toString().padStart(2, "0")}:
-              {milliseconds.toString().padStart(2, "0")}
-            </p>
-            <div className=" bg-transparent w-44 flex flex-col items-center">
-              {" "}
-              {!permission ? (
-                <button
-                  onClick={getMicrophonePermission}
-                  className=" bg-yellow-400 p-2 text-sm rounded-md"
-                >
-                  Get Microphone
-                </button>
-              ) : null}
-              {permission && recordingStatus === "inactive" ? (
-                <button
-                  onClick={() => {
-                    startRecording();
-                    startAndStop();
-                  }}
-                  className=" bg-green-400 px-4 py-1 text-sm rounded-md"
-                >
-                  Start Recording
-                </button>
-              ) : null}
-              <div className="flex justify-between w-44 bg-transparent">
+        <main className="bg-transparent flex flex-col gap-3 items-center">
+          <div className="bg-transparent flex flex-col gap-3 items-center ">
+            <div className="space-y-3 p-3 m-4 bg-transparent border-2 rounded border-gray-400">
+              <p id="counter" className=" bg-transparent text-3x text-center">
+                {hours}:{minutes.toString().padStart(2, "0")}:
+                {seconds.toString().padStart(2, "0")}:
+                {milliseconds.toString().padStart(2, "0")}
+              </p>
+              <div className=" bg-transparent flex justify-center flex-col w-72  items-center">
+                {" "}
+                {!permission ? (
+                  <button
+                    onClick={getMicrophonePermission}
+                    className=" bg-yellow-400 p-2 text-sm rounded-md"
+                  >
+                    Get Microphone
+                  </button>
+                ) : null}
+                {permission && recordingStatus === "inactive" ? (
+                  <button
+                    onClick={() => {
+                      startRecording();
+                      startAndStop();
+                    }}
+                    className=" bg-green-400 px-4 py-1 text-sm rounded-md"
+                  >
+                    Start Recording
+                  </button>
+                ) : null}
                 {recordingStatus === "recording" ? (
                   <button
                     onClick={() => {
                       pauseRecording();
                       startAndStop();
                     }}
-                    className=" bg-blue-400 px-4 py-1 text-sm rounded-md"
+                    className=" bg-blue-400 px-3 py-1 text-sm rounded-md"
                   >
                     Pause Recording
                   </button>
@@ -214,43 +215,50 @@ const AudioRecorder = ({
                     Resume Recording
                   </button>
                 ) : null}
+                {recordingStatus === "recording" ? (
+                  <button
+                    onClick={() => {
+                      startAndStop();
+                      setTime(0);
+                      stopRecording();
+                    }}
+                    className=" bg-red-400 px-4 py-1 my-3 text-sm rounded-md"
+                  >
+                    Stop Recording
+                  </button>
+                ) : null}
               </div>
-              {recordingStatus === "recording" ? (
-                <button
-                  onClick={() => {
-                    startAndStop();
-                    setTime(0);
-                    stopRecording();
-                  }}
-                  className=" bg-red-400 px-4 py-1 text-sm rounded-md"
-                >
-                  Stop Recording
-                </button>
+              {audio ? (
+                <div className=" bg-transparent flex items-center flex-col gap-3">
+                  <audio
+                    src={audio}
+                    className="w-56 h-9 rounded-full"
+                    controls
+                  ></audio>
+                  <a
+                    download
+                    href={audio}
+                    className=" w-52 gap-2 p-1 self-center rounded-lg hover:text-green-700 active:bg-yellow-700 flex justify-center items-center"
+                  >
+                    <HiOutlineDownload />
+                    Download Recording
+                  </a>
+                </div>
               ) : null}
             </div>
-            {audio ? (
-              <div className=" bg-transparent flex items-center flex-col gap-3">
-                <audio
-                  src={audio}
-                  className="w-56 h-9 rounded-full"
-                  controls
-                ></audio>
-                <a
-                  download
-                  href={audio}
-                  className=" w-44 px-2 self-center rounded-lg hover:text-green-700 active:bg-yellow-700"
-                >
-                  Download Recording
-                </a>
-              </div>
-            ) : null}
             <div className="flex  bg-transparent justify-center w-auto border-1 border-black m-3">
-              <label htmlFor="mode"></label>
+              <label
+                htmlFor="mode"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              ></label>
               <select
-                className=" border-2 border-gray-500"
                 name="mode"
                 id="mode"
+                className="block w-full p-2 mb-6 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               >
+                <option value="Select Record Mode Swing">
+                  Select Record Mode Swing
+                </option>
                 <option
                   onSelect={() => setMode("Public Mode")}
                   value="Public Mode"
