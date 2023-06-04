@@ -328,7 +328,9 @@ const Header = ({ setUpdatePosts, updatePosts }) => {
                         <button
                           className="block py-2 px-4 text-sm bg-transparent  dark:bg-transparent"
                           onClick={() => {
-                            signOut();
+                            signOut({
+                              callbackUrl: "https://app.darkduck.se/",
+                            });
                           }}
                         >
                           Sign out
