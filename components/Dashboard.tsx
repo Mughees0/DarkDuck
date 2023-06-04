@@ -18,6 +18,7 @@ const Dashboard = ({ updatePosts }) => {
   const [reply, setReply] = useState(false);
   const [posts, setPosts] = useState<PostsResponse>();
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [updateLikes, setUpdateLikes] = useState(false);
   const { data: session } = useSession();
 
   const getPosts = async () => {
@@ -42,7 +43,7 @@ const Dashboard = ({ updatePosts }) => {
   useEffect(() => {
     setIsLoaded((isLoaded) => true);
     getPosts();
-  }, [updatePosts]);
+  }, [updatePosts, updateLikes]);
 
   if (posts && isLoaded) {
     return (
@@ -187,6 +188,9 @@ const Dashboard = ({ updatePosts }) => {
                                     <LikeButton
                                       userId={session?.user?.id}
                                       postId={post?._id}
+                                      setUpdateLikes={setUpdateLikes}
+                                      updateLikes={updateLikes}
+                                      post={post}
                                     />
                                   </a>
 
