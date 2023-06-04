@@ -25,11 +25,11 @@ const validateForm = async (email: string) => {
   return null;
 };
 
-export async function GET({ params }) {
-  await dbConnect();
-  const { id } = params;
-  return NextResponse.json(await User.findOne({ id }));
-}
+// export async function GET({ params }) {
+//   await dbConnect();
+//   const { id } = params;
+//   return NextResponse.json(await User.findOne({ id }));
+// }
 
 export async function POST(request: Request) {
   await dbConnect();

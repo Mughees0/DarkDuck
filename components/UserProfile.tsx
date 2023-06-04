@@ -68,6 +68,8 @@ const UserBio = ({ updatePosts }) => {
           <ProfileImageUpload
             updateImage={updateImage}
             setUpdateImage={setUpdateImage}
+            setProfileModal={setProfileModal}
+            profileModal={profileModal}
           />
           <button
             className="text-white bg-gray-600 m-3 p-2 rounded dark:bg-gray-400"
@@ -89,6 +91,8 @@ const UserBio = ({ updatePosts }) => {
           <BannerImageUpload
             updateImage={updateImage}
             setUpdateImage={setUpdateImage}
+            setBannerModal={setBannerModal}
+            bannerModal={bannerModal}
           />
           <button
             className="text-white bg-gray-600 m-3 p-2 rounded dark:bg-gray-400"

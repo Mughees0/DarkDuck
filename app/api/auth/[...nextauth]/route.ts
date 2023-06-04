@@ -23,7 +23,8 @@ declare module "next-auth" {
     };
   }
 }
-export const handler = NextAuth({
+
+const handler = NextAuth({
   callbacks: {
     session: ({ session, token }) => ({
       ...session,
@@ -34,15 +35,6 @@ export const handler = NextAuth({
         email: token.email,
       },
     }),
-    // jwt: ({ token, user }) => ({
-    //   if(user) {
-    //     token.email = user.data.auth.email;
-    //     token.username = user.data.auth.userName;
-    //     token.userType = user.data.auth.userType;
-    //     token.accessToken = user.data.auth.token;
-    //     token.sub = user.data.auth.id;
-    //   },
-    // }),
   },
   providers: [
     CredentialsProvider({
@@ -125,4 +117,5 @@ export const handler = NextAuth({
   },
   secret: process.env.NEXTAUTH_SECRET,
 });
+
 export { handler as GET, handler as POST };

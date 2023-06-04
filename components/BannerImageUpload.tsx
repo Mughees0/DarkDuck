@@ -4,7 +4,12 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import React, { FormEvent, useRef, useState } from "react";
 
-const ImageUploader = ({ setUpdateImage, updateImage }) => {
+const ImageUploader = ({
+  setUpdateImage,
+  updateImage,
+  bannerModal,
+  setBannerModal,
+}) => {
   // 1. add reference to input element
   const ref = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
@@ -51,6 +56,7 @@ const ImageUploader = ({ setUpdateImage, updateImage }) => {
       );
       if (req.status === 200) {
         setUpdateImage(!updateImage);
+        setBannerModal(!bannerModal);
       }
       const res = await req.data;
     } catch (err) {
