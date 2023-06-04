@@ -124,7 +124,7 @@ const UserBio = ({ updatePosts }) => {
           <div className="bg-gray-200 rounded-full overflow-hidden  cursor-pointer absolute top-56 right-5 mt-32 ml-100 p-1 hover:shadow-outline">
             <BsCamera
               className=" bg-transparent text-gray-700 w-5 h-5 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-50"
-              onClick={() => setProfileModal(!bannerModal)}
+              onClick={() => setBannerModal(!bannerModal)}
             />
           </div>
         </div>
