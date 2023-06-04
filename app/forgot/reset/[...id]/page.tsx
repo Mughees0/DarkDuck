@@ -140,7 +140,7 @@ function ResetPage() {
                 htmlFor="password"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Password
+                Enter New Password
               </label>
               <input
                 type="password"

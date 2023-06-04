@@ -21,32 +21,32 @@ const SignUp = () => {
   const { data: session } = useSession();
   const [languages, setLanguages] = useState<string[]>();
   const [user, setUser] = useState<UserInputData>({
-    email: "none",
-    username: "none",
-    alias: "none",
-    password: "none",
-    country: "none",
-    language: "none",
-    countryCode: "none",
-    phone: "none",
-    age: "none",
-    occupation: "none",
+    email: "",
+    username: "",
+    alias: "",
+    password: "",
+    country: "",
+    language: "",
+    countryCode: "",
+    phone: "",
+    age: "",
+    occupation: "",
     instruments: [],
-    research: "none",
-    software: "none",
-    highEducation: "none",
-    city: "none",
-    zipCode: "none",
-    address: "none",
+    research: "",
+    software: "",
+    highEducation: "",
+    city: "",
+    zipCode: "",
+    address: "",
     termsCondition: false,
-    createdAt: Date.now(),
-    updatedAt: Date.now(),
+    createdAt: 0,
+    updatedAt: 0,
   });
   const [error, setError] = useState<UserInputErrors>();
-  const [countries, setCountries] = useState<CountryApi>();
+  const [countries, setCountries] = useState<string[]>([]);
   const [dialCodes, setDialCodes] = useState([]);
 
-  async function restCountries() {
+  async function restDialCodes() {
     try {
       const req = await axios.get(
         "https://countriesnow.space/api/v0.1/countries/codes"
@@ -54,12 +54,29 @@ const SignUp = () => {
       const res = await req.data;
       let dialCode = res?.data.map((country) => country.dial_code);
       dialCode = [...new Set(dialCode)];
-      setCountries(res);
       setDialCodes(dialCode);
     } catch (err: any) {
       if (err.response.status === 400) {
         console.log(
           "Not able to fetch dial codes and country names, API request failed." +
+            " The error message:> " +
+            err.message
+        );
+      } else {
+        console.log("Wrong call to the api.");
+      }
+    }
+  }
+
+  async function restCountries() {
+    try {
+      const req = await axios.get("/countries.json");
+      const res = req.data;
+      setCountries(res);
+    } catch (err: any) {
+      if (err.response.status === 400) {
+        console.log(
+          "Not able to fetch countries from the public of our server." +
             " The error message:> " +
             err.message
         );
@@ -88,6 +105,7 @@ const SignUp = () => {
   }
 
   useEffect(() => {
+    restDialCodes();
     restCountries();
     restLanguages();
   }, []);
@@ -480,7 +498,7 @@ const SignUp = () => {
                       htmlFor="country"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
-                      Select Country
+                      Country
                     </label>
                     <select
                       className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -490,10 +508,10 @@ const SignUp = () => {
                       aria-label="Default select example"
                     >
                       <option>Select Country</option>
-                      {countries?.data.map((country) => {
+                      {countries?.map((country) => {
                         return (
-                          <option key={country.name} value={country.name}>
-                            {country.name}
+                          <option key={country} value={country}>
+                            {country}
                           </option>
                         );
                       })}
@@ -553,7 +571,7 @@ const SignUp = () => {
                         onChange={handleCountryCode}
                         aria-label="Default select example"
                       >
-                        <option>Select Code</option>
+                        <option>Code</option>
                         {dialCodes?.sort().map((dial_code) => {
                           return (
                             <option key={dial_code} value={dial_code}>

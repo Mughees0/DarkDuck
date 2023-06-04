@@ -97,7 +97,7 @@ const Dashboard = ({ updatePosts }) => {
                                       className="h-10 w-10 rounded-full"
                                     />
                                   </div>
-                                  <div className="min-w-0 flex-1 items-start flex flex-col gap-2 h-20  ">
+                                  <div className="min-w-0  flex-1 items-start flex flex-col gap-1 h-20  ">
                                     <strong className=" justify-self-start p-1 px-2 bg-gray-900 text-gray-50 rounded dark:bg-white dark:text-black ">
                                       {post?.recordModeSwingId ==
                                       "633919ee9729ead90e0f6ac4"

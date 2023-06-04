@@ -72,7 +72,7 @@ function LikeButton({ userId, postId, setUpdateLikes, updateLikes, post }) {
   }
 
   useEffect(() => {
-    if (post.likes.includes(userId)) {
+    if (post?.likes?.includes(userId)) {
       setLiked(true);
     }
   }, []);

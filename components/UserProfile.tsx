@@ -25,6 +25,7 @@ const UserBio = ({ updatePosts }) => {
   const [profileModal, setProfileModal] = useState(false);
   const [bannerModal, setBannerModal] = useState(false);
   const [updateImage, setUpdateImage] = useState(false);
+  const [updateLikes, setUpdateLikes] = useState(false);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   // apis
@@ -70,7 +71,7 @@ const UserBio = ({ updatePosts }) => {
     setIsLoaded((isLoaded) => true);
     getUserDetails(userIdFromSession);
     getUserPosts(userIdFromSession);
-  }, [updatePosts, updateImage]);
+  }, [updatePosts, updateImage, updateLikes]);
 
   if (userData && isLoaded) {
     return (
@@ -206,7 +207,9 @@ const UserBio = ({ updatePosts }) => {
                   </li>
                   <li className="gap-2 items-center flex">
                     <GiGuitarBassHead />
-                    {userData?.instruments ? userData.instruments : "none"}
+                    {userData?.instruments.length
+                      ? userData.instruments
+                      : "none"}
                   </li>
                   <li className="gap-2 items-center flex">
                     <MdWork />
@@ -259,7 +262,7 @@ const UserBio = ({ updatePosts }) => {
                           <div className="min-w-0 flex-1">
                             <p className="truncate text-sm font-semibold text-gray-900 dark:text-white">
                               {userData?.username}
-                              <span>@{userData?.username}</span>
+                              <span> @{userData?.username}</span>
                             </p>
                             <p className="truncate text-sm font-normal text-gray-500 dark:text-gray-400">
                               {post?.createdAt
@@ -293,11 +296,6 @@ const UserBio = ({ updatePosts }) => {
                           </a>
                         </div>
                         <div className="space-y-4">
-                          <p className="text-base font-normal text-gray-500 dark:text-gray-400">
-                            Hi @everyone, the new designs are attached. Go check
-                            them out and let me know if I missed anything.
-                            Thanks!
-                          </p>
                           <div className="flex flex-wrap">
                             <audio controls>
                               <source
@@ -309,8 +307,8 @@ const UserBio = ({ updatePosts }) => {
                             </audio>
                           </div>
                         </div>
-                        <div className="flex space-x-6 border-y border-gray-200 py-3 dark:border-gray-700">
-                          <a className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white">
+                        <div className="flex border-y border-gray-200 py-3 dark:border-gray-700">
+                          <a className="flex items-center text-sm font-medium pr-4 text-gray-500 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white">
                             <svg
                               stroke="currentColor"
                               fill="currentColor"
@@ -330,7 +328,13 @@ const UserBio = ({ updatePosts }) => {
                             <LikeButton
                               userId={session?.user?.id}
                               postId={post?._id}
+                              post={post}
+                              setUpdateLikes={setUpdateLikes}
+                              updateLikes={updateLikes}
                             />
+                          </div>
+                          <div className="flex items-center pl-2  text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white">
+                            {post.likes.length}
                           </div>
                         </div>
                       </li>

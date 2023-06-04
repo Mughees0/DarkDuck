@@ -148,7 +148,7 @@ export default function OtpInput({ value, valueLength, onChange }: Props) {
           autoComplete="one-time-code"
           pattern="\d{1}"
           maxLength={valueLength}
-          className=" h-12 border w-11 border-blue-400 hover:border-2 hover:border-blue-600 enabled:border-3 rounded-md p-0 text-center text-lg font-bold leading-3"
+          className=" h-12 border w-11 dark:text-white border-blue-400 hover:border-2 hover:border-blue-600 enabled:border-3 rounded-md p-0 text-center text-lg font-bold leading-3"
           value={digit}
           onChange={(e) => inputOnChange(e, idx)}
           onKeyDown={inputOnKeyDown}

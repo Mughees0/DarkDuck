@@ -21,7 +21,7 @@ const AudioRecorder = ({
   const [audioChunks, setAudioChunks] = useState([]);
   const [audio, setAudio] = useState(null);
   const [audioBlob, setAudioBlob] = useState<Blob>(null);
-  const [mode, setMode] = useState("Public Mode");
+  const [mode, setMode] = useState("");
   const [uploading, setUploading] = useState(false);
   const { milliseconds, setTime, startAndStop, seconds, hours, minutes } =
     useTimer();
@@ -123,10 +123,9 @@ const AudioRecorder = ({
         {
           userId: Session?.user?.id,
           audio: storageRes?.success,
-          recordModeSwingId:
-            mode === "Public Mode"
-              ? "633919ee9729ead90e0f6ac4"
-              : "63391b065ef1e76cfdcf539c",
+          recordModeSwingId: mode
+            ? "633919ee9729ead90e0f6ac4"
+            : "63391b065ef1e76cfdcf539c",
         },
         {
           headers: {
@@ -279,14 +278,14 @@ const AudioRecorder = ({
                   Select Record Mode Swing
                 </option>
                 <option
-                  onSelect={() => setMode("Public Mode")}
-                  value="Public Mode"
+                  onClick={() => setMode("633919ee9729ead90e0f6ac4")}
+                  value="633919ee9729ead90e0f6ac4"
                 >
                   Public Mode
                 </option>
                 <option
-                  onSelect={() => setMode("Private Mode")}
-                  value="Private Mode"
+                  onClick={() => setMode("63391b065ef1e76cfdcf539c")}
+                  value="63391b065ef1e76cfdcf539c"
                 >
                   Private Mode
                 </option>

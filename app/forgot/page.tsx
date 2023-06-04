@@ -58,7 +58,7 @@ const ResetPassword = () => {
   if (status === "unauthenticated") {
     return (
       <>
-        <section className="bg-gray-50 dark:bg-gray-900">
+        <section className="bg-gray-50 h-screen flex dark:bg-black">
           <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
             <div className="w-full p-6  rounded-lg shadow dark:border md:mt-0 sm:max-w-md dark:bg-gray-800 dark:border-gray-200 sm:p-8">
               <h1 className="mb-1 text-xl font-bold dark:bg-gray-800 leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
@@ -89,7 +89,11 @@ const ResetPassword = () => {
                     value={email}
                     onChange={({ target: { value } }) => setEmail(value)}
                   />
-                  {error && <span className="text-red-400">{error}</span>}
+                  {error && (
+                    <span className="bg-transparent dark:bg-transparent text-red-400">
+                      {error}
+                    </span>
+                  )}
                 </div>
                 <button
                   type="submit"
