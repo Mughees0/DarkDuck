@@ -22,22 +22,21 @@ const Dashboard = ({ updatePosts }) => {
   const { data: session } = useSession();
 
   const getPosts = async () => {
-    const res = await axios
-      .get("/api/v1/posts")
-      .then(async (res) => {
-        setPosts(res.data);
-      })
-      .catch((error) => {
-        if (error.response.status === 400) {
-          console.log(
-            "Posts not fetched by the API, probably the posts is not found or request failed." +
-              " The error message:> " +
-              error.message
-          );
-        } else {
-          console.log("Wrong call to the api.");
-        }
-      });
+    try {
+      const req = await fetch("/api/v1/posts", { cache: "no-store" });
+      const res = await req.json();
+      setPosts(res);
+    } catch (error) {
+      if (error.response.status === 400) {
+        console.log(
+          "Posts not fetched by the API, probably the posts is not found or request failed." +
+            " The error message:> " +
+            error.message
+        );
+      } else {
+        console.log("Wrong call to the api.");
+      }
+    }
   };
 
   useEffect(() => {
