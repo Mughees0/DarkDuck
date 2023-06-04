@@ -29,7 +29,9 @@ const Dashboard = ({ updatePosts }) => {
       .catch((error) => {
         if (error.response.status === 400) {
           console.log(
-            "Posts not fetched by the API, probably the posts is not found or request failed."
+            "Posts not fetched by the API, probably the posts is not found or request failed." +
+              " The error message:> " +
+              error.message
           );
         } else {
           console.log("Wrong call to the api.");
@@ -113,10 +115,7 @@ const Dashboard = ({ updatePosts }) => {
                                         : null}
                                     </p>
                                   </div>
-                                  <a
-                                    href="#"
-                                    className="inline-flex cursor-pointer justify-center rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                                  >
+                                  <a className="inline-flex cursor-pointer justify-center rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
                                     <svg
                                       stroke="currentColor"
                                       fill="currentColor"
@@ -153,7 +152,7 @@ const Dashboard = ({ updatePosts }) => {
                                     )}
                                   </div>
                                 </div>
-                                <div className="flex space-x-6 border-y border-gray-200 py-3 dark:border-gray-700">
+                                <div className="flex space-x-3 border-y border-gray-200 py-3 dark:border-gray-700">
                                   <a className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white">
                                     <svg
                                       stroke="currentColor"
@@ -188,10 +187,9 @@ const Dashboard = ({ updatePosts }) => {
                                     />
                                   </a>
 
-                                  <a
-                                    href="#"
-                                    className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white"
-                                  ></a>
+                                  <div className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white">
+                                    {post.likes.length}
+                                  </div>
                                 </div>
                               </div>
                             </div>

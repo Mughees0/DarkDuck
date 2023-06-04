@@ -39,7 +39,9 @@ const SignUp = () => {
     } catch (err: any) {
       if (err.response.status === 400) {
         console.log(
-          "Not able to fetch dial codes and country names, API request failed."
+          "Not able to fetch dial codes and country names, API request failed." +
+            " The error message:> " +
+            err.message
         );
       } else {
         console.log("Wrong call to the api.");
@@ -55,7 +57,9 @@ const SignUp = () => {
     } catch (err: any) {
       if (err.response.status === 400) {
         console.log(
-          "Not able to fetch languages from the public of our server."
+          "Not able to fetch languages from the public of our server." +
+            " The error message:> " +
+            err.message
         );
       } else {
         console.log("Wrong call to the api.");
@@ -275,6 +279,8 @@ const SignUp = () => {
           zipCode: user?.zipCode ? user.zipCode : "none",
           address: user?.address ? user.address : "none",
           termsCondition: user?.termsCondition,
+          createdAt: Date.now(),
+          updatedAt: Date.now(),
         },
         {
           headers: {
@@ -289,7 +295,11 @@ const SignUp = () => {
       })
       .catch((error) => {
         if (error.response.status === 400) {
-          console.log("Not able to register user, API request failed.");
+          console.log(
+            "Not able to register user, API request failed." +
+              " The error message:> " +
+              error.message
+          );
         } else {
           console.log("Wrong call to the api, wrong route maybe.");
         }

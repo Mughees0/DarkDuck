@@ -28,7 +28,9 @@ function LikeButton({ userId, postId }: { userId: string; postId: string }) {
     } catch (error) {
       if (error.response.status === 400) {
         console.log(
-          "post not liked by the API, probably the post is not found or request failed."
+          "post not liked by the API, probably the post is not found or request failed." +
+            " The error message:> " +
+            error.message
         );
       } else {
         console.log("Wrong call to the api.");

@@ -13,7 +13,9 @@ const useLocalStorage = (key: string, initialValue: string) => {
       // If error also return initialValue
       if (error.response.status === 400) {
         console.log(
-          "Not able to fetch localstorage data to use in dark mode, API request failed."
+          "Not able to fetch localstorage data to use in dark mode, API request failed." +
+            " The error message:> " +
+            error.message
         );
       } else {
         console.log("Wrong call to the api.");
@@ -36,7 +38,9 @@ const useLocalStorage = (key: string, initialValue: string) => {
       // A more advanced implementation would handle the error case
       if (error.response.status === 400) {
         console.log(
-          "Not able to set localstorage data to current theme (dark or light), API request failed."
+          "Not able to set localstorage data to current theme (dark or light), API request failed." +
+            " The error message:> " +
+            error.message
         );
       } else {
         console.log("Wrong call to the api.");

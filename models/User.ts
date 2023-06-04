@@ -82,6 +82,12 @@ const UserSchema = new Schema({
   address: {
     type: String,
   },
+  createdAt: {
+    type: Date,
+  },
+  updatedAt: {
+    type: Date,
+  },
 });
 
 UserSchema.pre("save", function (next) {

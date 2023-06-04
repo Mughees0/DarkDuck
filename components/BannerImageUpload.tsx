@@ -70,7 +70,11 @@ const ImageUploader = ({
       const res = await req.data;
     } catch (err) {
       if (err.response.status === 400) {
-        console.log("Banner Image is uploaded but profile did not update.");
+        console.log(
+          "Banner Image is uploaded but profile did not update." +
+            " The error message:> " +
+            err.message
+        );
       } else {
         console.log("Wrong call to the api.");
       }

@@ -37,7 +37,11 @@ const UserBio = ({ updatePosts }) => {
       setUserData(user);
     } catch (error) {
       if (error.response.status === 400) {
-        console.log("Not able to fetch user, API request failed.");
+        console.log(
+          "Not able to fetch user, API request failed." +
+            " The error message:> " +
+            error.message
+        );
       } else {
         console.log("Wrong call to the api.");
       }
@@ -51,7 +55,11 @@ const UserBio = ({ updatePosts }) => {
       setPosts(posts);
     } catch (error) {
       if (error.response.status === 400) {
-        console.log("Not able to fetch post, API request failed.");
+        console.log(
+          "Not able to fetch post, API request failed." +
+            " The error message:> " +
+            error.message
+        );
       } else {
         console.log("Wrong call to the api.");
       }

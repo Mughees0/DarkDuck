@@ -41,7 +41,11 @@ const ImageUploader = ({
       }
     } catch (error) {
       if (error.response.status === 400) {
-        console.log("profile Image not uploaded.");
+        console.log(
+          "profile Image not uploaded." +
+            " The error message:> " +
+            error.message
+        );
       } else {
         console.log("Wrong call to the api.");
       }
@@ -67,9 +71,13 @@ const ImageUploader = ({
         setProfileModal(!profileModal);
       }
       const res = await req.data;
-    } catch (err) {
-      if (err.response.status === 400) {
-        console.log("Profile Image is uploaded but profile did not update.");
+    } catch (error) {
+      if (error.response.status === 400) {
+        console.log(
+          "Profile Image is uploaded but profile did not update." +
+            " The error message:> " +
+            error.message
+        );
       } else {
         console.log("Wrong call to the api.");
       }
