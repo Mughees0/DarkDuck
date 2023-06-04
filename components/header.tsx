@@ -25,9 +25,10 @@ const Header = ({ setUpdatePosts, updatePosts }) => {
 
   const fetchUserData = async (id: string) => {
     try {
+      // const id = session?.user?.id;
       const req = await axios.get(`/api/v1/users/user/${id}`);
       const res = await req.data;
-      setUserData(res.data);
+      setUserData(res);
     } catch (error) {
       throw error;
     }
@@ -266,7 +267,7 @@ const Header = ({ setUpdatePosts, updatePosts }) => {
                     <img
                       className="w-8 h-8 rounded-full"
                       src={
-                        userData?.profilePicture == undefined
+                        userData?.profilePicture
                           ? process.env.REACT_APP_IMAGES_PATH +
                             userData?.profilePicture
                           : "/assets/avatar.png"

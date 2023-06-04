@@ -75,12 +75,12 @@ const Dashboard = ({ updatePosts }) => {
                                 <div className="flex items-center space-x-4">
                                   <div className="shrink-0">
                                     <img
-                                      alt="Portrait Neil Sims"
+                                      alt="User Profile Picture"
                                       src={
                                         post?.userId?.profilePicture
                                           ? process.env.REACT_APP_IMAGES_PATH +
                                             post?.userId?.profilePicture
-                                          : "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/joseph-mcfall.png"
+                                          : "/assets/avatar.png"
                                       }
                                       className="h-10 w-10 rounded-full"
                                     />
