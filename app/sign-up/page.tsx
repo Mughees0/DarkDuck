@@ -1,8 +1,8 @@
 "use client";
 
+import AuthRedirect from "@/components/AuthRedirect";
 import Loader from "@/components/Loader";
 import SignUp from "@/components/SignUp";
-import UnAuthRedirect from "@/components/UnAuthRedirect";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -27,7 +27,7 @@ function Signup() {
       <Loader />
     );
   } else {
-    return <UnAuthRedirect />;
+    return <AuthRedirect />;
   }
 }
 

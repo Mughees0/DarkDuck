@@ -137,8 +137,8 @@ const AudioRecorder = ({
   };
 
   return (
-    <div className="pointer-events-none dark:border-2 dark:border-gray-100 relative w-[90%] lg:w-[30%] translate-y-[-50px] transition-all duration-300 ease-in-out z-[9999] transform-none opacity-100 dark:text-neutral-200 ">
-      <div className="min-[576px]:shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] pointer-events-auto relative flex w-full flex-col rounded-md bg-white bg-clip-padding text-current shadow-lg outline-none space-y-5">
+    <div className="pointer-events-none dark:border-2 dark:border-gray-100 relative w-max px-7 rounded-lg lg:w-[30%] translate-y-[-50px] transition-all duration-300 ease-in-out z-[9999] transform-none opacity-100 dark:text-neutral-200 sm:w-max sm:px-10 ">
+      <div className="min-[576px]:shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] pointer-events-auto relative flex w-full flex-col rounded-md bg-clip-padding text-current outline-none space-y-5">
         <div className="flex flex-shrink-0 items-center justify-between rounded-t-md p-4">
           <h2 className="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200">
             Create Post
@@ -255,7 +255,7 @@ const AudioRecorder = ({
               <select
                 name="mode"
                 id="mode"
-                className="block w-full p-2 mb-6 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="block w-full p-2  text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               >
                 <option value="Select Record Mode Swing">
                   Select Record Mode Swing
@@ -281,7 +281,7 @@ const AudioRecorder = ({
           <div className="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md bg-transparent border-opacity-100 p-4 dark:border-opacity-50">
             <button
               onClick={handleAudioSubmit}
-              className=" py-1 bg-green-300 inline-block rounded bg-primary-100 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-primary-accent-100 dark:bg-gray-100 dark:text-gray-900 focus:bg-primary-accent-100 focus:outline-none focus:ring-0 active:bg-primary-accent-200"
+              className=" py-1 bg-green-300 inline-block rounded bg-primary-100 px-6 mb-2 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-primary-accent-100 dark:bg-gray-100 dark:text-gray-900 focus:bg-primary-accent-100 focus:outline-none focus:ring-0 active:bg-primary-accent-200"
             >
               {uploading ? "Uploading..." : "Post"}
             </button>
