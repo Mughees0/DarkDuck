@@ -21,7 +21,28 @@ const SignUp = () => {
   const router = useRouter();
   const { data: session } = useSession();
   const [languages, setLanguages] = useState<string[]>();
-  const [user, setUser] = useState<UserInputData>();
+  const [user, setUser] = useState<UserInputData>({
+    email: "none",
+    username: "none",
+    alias: "none",
+    password: "none",
+    country: "none",
+    language: "none",
+    countryCode: "none",
+    phone: "none",
+    age: "none",
+    occupation: "none",
+    instruments: [],
+    research: "none",
+    software: "none",
+    highEducation: "none",
+    city: "none",
+    zipCode: "none",
+    address: "none",
+    termsCondition: false,
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
+  });
   const [error, setError] = useState<UserInputErrors>();
   const [countries, setCountries] = useState<CountryApi>();
   const [dialCodes, setDialCodes] = useState([]);

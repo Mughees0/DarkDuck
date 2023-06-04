@@ -16,6 +16,8 @@ export type UserInputData = {
   zipCode?: string;
   address?: string;
   city?: string;
+  createdAt?: Date | number;
+  updatedAt?: Date | number;
   termsCondition: boolean;
 };
 
