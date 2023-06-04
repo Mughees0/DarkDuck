@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "../../../../lib/mongodb/dbConnect";
 import { NextRequest, NextResponse } from "next/server";
 import Post from "../../../../models/Post";
+export const dynamic = "auto";
 
 interface ResponseData {
   error?: string;

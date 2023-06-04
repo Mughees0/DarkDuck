@@ -5,6 +5,7 @@ import User from "../../../../../../models/User";
 import bcrypt from "bcrypt";
 import { NextResponse } from "next/server";
 import Post from "@/models/Post";
+export const dynamic = "auto";
 
 interface ResponseData {
   error?: string;

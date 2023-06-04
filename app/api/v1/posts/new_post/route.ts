@@ -1,6 +1,7 @@
 import dbConnect from "@/lib/mongodb/dbConnect";
 import Post from "@/models/Post";
 import { NextRequest, NextResponse } from "next/server";
+export const dynamic = "auto";
 
 export async function POST(request: NextRequest) {
   await dbConnect();
