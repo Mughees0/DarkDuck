@@ -1,10 +1,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
 
-import { GiDuck } from "react-icons/gi";
-import { BsFillMoonFill, BsFillSunFill } from "react-icons/bs";
-import { TbMessages } from "react-icons/tb";
-import { GoHome } from "react-icons/go";
+import { GiDuck } from "@react-icons/all-files/gi/GiDuck";
+import { BsMoon } from "@react-icons/all-files/bs/BsMoon";
+import { BiSun } from "@react-icons/all-files/bi/BiSun";
+import { FiMessageCircle } from "@react-icons/all-files/fi/FiMessageCircle";
+import { GoHome } from "@react-icons/all-files/go/GoHome";
 
 import axios from "axios";
 import useColorMode from "@/hooks/useColorMode";
@@ -74,7 +75,7 @@ const Header = ({ setUpdatePosts, updatePosts }) => {
               <div
                 className={
                   audioRecordingModel
-                    ? "h-screen w-screen absolute flex justify-center items-center bg-opacity-25 bg-gay-400 top-0 left-0 right-0 bottom-0"
+                    ? "h-screen w-screen absolute flex justify-center items-center bg-opacity-25 bg-gray-400 top-0 left-0 right-0 bottom-0 dark:border-2 dark:border-neutral-200"
                     : "hidden"
                 }
               >
@@ -98,7 +99,7 @@ const Header = ({ setUpdatePosts, updatePosts }) => {
                 type="button"
                 className="p-2 text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white mr-1"
               >
-                <TbMessages className="h-6 w-6 bg-gray-200" />
+                <FiMessageCircle className="h-6 w-6 bg-gray-200" />
               </button>
               {/* <!-- Notifications --> */}
               <button
@@ -312,9 +313,9 @@ const Header = ({ setUpdatePosts, updatePosts }) => {
                 }
               >
                 {colorMode === "light" ? (
-                  <BsFillMoonFill className="text-black bg-gray-200" />
+                  <BsMoon className="text-black bg-gray-200" />
                 ) : (
-                  <BsFillSunFill />
+                  <BiSun />
                 )}
               </button>
             </div>

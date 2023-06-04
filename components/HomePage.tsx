@@ -1,7 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { GiDuck } from "react-icons/gi";
-import { BsFillMoonFill, BsFillSunFill } from "react-icons/bs";
+
+import { GiDuck } from "@react-icons/all-files/gi/GiDuck";
+import { BsMoon } from "@react-icons/all-files/bs/BsMoon";
+import { BiSun } from "@react-icons/all-files/Bi/BiSun";
+
 import useColorMode from "@/hooks/useColorMode";
 import Link from "next/link";
 import Loader from "./Loader";
@@ -28,9 +31,9 @@ const Home = () => {
               }
             >
               {colorMode === "light" ? (
-                <BsFillMoonFill className="text-black dark:text-white" />
+                <BsMoon className="text-black dark:text-white" />
               ) : (
-                <BsFillSunFill className="text-black dark:text-white" />
+                <BiSun className="text-black dark:text-white" />
               )}
             </button>
           </div>

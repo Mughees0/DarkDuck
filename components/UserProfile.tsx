@@ -3,9 +3,13 @@ import { PostsResponse, UserDataResponse } from "@/types";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import { GiGuitarBassHead, GiDuck } from "react-icons/gi";
-import { BsFillCameraFill } from "react-icons/bs";
-import { MdLanguage, MdWork } from "react-icons/md";
+
+import { GiGuitarBassHead } from "@react-icons/all-files/gi/GiGuitarBassHead";
+import { GiDuck } from "@react-icons/all-files/gi/GiDuck";
+import { BsCamera } from "@react-icons/all-files/bs/BsCamera";
+import { MdLanguage } from "@react-icons/all-files/md/MdLanguage";
+import { MdWork } from "@react-icons/all-files/md/MdWork";
+
 import ProfileImageUpload from "./ProfileImageUpload";
 import BannerImageUpload from "./BannerImageUpload";
 import LikeButton from "./LikeButton";
@@ -118,7 +122,7 @@ const UserBio = ({ updatePosts }) => {
             alt="User Banner Picture"
           />
           <div className="bg-gray-200 rounded-full overflow-hidden  cursor-pointer absolute top-56 right-5 mt-32 ml-100 p-1 hover:shadow-outline">
-            <BsFillCameraFill
+            <BsCamera
               className=" bg-transparent text-gray-700 w-5 h-5 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-50"
               onClick={() => setProfileModal(!bannerModal)}
             />
@@ -158,7 +162,7 @@ const UserBio = ({ updatePosts }) => {
                         alt="User Profile Picture"
                       />
                       <div className="bg-gray-200 rounded-full overflow-hidden  cursor-pointer absolute top-[3.7rem] left-18 mt-32 ml-40 p-2 hover:shadow-outline">
-                        <BsFillCameraFill
+                        <BsCamera
                           className=" bg-transparent text-gray-700 w-5 h-5 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-50"
                           onClick={() => setProfileModal(!profileModal)}
                         />
@@ -222,7 +226,7 @@ const UserBio = ({ updatePosts }) => {
               </nav>
 
               <ul className="tweets-user">
-                {posts.length ? (
+                {posts?.length ? (
                   posts?.map((post) => {
                     return (
                       <li

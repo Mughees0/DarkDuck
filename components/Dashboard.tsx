@@ -2,8 +2,8 @@
 import { PostsResponse } from "@/types";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { BsFillArrowRightCircleFill } from "react-icons/bs";
-import { SiAudiomack } from "react-icons/si";
+import { BsArrowRight } from "@react-icons/all-files/bs/BsArrowRight";
+import { SiAudiomack } from "@react-icons/all-files/si/SiAudiomack";
 import Loader from "./Loader";
 import { useSession } from "next-auth/react";
 import LikeButton from "./LikeButton";
@@ -54,7 +54,7 @@ const Dashboard = ({ updatePosts }) => {
             <div className=" text-black rounded items-center p-2 m-5 bg-gray-200 dark:bg-gray-400 hover:text-white hover:bg-gray-400 hover:text-lg dark:hover:bg-gray-600 px-3">
               <button className="flex items-center gap-2 dark:text-white bg-transparent dark:bg-transparent">
                 View Posts
-                <BsFillArrowRightCircleFill className=" bg-transparent dark:bg-transparent dark:text-white" />
+                <BsArrowRight className=" bg-transparent dark:bg-transparent dark:text-white" />
               </button>
             </div>
           </section>

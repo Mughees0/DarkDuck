@@ -1,10 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
-import { GiDuck } from "react-icons/gi";
 import React from "react";
 import useColorMode from "../hooks/useColorMode";
-import { BsFillMoonFill, BsFillSunFill } from "react-icons/bs";
-import { GoHome } from "react-icons/go";
+
+import { GiDuck } from "@react-icons/all-files/gi/GiDuck";
+import { BsMoon } from "@react-icons/all-files/bs/BsMoon";
+import { BiSun } from "@react-icons/all-files/Bi/BiSun";
+import { GoHome } from "@react-icons/all-files/go/GoHome";
 import axios from "axios";
 import { CountryApi, UserInputData, UserInputErrors } from "@/types";
 import { signIn, useSession } from "next-auth/react";
@@ -318,9 +320,9 @@ const SignUp = () => {
               }
             >
               {colorMode === "light" ? (
-                <BsFillMoonFill className="text-black" />
+                <BsMoon className="text-black" />
               ) : (
-                <BsFillSunFill />
+                <BiSun />
               )}
             </button>
           </div>

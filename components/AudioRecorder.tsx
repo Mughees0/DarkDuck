@@ -5,7 +5,7 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useState, useRef } from "react";
 const mimeType = "audio/webm";
-import { HiOutlineDownload } from "react-icons/hi";
+import HiOutlineDownload from "@react-icons/all-files/hi/HiOutlineDownload";
 
 const AudioRecorder = ({
   setAudioRecordingModel,
@@ -137,8 +137,8 @@ const AudioRecorder = ({
   };
 
   return (
-    <div className="pointer-events-none relative w-[80%] lg:w-[40%] translate-y-[-50px] transition-all duration-300 ease-in-out z-[9999] transform-none opacity-100">
-      <div className="min-[576px]:shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] pointer-events-auto relative flex w-full flex-col rounded-md bg-white bg-clip-padding text-current shadow-lg outline-none dark:bg-neutral-600 space-y-5">
+    <div className="pointer-events-none relative w-[80%] lg:w-[30%] translate-y-[-50px] transition-all duration-300 ease-in-out z-[9999] transform-none opacity-100 dark:text-neutral-200 ">
+      <div className="min-[576px]:shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] pointer-events-auto relative flex w-full flex-col rounded-md bg-white bg-clip-padding text-current shadow-lg outline-none space-y-5">
         <div className="flex flex-shrink-0 items-center justify-between rounded-t-md p-4">
           <h2 className="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200">
             Create Post
@@ -155,7 +155,7 @@ const AudioRecorder = ({
               viewBox="0 0 24 24"
               strokeWidth="1.5"
               stroke="currentColor"
-              className="h-6 w-6"
+              className="h-6 w-6 dark:text-neutral-200"
             >
               <path
                 strokeLinecap="round"
@@ -167,7 +167,7 @@ const AudioRecorder = ({
         </div>
         <main className="bg-transparent flex flex-col gap-3 items-center">
           <div className="bg-transparent flex flex-col gap-3 items-center ">
-            <div className="space-y-3 p-3 m-4 bg-transparent border-2 rounded border-gray-400">
+            <div className="space-y-3 p-7 m-2 bg-transparent border-2 rounded border-gray-200">
               <p id="counter" className=" bg-transparent text-3x text-center">
                 {hours}:{minutes.toString().padStart(2, "0")}:
                 {seconds.toString().padStart(2, "0")}:

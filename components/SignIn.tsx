@@ -5,10 +5,12 @@ import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { BsFillMoonFill, BsFillSunFill } from "react-icons/bs";
 
-import { GiDuck } from "react-icons/gi";
-import { GoHome } from "react-icons/go";
+import { GiDuck } from "@react-icons/all-files/gi/GiDuck";
+import { BsMoon } from "@react-icons/all-files/bs/BsMoon";
+import { BiSun } from "@react-icons/all-files/Bi/BiSun";
+import { GoHome } from "@react-icons/all-files/go/GoHome";
+
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -76,9 +78,9 @@ const SignIn = () => {
               }
             >
               {colorMode === "light" ? (
-                <BsFillMoonFill className="text-black" />
+                <BsMoon className="text-black" />
               ) : (
-                <BsFillSunFill />
+                <BiSun />
               )}
             </button>
           </div>

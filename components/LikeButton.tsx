@@ -3,7 +3,7 @@
 import axios from "axios";
 
 import { useState } from "react";
-import { GiDuck } from "react-icons/gi";
+import { GiDuck } from "@react-icons/all-files/gi/GiDuck";
 
 function LikeButton({ userId, postId }: { userId: string; postId: string }) {
   const [liked, setLiked] = useState(false);
