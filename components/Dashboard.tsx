@@ -207,7 +207,7 @@ const Dashboard = ({ updatePosts }) => {
               <h3 className="text-xl w-44 relative left-6 top-5 text-gray-600 dark:text-white">
                 Search in Site
               </h3>
-              <div className="w-full space-y-10 mt-4 px-4 xl:sticky xl:flex xl:flex-col border-l border-black dark:border dark:border-l-1 dark:border-t-0 dark:border-b-0 dark:border-r-0 dark:border-red-700">
+              <div className="w-full space-y-10 mt-6 px-4 xl:sticky xl:flex xl:flex-col border-l border-black dark:border dark:border-l-1 dark:border-t-0 dark:border-b-0 dark:border-r-0 dark:border-red-700">
                 <button
                   type="button"
                   className="DocSearch DocSearch-Button border rounded shadow overflow-hidden"
@@ -248,8 +248,8 @@ const Dashboard = ({ updatePosts }) => {
                   </h3>
                   <ul className="divide-y divide-gray-200 dark:divide-gray-700">
                     <li className="flex items-center space-x-4 pb-4">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-purple-600 dark:bg-purple-600">
-                        <SiAudiomack className=" bg-transparent text-white" />
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-purple-600 dark:bg-purple-600 ">
+                        <SiAudiomack className=" bg-transparent text-white dark:bg-transparent" />
                       </div>
                       <div>
                         <div className="text-base font-semibold text-gray-900 dark:text-white">
@@ -262,7 +262,7 @@ const Dashboard = ({ updatePosts }) => {
                     </li>
                     <li className="flex items-center space-x-4 py-4">
                       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-900 dark:bg-gray-400">
-                        <SiAudiomack className=" bg-transparent text-white " />
+                        <SiAudiomack className=" bg-transparent text-white dark:bg-transparent" />
                       </div>
                       <div>
                         <div className="text-base font-semibold text-gray-900 dark:text-white">
@@ -274,8 +274,8 @@ const Dashboard = ({ updatePosts }) => {
                       </div>
                     </li>
                     <li className="flex items-center space-x-4 pt-4">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white dark:bg-black">
-                        <SiAudiomack className=" bg-transparent text-black" />
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white dark:bg-gray-800">
+                        <SiAudiomack className=" bg-transparent text-black dark:text-white dark:bg-transparent" />
                       </div>
                       <div>
                         <div className="text-base font-semibold text-gray-900 dark:text-white">

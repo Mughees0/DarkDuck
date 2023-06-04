@@ -1,13 +1,9 @@
 "use client";
-import React from "react";
 
 const Footer = () => {
   return (
     <>
-      <footer
-        data-testid="flowbite-footer"
-        className="w-full rounded-lg bg-white shadow border dark:bg-gray-800 md:flex md:items-center md:justify-between overflow-hidden"
-      >
+      <footer className="w-full rounded-lg bg-white shadow border dark:bg-gray-800 md:flex md:items-center md:justify-between overflow-hidden">
         <div className="flex w-full flex-col gap-y-6 lg:flex-row lg:justify-between lg:gap-y-0 pt-3 px-3 overflow-hidden">
           <ul
             data-testid="footer-groupLink"
@@ -128,10 +124,10 @@ const Footer = () => {
             </div>
           </ul>
         </div>
-        <p className=" text-center text-sm text-gray-500 bg-transparent dark:text-gray-300  p-3">
-          © DarkDuck 2023
-        </p>
       </footer>
+      <p className="text-center text-sm text-gray-500 bg-transparent dark:text-gray-300  p-3">
+        © DarkDuck 2023
+      </p>
     </>
   );
 };

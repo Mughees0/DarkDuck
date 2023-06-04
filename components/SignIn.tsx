@@ -1,9 +1,8 @@
 "use client";
 import useColorMode from "@/hooks/useColorMode";
-import Validation from "@/utils/validator/validators";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 import { GiDuck } from "@react-icons/all-files/gi/GiDuck";
@@ -21,7 +20,6 @@ const SignIn = () => {
   const [loading, setLoading] = useState(false);
   const { data: session } = useSession();
   const [colorMode, setColorMode] = useColorMode();
-  const pathname = usePathname();
   const router = useRouter();
 
   const loginUser = async () => {

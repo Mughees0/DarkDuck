@@ -9,7 +9,6 @@ import { GoHome } from "@react-icons/all-files/go/GoHome";
 
 import axios from "axios";
 import useColorMode from "@/hooks/useColorMode";
-import { useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { UserDataResponse } from "@/types";
@@ -21,7 +20,6 @@ const Header = ({ setUpdatePosts, updatePosts }) => {
   const [userData, setUserData] = useState<UserDataResponse>();
   const [toggleUserModal, setToggleUserModal] = useState(false);
   const { data: session } = useSession();
-  const router = useRouter();
 
   const fetchUserData = async (id: string) => {
     try {
@@ -56,11 +54,11 @@ const Header = ({ setUpdatePosts, updatePosts }) => {
               <button
                 onClick={() => setAudioRecordingModel(!audioRecordingModel)}
                 type="button"
-                className="sm:hidden items-center justify-center text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-xs px-3 py-1.5 mr-2 dark:bg-gray-600 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
+                className="sm:hidden items-center justify-center text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-xs p-2 mr-2 dark:bg-gray-600 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
               >
                 <svg
                   aria-hidden="true"
-                  className=" w-3 h-5 text-white bg-gray-800"
+                  className=" w-5 h-5 text-gray-200 dark:bg-transparent bg-gray-700"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                   xmlns="http://www.w3.org/2000/svg"
@@ -113,14 +111,14 @@ const Header = ({ setUpdatePosts, updatePosts }) => {
                 type="button"
                 className="p-2 text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white mr-1"
               >
-                <GoHome className="h-6 w-6 bg-gray-200" />
+                <GoHome className="h-6 w-6 bg-gray-200 hover:bg-transparent" />
               </a>
               {/* <!-- Messages --> */}
               <button
                 type="button"
                 className="p-2 text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white mr-1"
               >
-                <FiMessageCircle className="h-6 w-6 bg-gray-200" />
+                <FiMessageCircle className="h-6 w-6 bg-gray-200 hover:bg-transparent" />
               </button>
               {/* <!-- Notifications --> */}
               <button
@@ -132,7 +130,7 @@ const Header = ({ setUpdatePosts, updatePosts }) => {
                 {/* <!-- Bell icon --> */}
                 <svg
                   aria-hidden="true"
-                  className="w-6 h-6 bg-gray-200"
+                  className="w-6 h-6 bg-gray-200 hover:bg-transparent"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                   xmlns="http://www.w3.org/2000/svg"
@@ -336,7 +334,7 @@ const Header = ({ setUpdatePosts, updatePosts }) => {
                 {colorMode === "light" ? (
                   <BsMoon className="text-black bg-gray-200" />
                 ) : (
-                  <BiSun />
+                  <BiSun className="dark:bg-gray-800" />
                 )}
               </button>
             </div>

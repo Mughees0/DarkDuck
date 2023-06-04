@@ -5,7 +5,6 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
 import { GiGuitarBassHead } from "@react-icons/all-files/gi/GiGuitarBassHead";
-import { GiDuck } from "@react-icons/all-files/gi/GiDuck";
 import { BsCamera } from "@react-icons/all-files/bs/BsCamera";
 import { MdLanguage } from "@react-icons/all-files/md/MdLanguage";
 import { MdWork } from "@react-icons/all-files/md/MdWork";
@@ -23,7 +22,6 @@ const UserBio = ({ updatePosts }) => {
   const [userData, setUserData] = useState<UserDataResponse>();
   const [posts, setPosts] = useState<PostsResponse>(null);
 
-  const [liked, setLiked] = useState(false);
   const [profileModal, setProfileModal] = useState(false);
   const [bannerModal, setBannerModal] = useState(false);
   const [updateImage, setUpdateImage] = useState(false);
