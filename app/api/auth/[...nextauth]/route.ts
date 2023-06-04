@@ -34,6 +34,15 @@ export const handler = NextAuth({
         email: token.email,
       },
     }),
+    // jwt: ({ token, user }) => ({
+    //   if(user) {
+    //     token.email = user.data.auth.email;
+    //     token.username = user.data.auth.userName;
+    //     token.userType = user.data.auth.userType;
+    //     token.accessToken = user.data.auth.token;
+    //     token.sub = user.data.auth.id;
+    //   },
+    // }),
   },
   providers: [
     CredentialsProvider({

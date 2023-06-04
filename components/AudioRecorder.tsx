@@ -1,13 +1,17 @@
 "use client";
 import { useTimer } from "@/hooks/useTimer";
-import Session from "@/models/Session";
 import { StorageRes } from "@/types";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useState, useRef } from "react";
 const mimeType = "audio/webm";
 
-const AudioRecorder = ({ setAudioRecordingModel, audioRecordingModel }) => {
+const AudioRecorder = ({
+  setAudioRecordingModel,
+  audioRecordingModel,
+  setUpdatePosts,
+  updatePosts,
+}) => {
   const { data: Session } = useSession();
   const [stream, setStream] = useState(null);
   const [permission, setPermission] = useState(false);
@@ -104,7 +108,7 @@ const AudioRecorder = ({ setAudioRecordingModel, audioRecordingModel }) => {
     // 2. Use the FileName and store the Post Data in MongoDB
     try {
       const req = await axios.post(
-        "/api/v1/posts",
+        "/api/v1/posts/new_post",
         {
           userId: Session?.user?.id,
           audio: storageRes?.success,
@@ -120,6 +124,9 @@ const AudioRecorder = ({ setAudioRecordingModel, audioRecordingModel }) => {
           },
         }
       );
+      if (req.status == 200) {
+        setUpdatePosts(!updatePosts);
+      }
       const res = await req.data;
     } catch (err) {
       throw err;
@@ -144,13 +151,13 @@ const AudioRecorder = ({ setAudioRecordingModel, audioRecordingModel }) => {
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              stroke-width="1.5"
+              strokeWidth="1.5"
               stroke="currentColor"
               className="h-6 w-6"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 d="M6 18L18 6M6 6l12 12"
               ></path>
             </svg>
@@ -259,8 +266,8 @@ const AudioRecorder = ({ setAudioRecordingModel, audioRecordingModel }) => {
               </select>
             </div>
 
-            <input name="userId" hidden value={Session?.user?.id} />
-            <input id="audio" name="audio" type="audio" hidden value={audio} />
+            <input name="userId" hidden />
+            <input id="audio" name="audio" type="audio" hidden />
           </div>
           <div className="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md bg-transparent border-opacity-100 p-4 dark:border-opacity-50">
             <button

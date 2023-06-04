@@ -27,14 +27,14 @@ export async function POST(req: Request) {
         const blob = value as Blob;
         const filename = key;
         fileName = key;
-        // const existing = gridFSBucket.find();
+        const existing = gridFSBucket.find({ filename });
         // const file = await existing.toArray();
         // console.log(file);
-        // if (existing) {
-        //   // If file already exists, let's skip it.
-        //   // If you want a different behavior such as override, modify this part.
-        //   continue;
-        // }
+        if (existing) {
+          // If file already exists, let's skip it.
+          // If you want a different behavior such as override, modify this part.
+          continue;
+        }
 
         //conver the blob to stream
         const buffer = Buffer.from(await blob.arrayBuffer());

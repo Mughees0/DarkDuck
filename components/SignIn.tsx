@@ -1,11 +1,10 @@
 "use client";
 import useColorMode from "@/hooks/useColorMode";
 import Validation from "@/utils/validator/validators";
-import axios from "axios";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { BsFillMoonFill, BsFillSunFill } from "react-icons/bs";
 
 import { GiDuck } from "react-icons/gi";
@@ -23,51 +22,23 @@ const SignIn = () => {
   const pathname = usePathname();
   const router = useRouter();
 
-  const isValid = () => {
-    let isValid = true;
-
-    if (!user.email) {
-      error.email = "Email is required";
-      isValid = false;
-    }
-
-    if (!Validation.EmailValidation(user.email)) {
-      error.email = "Please Enter valid Email";
-      isValid = false;
-    }
-
-    if (!user.password) {
-      error.password = "Password is required";
-      isValid = false;
-    }
-
-    if (!Validation.passwordValidation(user.password)) {
-      error.password = "Please provide password of minimum length 8";
-      isValid = false;
-    }
-    setError({ ...error });
-    return isValid;
-  };
-
-  const redirectToHome = () => {
-    if (pathname === "/sign-up" || pathname === "/sign-in") {
-      // TODO: redirect to a success register page
-      router.push("/");
-    }
-  };
-
   const loginUser = async () => {
     setLoading(true);
+
     const res: any = await signIn("credentials", {
       redirect: false,
       email: user?.email,
       password: user?.password,
       callbackUrl: `${window.location.origin}`,
     });
-    res.error ? setApiError(res.error) : redirectToHome();
+
+    res.error ? setApiError(res.error) : router.push("/");
+
     setLoading(false);
   };
+
   let notify;
+
   if (apiError !== undefined) {
     colorMode === "light"
       ? (notify = () =>

@@ -17,6 +17,6 @@ export async function POST(request: Request) {
   if (otp == userOtpCheck.otp) {
     return NextResponse.json({ success: "Done" }, { status: 200 });
   } else {
-    return NextResponse.json({ error: "OTP Incorrect" }, { status: 400 });
+    return NextResponse.json({ error: "Incorrect OTP" }, { status: 400 });
   }
 }

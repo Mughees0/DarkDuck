@@ -95,6 +95,7 @@ export type PostsResponse = [
     updatedAt: string;
     createdAt: string;
     __v: string;
+    likes: string[];
   }
 ];
 export type UserDataResponse = {

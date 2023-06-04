@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 export type Props = {
   value: string;
@@ -15,7 +15,6 @@ export default function OtpInput({ value, valueLength, onChange }: Props) {
   const [valueItems, setValueItems] = useState<string[]>();
 
   function getValueItems() {
-
     valueArray = value?.split("");
 
     for (let i = 0; i < valueLength; i++) {
@@ -27,12 +26,16 @@ export default function OtpInput({ value, valueLength, onChange }: Props) {
         items.push("");
       }
     }
-
     setValueItems(items);
   }
 
+  const notInitialRender = useRef(false);
   useEffect(() => {
-    getValueItems();
+    if (notInitialRender.current) {
+      getValueItems();
+    } else {
+      notInitialRender.current = true;
+    }
   }, [value]);
 
   const focusToNextInput = (target: HTMLElement) => {
@@ -155,22 +158,3 @@ export default function OtpInput({ value, valueLength, onChange }: Props) {
     </>
   );
 }
-
-// .otp-group {
-//   display: flex;
-//   width: 100%;
-//   max-width: 360px;
-//   column-gap: 10px;
-// }
-
-// .otp-input {
-//   width: 100%;
-//   height: 60px;
-//   border: 1px solid #ccc;
-//   border-radius: 5px;
-//   padding: 0;
-//   text-align: center;
-//   font-size: 32px;
-//   font-weight: bold;
-//   line-height: 1;
-// }

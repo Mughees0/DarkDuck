@@ -4,30 +4,34 @@ import Header from "@/components/header";
 import { Loader } from "@/components/Loader";
 import UserProfile from "@/components/UserProfile";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 function Profile() {
-  const { data: session } = useSession();
-  const router = useRouter();
+  const { data: session, status } = useSession();
+  // const router = useRouter();
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [updatePosts, setUpdatePosts] = useState(false);
 
   useEffect(() => {
     setIsLoaded((isLoaded) => true);
   }, []);
 
-  if (session) {
+  if (status === "authenticated") {
     return isLoaded ? (
       <>
-        <Header />
-        <UserProfile />
+        <Header updatePosts={updatePosts} setUpdatePosts={setUpdatePosts} />
+        <UserProfile updatePosts={updatePosts} />
         <Footer />
       </>
     ) : (
       <Loader />
     );
   } else {
-    router.push("/");
+    return (
+      <main className="flex h-screen w-screen justify-center items-center">
+        <div>Please Login First</div>
+      </main>
+    );
   }
 }
 

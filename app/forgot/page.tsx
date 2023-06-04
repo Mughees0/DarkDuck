@@ -1,10 +1,8 @@
 "use client";
-import { useEffect, useState } from "react";
-// const logo = require('../../assets/images/darkduck.png');
+import { useState } from "react";
 import axios from "axios";
 import { usePathname, useRouter } from "next/navigation";
-import OtpInput from "@/components/OtpInput";
-import { UserResponse } from "@/types";
+import { useSession } from "next-auth/react";
 
 const ResetPassword = () => {
   const [disable, setDisable] = useState(false);
@@ -13,6 +11,7 @@ const ResetPassword = () => {
   const [email, setEmail] = useState("");
   const pathname = usePathname();
   const router = useRouter();
+  const { data: session, status } = useSession();
 
   const redirectToReset = (id: string) => {
     if (pathname === "/forgot") {
@@ -41,12 +40,12 @@ const ResetPassword = () => {
         setLoader(false);
         const res = await req.data;
         redirectToReset(res?.emailUser?._id);
-      } else {
-        setLoader(false);
-        setError("Wrong Input");
       }
     } catch (error) {
-      throw new Error("There is a problem:> " + error.message);
+      if (error.response.status === 400) {
+        setLoader(false);
+        setError("Email is not registered");
+      }
     }
   };
 
@@ -57,54 +56,56 @@ const ResetPassword = () => {
     await forgotPassword(email);
   };
 
-  return (
-    <>
-      <section className="bg-gray-50 dark:bg-gray-900">
-        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-          <div className="w-full p-6  rounded-lg shadow dark:border md:mt-0 sm:max-w-md dark:bg-gray-800 dark:border-gray-200 sm:p-8">
-            <h1 className="mb-1 text-xl font-bold dark:bg-gray-800 leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-              Forgot your password?
-            </h1>
-            <p className="font-light text-gray-500 dark:bg-gray-800 dark:text-gray-400">
-              Don't fret! Just type in your email and we will send you a code to
-              reset your password!
-            </p>
-            <form
-              className="mt-4 dark:bg-gray-800 space-y-4 lg:mt-5 md:space-y-5"
-              onSubmit={formSubmit}
-            >
-              <div className="dark:bg-gray-800">
-                <label
-                  htmlFor="email"
-                  className="block mb-2 text-sm dark:bg-gray-800 font-medium text-gray-900 dark:text-white"
-                >
-                  Your email
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="name@company.com"
-                  required
-                  value={email}
-                  onChange={({ target: { value } }) => setEmail(value)}
-                />
-                {error && <span className="text-danger">{error}</span>}
-              </div>
-              <button
-                type="submit"
-                className="w-full text-white bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
-                disabled={disable || loader}
+  if (status === "unauthenticated") {
+    return (
+      <>
+        <section className="bg-gray-50 dark:bg-gray-900">
+          <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+            <div className="w-full p-6  rounded-lg shadow dark:border md:mt-0 sm:max-w-md dark:bg-gray-800 dark:border-gray-200 sm:p-8">
+              <h1 className="mb-1 text-xl font-bold dark:bg-gray-800 leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                Forgot your password?
+              </h1>
+              <p className="font-light text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+                Don't fret! Just type in your email and we will send you a code
+                to reset your password!
+              </p>
+              <form
+                className="mt-4 dark:bg-gray-800 space-y-4 lg:mt-5 md:space-y-5"
+                onSubmit={formSubmit}
               >
-                {loader ? "Please wait..." : "Reset password"}
-              </button>
-            </form>
+                <div className="dark:bg-gray-800">
+                  <label
+                    htmlFor="email"
+                    className="block mb-2 text-sm dark:bg-gray-800 font-medium text-gray-900 dark:text-white"
+                  >
+                    Your email
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="name@company.com"
+                    required
+                    value={email}
+                    onChange={({ target: { value } }) => setEmail(value)}
+                  />
+                  {error && <span className="text-red-400">{error}</span>}
+                </div>
+                <button
+                  type="submit"
+                  className="w-full text-white bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
+                  disabled={disable || loader}
+                >
+                  {loader ? "Please wait..." : "Reset password"}
+                </button>
+              </form>
+            </div>
           </div>
-        </div>
-      </section>
-    </>
-  );
+        </section>
+      </>
+    );
+  }
 };
 
 export default ResetPassword;

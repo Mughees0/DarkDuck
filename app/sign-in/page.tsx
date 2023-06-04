@@ -1,13 +1,13 @@
 "use client";
 
-import { Loader } from "@/components/loader";
+import { Loader } from "../../components/Loader";
 import SignIn from "@/components/SignIn";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 function Signin() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
@@ -15,7 +15,7 @@ function Signin() {
     setIsLoaded((isLoaded) => true);
   }, []);
 
-  if (!session) {
+  if (status === "unauthenticated") {
     return isLoaded ? (
       <>
         <SignIn />
@@ -24,7 +24,11 @@ function Signin() {
       <Loader />
     );
   } else {
-    router.push("/");
+    return (
+      <main className="flex h-screen w-screen justify-center items-center">
+        <div>Please SignOut First</div>
+      </main>
+    );
   }
 }
 

@@ -1,29 +1,20 @@
 "use client";
 import React, { useState, useEffect } from "react";
-// import { Button, Container, Dropdown, Nav, Navbar } from "react-bootstrap";
-// import { Link, Navigate, useNavigate } from "react-router-dom";
-import { ImHome } from "react-icons/im";
-import { HiChatAlt2 } from "react-icons/hi";
-import { BsFillBellFill, BsFillPlusCircleFill } from "react-icons/bs";
-import { FaUserCircle } from "react-icons/fa";
-// import { logout } from "../../actions/auth.action";
+
 import { GiDuck } from "react-icons/gi";
 import { BsFillMoonFill, BsFillSunFill } from "react-icons/bs";
 import { TbMessages } from "react-icons/tb";
 import { GoHome } from "react-icons/go";
-// import { useDispatch } from "react-redux";
-// import * as auth from "../../helpers/auth";
+
 import axios from "axios";
 import useColorMode from "@/hooks/useColorMode";
 import { useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { data } from "autoprefixer";
-import { UserDataResponse, UserInputData } from "@/types";
+import { UserDataResponse } from "@/types";
 import AudioRecorder from "./AudioRecorder";
 
-const Header = () => {
-  //   const userDetails = decode(localStorage.getItem("accessToken"));
+const Header = ({ setUpdatePosts, updatePosts }) => {
   const [colorMode, setColorMode] = useColorMode();
   const [audioRecordingModel, setAudioRecordingModel] = useState(false);
   const [userData, setUserData] = useState<UserDataResponse>();
@@ -90,6 +81,8 @@ const Header = () => {
                 <AudioRecorder
                   setAudioRecordingModel={setAudioRecordingModel}
                   audioRecordingModel={audioRecordingModel}
+                  setUpdatePosts={setUpdatePosts}
+                  updatePosts={updatePosts}
                 />
               </div>
               {/* <!-- Home --> */}
@@ -252,8 +245,9 @@ const Header = () => {
                     <img
                       className="w-8 h-8 rounded-full"
                       src={
-                        userData?.profilePicture
-                          ? userData?.profilePicture
+                        userData?.profilePicture == undefined
+                          ? process.env.REACT_APP_IMAGES_PATH +
+                            userData?.profilePicture
                           : "/assets/avatar.png"
                       }
                       alt=""

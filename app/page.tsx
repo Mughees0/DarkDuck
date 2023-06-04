@@ -8,18 +8,19 @@ import { useEffect, useState } from "react";
 import Footer from "@/components/Footer";
 
 export default function Home() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [updatePosts, setUpdatePosts] = useState(false);
 
   useEffect(() => {
     setIsLoaded((isLoaded) => true);
   }, []);
 
-  if (session) {
+  if (status === "authenticated") {
     return isLoaded ? (
       <main>
-        <Header />
-        <Dashboard />
+        <Header updatePosts={updatePosts} setUpdatePosts={setUpdatePosts} />
+        <Dashboard updatePosts={updatePosts} />
         <Footer />
       </main>
     ) : (

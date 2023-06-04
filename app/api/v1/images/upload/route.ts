@@ -24,13 +24,16 @@ export async function POST(req: Request) {
       if (isFile) {
         const blob = value as Blob;
         const filename = blob.name;
-        // const existing = gridFSBucket.find();
-        // const file = await existing.toArray();
-        // console.log(file.at(0).filename);
+        // const existing = gridFSBucket.find({ filename });
+        // // const file = await existing.toArray();
+        // // console.log(file.at(0).filename);
         // if (existing) {
         //   // If file already exists, let's skip it.
         //   // If you want a different behavior such as override, modify this part.
-        //   continue;
+        //   return NextResponse.json(
+        //     { Failed: "image already in DB" },
+        //     { status: 400 }
+        //   );
         // }
 
         //conver the blob to stream

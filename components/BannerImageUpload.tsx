@@ -1,18 +1,14 @@
 "use client";
-
 import { StorageRes } from "@/types";
 import axios from "axios";
-import { Blob } from "buffer";
 import { useSession } from "next-auth/react";
-import { Input } from "postcss";
 import React, { FormEvent, useRef, useState } from "react";
 
-const ImageUploader = () => {
+const ImageUploader = ({ setUpdateImage, updateImage }) => {
   // 1. add reference to input element
   const ref = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const { data: Session } = useSession();
-  const [selectedFile, setSelectedFile] = useState<File>();
   const [currentFile, setCurrentFile] = useState(undefined);
   const [previewImage, setPreviewImage] = useState(undefined);
 
@@ -53,6 +49,9 @@ const ImageUploader = () => {
           },
         }
       );
+      if (req.status === 200) {
+        setUpdateImage(!updateImage);
+      }
       const res = await req.data;
     } catch (err) {
       throw err;
@@ -83,7 +82,7 @@ const ImageUploader = () => {
           className="px-2 py-1 rounded-md bg-violet-50 text-violet-500"
           disabled={!currentFile}
           type="submit"
-          value="Change Banner Image"
+          value={uploading ? "Please Wait..." : "Change Banner Image"}
         />
       </form>
 
@@ -117,7 +116,7 @@ const ImageUploader = () => {
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                stroke-width="2"
+                strokeWidth="2"
                 d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
               ></path>
             </svg>

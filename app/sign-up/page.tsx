@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 function Signup() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
@@ -15,7 +15,7 @@ function Signup() {
     setIsLoaded((isLoaded) => true);
   }, []);
 
-  if (!session) {
+  if (status === "unauthenticated") {
     return isLoaded ? (
       <>
         <SignUp />
@@ -24,7 +24,11 @@ function Signup() {
       <Loader />
     );
   } else {
-    router.push("/");
+    return (
+      <main className="flex h-screen w-screen justify-center items-center">
+        <div>Please SignOut First</div>
+      </main>
+    );
   }
 }
 
