@@ -53,7 +53,10 @@ const Header = ({ setUpdatePosts, updatePosts }) => {
             <div className="flex bg-gray-200 dark:bg-gray-800  justify-start items-center">
               {/* Icon/logo */}
               <a href="/" className="flex mr-4 bg-gray-200 dark:bg-gray-800">
-                <GiDuck className="mr-3 h-8 w-8 bg-gray-200 dark:text-red-700 dark:bg-gray-800" />
+                <img
+                  src="/assets/logo.png"
+                  className="mr-3 h-8 w-8 bg-gray-200 dark:text-red-700 dark:bg-gray-800"
+                />
               </a>
             </div>
             <div className="flex items-center bg-gray-200 dark:bg-gray-800 lg:order-2">

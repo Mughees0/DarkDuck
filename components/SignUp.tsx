@@ -346,7 +346,10 @@ const SignUp = () => {
             <div className="w-full bg-white rounded-lg shadow my-5 dark:border md:mt-0 sm:max-w-xl xl:p-0 dark:bg-gray-800 dark:border-gray-700">
               <div className="p-6 space-y-4 md:space-y-6 sm:p-8 border border-white outline-none rounded-md ">
                 <div className="flex justify-center">
-                  <GiDuck className=" text-[50px] dark:text-white" />
+                  <img
+                    src="/assets/logo.png"
+                    className="w-16 h-16 dark:text-white"
+                  />
                 </div>
                 <h1 className="text-xl text-center font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                   Create your account
