@@ -48,9 +48,12 @@ const Dashboard = ({ updatePosts }) => {
     return (
       <>
         <main className="bg-gray-50">
-          <section className="bg-cover bg-center bg-bgCover text-black text-center flex flex-col items-center dark:text-white">
-            <h1 className="bg-transparent dark:bg-transparent pt-20 text-3xl font-bold">
-              DarkDuck
+          <section className="bg-cover bg-center bg-bgCover text-black text-center flex flex-col items-center">
+            <h1 className="bg-transparent dark:bg-transparent pt-20 font-bold">
+              <img
+                src="/assets/name.png"
+                className="w-96 h-24 bg-transparent dark:bg-transparent "
+              />
             </h1>
 
             <p className="bg-transparent dark:bg-transparent pt-2 text-sm lg:text-2xl w-3/4 lg:w-2/4 pb-3">
@@ -59,10 +62,10 @@ const Dashboard = ({ updatePosts }) => {
               management, musical collaboration, and social connectivity –
               transforming your online world seamlessly."
             </p>
-            <div className=" text-black rounded items-center p-2 m-5 bg-gray-200 dark:bg-gray-400 hover:text-white hover:bg-gray-400 hover:text-lg dark:hover:bg-gray-600 px-3">
-              <button className="flex items-center gap-2 dark:text-white bg-transparent dark:bg-transparent">
+            <div className=" text-black rounded items-center p-2 m-5 bg-gray-200 dark:bg-gray-400  hover:bg-gray-400 hover:text-lg dark:hover:bg-gray-600 px-3">
+              <button className="flex items-center gap-2 bg-transparent dark:bg-transparent">
                 View Posts
-                <BsArrowRight className=" bg-transparent dark:bg-transparent dark:text-white" />
+                <BsArrowRight className=" bg-transparent dark:bg-transparent" />
               </button>
             </div>
           </section>

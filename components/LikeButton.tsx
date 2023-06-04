@@ -44,12 +44,9 @@ function LikeButton({ userId, postId }: { userId: string; postId: string }) {
         onClick={() => handleLike(postId)}
         className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white"
       >
-        <GiDuck
-          className={
-            liked
-              ? " w-5 h-5 text-red-400"
-              : " w-5 h-5 hover:text-blue-600 text-yellow-400"
-          }
+        <img
+          src={liked ? "/assets/red-duck.png" : "/assets/yellow-duck.png"}
+          className={liked ? " w-6 h-6" : " w-6 h-6"}
         />
       </button>
     </>

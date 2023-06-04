@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const unAuthRedirect = () => {
   return (
-    <main className="flex h-screen w-screen justify-center flex-col gap-3  items-center">
+    <main className="flex h-screen w-screen justify-center flex-col gap-3  items-center dark:text-gray-50">
       <div>Please Login First</div>
       <div className="flex justify-between gap-3">
         <Link
