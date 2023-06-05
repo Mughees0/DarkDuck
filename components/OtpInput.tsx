@@ -29,6 +29,7 @@ export default function OtpInput({ value, valueLength, onChange }: Props) {
     setValueItems(items);
   }
 
+  // Don't Stop intial render for build
   const notInitialRender = useRef(false);
   useEffect(() => {
     if (notInitialRender.current) {
