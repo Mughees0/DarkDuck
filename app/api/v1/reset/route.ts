@@ -4,6 +4,7 @@ import User from "../../../../models/User";
 import bcrypt from "bcrypt";
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
+export const dynamic = "force-dynamic";
 
 const validateEmail = (email: string): boolean => {
   const regEx = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
