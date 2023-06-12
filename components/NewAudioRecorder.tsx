@@ -3,49 +3,22 @@ import { useTimer } from "@/hooks/useTimer";
 import { StorageRes } from "@/types";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { useState, useRef } from "react";
-const mimeType = "audio/webm";
+import { useState } from "react";
 import { HiOutlineDownload } from "@react-icons/all-files/hi/HiOutlineDownload";
-import { log } from "console";
-import vmsg, { Recorder } from "vmsg";
-import { set } from "mongoose";
+import { Recorder } from "vmsg";
 
-// const trying = () => {
-//   // vmsg
-//   //   .record({
-//   //     wasmURL: require("../../node_modules/vmsg/dist/vmsg.wasm"),
-//   //     shimURL: "https://unpkg.com/wasm-polyfill.js@0.2.0/wasm-polyfill.js",
-//   //   })
-//   //   .then((blob) => {
-//   //     console.log("Recorded MP3", blob);
-//   //   });
-//   // Can be used like this:
-//   //
-//   // const form = new FormData();
-//   // form.append("file[]", blob, "record.mp3");
-//   // fetch("/upload.php", {
-//   //   credentials: "include",
-//   //   method: "POST",
-//   //   body: form,
-//   // }).then(resp => {
-//   // });
+const recorder = new Recorder({
+  wasmURL: "https://cdn.rawgit.com/Kagami/vmsg/df671f6b/vmsg.wasm",
+  shimURL: "https://unpkg.com/wasm-polyfill.js@0.2.0/wasm-polyfill.js",
+});
 
-//   vmsgRecoder.startRecording();
-// };
-
-const AudioRecorder = ({
+export const AudioRecorder = ({
   setAudioRecordingModel,
   audioRecordingModel,
   setUpdatePosts,
   updatePosts,
 }) => {
   const { data: Session } = useSession();
-  const [stream, setStream] = useState(null);
-  const [permission, setPermission] = useState(false);
-  const mediaRecorder = useRef(null);
-  const [recordingStatus, setRecordingStatus] = useState("inactive");
-  const [audioChunks, setAudioChunks] = useState([]);
-
   const [isLoading, setIsLoading] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [audio, setAudio] = useState(null);
@@ -54,13 +27,9 @@ const AudioRecorder = ({
   const [uploading, setUploading] = useState(false);
   const { milliseconds, setTime, startAndStop, seconds, hours, minutes } =
     useTimer();
-  const recorder = new Recorder({
-    wasmURL: "https://cdn.rawgit.com/Kagami/vmsg/df671f6b/vmsg.wasm",
-    shimURL: "https://unpkg.com/wasm-polyfill.js@0.2.0/wasm-polyfill.js",
-  });
+
   const startRecording = async () => {
     setIsLoading(true);
-
     if (isRecording) {
       const blob = await recorder.stopRecording();
       setAudioBlob(blob);
