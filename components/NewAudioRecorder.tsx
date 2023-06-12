@@ -10,11 +10,6 @@ import { log } from "console";
 import vmsg, { Recorder } from "vmsg";
 import { set } from "mongoose";
 
-const recorder = new Recorder({
-  wasmURL: "https://cdn.rawgit.com/Kagami/vmsg/df671f6b/vmsg.wasm",
-  shimURL: "https://unpkg.com/wasm-polyfill.js@0.2.0/wasm-polyfill.js",
-});
-
 // const trying = () => {
 //   // vmsg
 //   //   .record({
@@ -59,7 +54,10 @@ const AudioRecorder = ({
   const [uploading, setUploading] = useState(false);
   const { milliseconds, setTime, startAndStop, seconds, hours, minutes } =
     useTimer();
-
+  const recorder = new Recorder({
+    wasmURL: "https://cdn.rawgit.com/Kagami/vmsg/df671f6b/vmsg.wasm",
+    shimURL: "https://unpkg.com/wasm-polyfill.js@0.2.0/wasm-polyfill.js",
+  });
   const startRecording = async () => {
     setIsLoading(true);
 
