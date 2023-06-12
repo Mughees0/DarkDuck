@@ -11,7 +11,7 @@ import useColorMode from "@/hooks/useColorMode";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { UserDataResponse } from "@/types";
-import AudioRecorder from "./AudioRecorder";
+import AudioRecorder from "./NewAudioRecorder";
 
 const Header = ({ setUpdatePosts, updatePosts }) => {
   const [colorMode, setColorMode] = useColorMode();
