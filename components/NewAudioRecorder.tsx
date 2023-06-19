@@ -82,9 +82,7 @@ export const AudioRecorder = ({
         {
           userId: Session?.user?.id,
           audio: storageRes?.success,
-          recordModeSwingId: mode
-            ? "633919ee9729ead90e0f6ac4"
-            : "63391b065ef1e76cfdcf539c",
+          recordModeSwingId: mode ? "public" : "private",
         },
         {
           headers: {
@@ -150,14 +148,6 @@ export const AudioRecorder = ({
                 {milliseconds.toString().padStart(2, "0")}
               </p>
               <div className=" bg-transparent flex justify-center flex-col w-72  items-center">
-                {/* {!permission ? (
-                  <button
-                    onClick={getMicrophonePermission}
-                    className=" bg-yellow-400 dark:text-gray-900 dark:bg-yellow-400 p-2 text-sm rounded-md"
-                  >
-                    Get Microphone
-                  </button>
-                ) : null} */}
                 {!isRecording ? (
                   <button
                     onClick={() => {
@@ -169,28 +159,6 @@ export const AudioRecorder = ({
                     Start Recording
                   </button>
                 ) : null}
-                {/* {isRecording ? (
-                  <button
-                    onClick={() => {
-                      pauseRecording();
-                      startAndStop();
-                    }}
-                    className=" bg-blue-400 dark:bg-blue-400 dark:text-gray-900 px-3 py-1 text-sm rounded-md"
-                  >
-                    Pause Recording
-                  </button>
-                ) : null} */}
-                {/* {recordingStatus === "paused" ? (
-                  <button
-                    onClick={() => {
-                      resumeRecording();
-                      startAndStop();
-                    }}
-                    className=" bg-purple-400 dark:text-gray-900 dark:bg-purple-400 px-4 py-1 text-sm rounded-md"
-                  >
-                    Resume Recording
-                  </button>
-                ) : null} */}
                 {isRecording ? (
                   <button
                     onClick={() => {
@@ -233,19 +201,13 @@ export const AudioRecorder = ({
                 className="block w-full p-2  text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               >
                 <option value="Select Record Mode Swing">
-                  Select Record Mode Swing
+                  Select Audience
                 </option>
-                <option
-                  onClick={() => setMode("633919ee9729ead90e0f6ac4")}
-                  value="633919ee9729ead90e0f6ac4"
-                >
-                  Public Mode
+                <option onClick={() => setMode("public")} value="public">
+                  Public
                 </option>
-                <option
-                  onClick={() => setMode("63391b065ef1e76cfdcf539c")}
-                  value="63391b065ef1e76cfdcf539c"
-                >
-                  Private Mode
+                <option onClick={() => setMode("private")} value="private">
+                  Private
                 </option>
               </select>
             </div>

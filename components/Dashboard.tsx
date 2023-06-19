@@ -7,6 +7,8 @@ import { SiAudiomack } from "@react-icons/all-files/si/SiAudiomack";
 import Loader from "./Loader";
 import { useSession } from "next-auth/react";
 import LikeButton from "./LikeButton";
+import NewPost from "./NewPost";
+import CreatePost from "./CreatePost";
 
 const convertDate = (TZdate) => {
   let date = new Date(TZdate);
@@ -14,11 +16,12 @@ const convertDate = (TZdate) => {
   //   dateFormat(date, "mmmm dd, yyyy");
 };
 
-const Dashboard = ({ updatePosts }) => {
+const Dashboard = ({ setUpdatePosts, updatePosts }) => {
   const [reply, setReply] = useState(false);
   const [posts, setPosts] = useState<PostsResponse>();
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [updateLikes, setUpdateLikes] = useState(false);
+  const [newPostModel, setNewPostModel] = useState(false);
   const { data: session } = useSession();
 
   const getPosts = async () => {
@@ -74,6 +77,24 @@ const Dashboard = ({ updatePosts }) => {
               <h1 className="text-3xl font-bold col-span-2 m-auto max-w-3xl space-y-6 overflow-y-auto mt-3 lg:pt-6  dark:text-white">
                 Fresh Posts
               </h1>
+              <CreatePost
+                newPostModel={newPostModel}
+                setNewPostModel={setNewPostModel}
+              />
+              <div
+                className={
+                  newPostModel
+                    ? " w-full absolute flex justify-center items-center bg-opacity-25 dark:bg-opacity-25 bg-gray-400 top-0 left-0 right-0 bottom-0 "
+                    : "hidden"
+                }
+              >
+                <NewPost
+                  setNewPostModel={setNewPostModel}
+                  newPostModel={newPostModel}
+                  setUpdatePosts={setUpdatePosts}
+                  updatePosts={updatePosts}
+                />
+              </div>
               <ul>
                 {posts ? (
                   posts?.length ? (
@@ -98,8 +119,10 @@ const Dashboard = ({ updatePosts }) => {
                                   </div>
                                   <div className="min-w-0  flex-1 items-start flex flex-col gap-1 h-20  ">
                                     <strong className=" justify-self-start p-1 px-2 bg-gray-900 text-gray-50 rounded dark:bg-white dark:text-black ">
-                                      {post?.recordModeSwingId ==
-                                      "633919ee9729ead90e0f6ac4"
+                                      {post?.audience === "public"
+                                        ? "Public"
+                                        : post?.recordModeSwingId ===
+                                          "633919ee9729ead90e0f6ac4"
                                         ? "Public World Mode"
                                         : "Private World Mode"}
                                     </strong>
@@ -134,12 +157,18 @@ const Dashboard = ({ updatePosts }) => {
                                   </a>
                                 </div>
                                 <div className="space-y-4">
-                                  {/* <p className="text-base font-normal text-gray-500 dark:text-gray-400">
-                                Hi @everyone, the new designs are attached. Go
-                                check them out and let me know if I missed
-                                anything. Thanks!
-                              </p> */}
-                                  <div className="flex flex-wrap">
+                                  <div className="flex flex-wrap gap-4">
+                                    {post?.text ? <p>{post?.text}</p> : <></>}
+                                    {post?.image ? (
+                                      <img
+                                        src={
+                                          process.env.REACT_APP_IMAGES_PATH +
+                                          post?.image
+                                        }
+                                      />
+                                    ) : (
+                                      <></>
+                                    )}
                                     {post?.audio ? (
                                       <audio controls>
                                         <source
