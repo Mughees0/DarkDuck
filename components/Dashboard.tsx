@@ -1,5 +1,5 @@
 "use client";
-import { PostsResponse } from "@/types";
+import { PostsResponse, UserDataResponse } from "@/types";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { BsArrowRight } from "@react-icons/all-files/bs/BsArrowRight";
@@ -22,6 +22,7 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [updateLikes, setUpdateLikes] = useState(false);
   const [newPostModel, setNewPostModel] = useState(false);
+  const [userData, setUserData] = useState<UserDataResponse>();
   const { data: session } = useSession();
 
   const getPosts = async () => {
@@ -42,10 +43,33 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
     }
   };
 
+  const fetchUserData = async (id: string) => {
+    try {
+      // const id = session?.user?.id;
+      const req = await axios.get(`/api/v1/users/user/${id}`);
+      const res = await req.data;
+      setUserData(res);
+    } catch (error) {
+      if (error.response.status === 400) {
+        console.log(
+          "User not fetched by the API, probably the user is not found or request failed." +
+            " The error message:> " +
+            error.message
+        );
+      } else {
+        console.log("Wrong call to the api.");
+      }
+    }
+  };
+
   useEffect(() => {
+    if (!session?.user?.id) {
+      return;
+    }
+    fetchUserData(session?.user?.id);
     setIsLoaded((isLoaded) => true);
     getPosts();
-  }, [updatePosts, updateLikes]);
+  }, [updatePosts, updateLikes, session?.user?.id]);
 
   if (posts && isLoaded) {
     return (
@@ -78,17 +102,25 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                 Fresh Posts
               </h1>
               <CreatePost
+                username={userData?.username}
+                profileImage={
+                  process.env.REACT_APP_IMAGES_PATH + userData?.profilePicture
+                }
                 newPostModel={newPostModel}
                 setNewPostModel={setNewPostModel}
               />
               <div
                 className={
                   newPostModel
-                    ? " w-full absolute flex justify-center items-center bg-opacity-25 dark:bg-opacity-25 bg-gray-400 top-0 left-0 right-0 bottom-0 "
+                    ? "flex justify-center items-center bg-opacity-25 dark:bg-opacity-25 bg-gray-400 fixed top-0 z-40 h-screen w-full left-0 right-0"
                     : "hidden"
                 }
               >
                 <NewPost
+                  username={userData?.username}
+                  profileImage={
+                    process.env.REACT_APP_IMAGES_PATH + userData?.profilePicture
+                  }
                   setNewPostModel={setNewPostModel}
                   newPostModel={newPostModel}
                   setUpdatePosts={setUpdatePosts}
@@ -121,8 +153,9 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                                     <strong className=" justify-self-start p-1 px-2 bg-gray-900 text-gray-50 rounded dark:bg-white dark:text-black ">
                                       {post?.audience === "public"
                                         ? "Public"
-                                        : post?.recordModeSwingId ===
-                                          "633919ee9729ead90e0f6ac4"
+                                        : "Private" ||
+                                          post?.recordModeSwingId ===
+                                            "633919ee9729ead90e0f6ac4"
                                         ? "Public World Mode"
                                         : "Private World Mode"}
                                     </strong>

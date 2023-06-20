@@ -20,7 +20,10 @@ function Profile() {
     return isLoaded ? (
       <>
         <Header updatePosts={updatePosts} setUpdatePosts={setUpdatePosts} />
-        <UserProfile updatePosts={updatePosts} />
+        <UserProfile
+          updatePosts={updatePosts}
+          setUpdatePosts={setUpdatePosts}
+        />
       </>
     ) : (
       <Loader />

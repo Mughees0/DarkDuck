@@ -14,14 +14,16 @@ import BannerImageUpload from "./BannerImageUpload";
 import LikeButton from "./LikeButton";
 import Loader from "./Loader";
 import Footer from "./Footer";
+import NewPost from "./NewPost";
+import CreatePost from "./CreatePost";
 
-const UserBio = ({ updatePosts }) => {
+const UserBio = ({ updatePosts, setUpdatePosts }) => {
   const { data: session } = useSession();
   const userIdFromSession = session?.user?.id;
 
   const [userData, setUserData] = useState<UserDataResponse>();
   const [posts, setPosts] = useState<PostsResponse>(null);
-
+  const [newPostModel, setNewPostModel] = useState(false);
   const [profileModal, setProfileModal] = useState(false);
   const [bannerModal, setBannerModal] = useState(false);
   const [updateImage, setUpdateImage] = useState(false);
@@ -242,7 +244,32 @@ const UserBio = ({ updatePosts }) => {
                   Your Posts
                 </h3>
               </nav>
-
+              <CreatePost
+                username={userData?.username}
+                profileImage={
+                  process.env.REACT_APP_IMAGES_PATH + userData?.profilePicture
+                }
+                newPostModel={newPostModel}
+                setNewPostModel={setNewPostModel}
+              />
+              <div
+                className={
+                  newPostModel
+                    ? "flex justify-center items-center bg-opacity-25 dark:bg-opacity-25 bg-gray-400 fixed top-0 z-40 h-screen w-full left-0 right-0  "
+                    : "hidden"
+                }
+              >
+                <NewPost
+                  username={userData?.username}
+                  profileImage={
+                    process.env.REACT_APP_IMAGES_PATH + userData?.profilePicture
+                  }
+                  setNewPostModel={setNewPostModel}
+                  newPostModel={newPostModel}
+                  setUpdatePosts={setUpdatePosts}
+                  updatePosts={updatePosts}
+                />
+              </div>
               <ul className="tweets-user">
                 {posts?.length ? (
                   posts?.map((post) => {
@@ -295,8 +322,19 @@ const UserBio = ({ updatePosts }) => {
                             </svg>
                           </a>
                         </div>
-                        <div className="space-y-4">
-                          <div className="flex flex-wrap">
+                        <div className="space-y-4 dark:text-gray-100">
+                          <div className="flex flex-wrap gap-4">
+                            {post?.text ? <p>{post?.text}</p> : <></>}
+                            {post?.image ? (
+                              <img
+                                src={
+                                  process.env.REACT_APP_IMAGES_PATH +
+                                  post?.image
+                                }
+                              />
+                            ) : (
+                              <></>
+                            )}
                             <audio controls>
                               <source
                                 src={

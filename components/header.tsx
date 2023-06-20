@@ -12,6 +12,8 @@ import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { UserDataResponse } from "@/types";
 import AudioRecorder from "./NewAudioRecorder";
+import NewPost from "./NewPost";
+import { set } from "mongoose";
 
 const Header = ({ setUpdatePosts, updatePosts }) => {
   const [colorMode, setColorMode] = useColorMode();
@@ -65,7 +67,7 @@ const Header = ({ setUpdatePosts, updatePosts }) => {
               </a>
             </div>
             <div className="flex items-center bg-gray-200 dark:bg-gray-800 lg:order-2">
-              <button
+              {/* <button
                 onClick={() => setAudioRecordingModel(!audioRecordingModel)}
                 type="button"
                 className="sm:hidden items-center justify-center text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-xs p-2 mr-2 dark:bg-gray-600 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
@@ -83,9 +85,9 @@ const Header = ({ setUpdatePosts, updatePosts }) => {
                     clipRule="evenodd"
                   ></path>
                 </svg>
-              </button>
+              </button> */}
               {/* Big Screen New Post Button */}
-              <button
+              {/* <button
                 onClick={() => setAudioRecordingModel(!audioRecordingModel)}
                 type="button"
                 className=" hidden sm:inline-flex items-center justify-center text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-xs px-3 py-1.5 mr-2 dark:bg-gray-600 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
@@ -112,13 +114,13 @@ const Header = ({ setUpdatePosts, updatePosts }) => {
                     : "hidden"
                 }
               >
-                <AudioRecorder
-                  setAudioRecordingModel={setAudioRecordingModel}
-                  audioRecordingModel={audioRecordingModel}
+                <NewPost
+                  setNewPostModel={setAudioRecordingModel}
+                  newPostModel={audioRecordingModel}
                   setUpdatePosts={setUpdatePosts}
                   updatePosts={updatePosts}
                 />
-              </div>
+              </div> */}
               {/* <!-- Home --> */}
               <a
                 href="/"
