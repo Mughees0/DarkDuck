@@ -4,7 +4,7 @@ function CreatePost({ newPostModel, setNewPostModel, profileImage, username }) {
   }
 
   return (
-    <main className=" border-2 border-gray-900 dark:border-white rounded-lg col-span-2 m-auto h-full max-w-3xl overflow-hidden overflow-y-auto mt-3 lg:pt-6 ">
+    <>
       <section className=" flex items-center gap-5 px-5 border-b pt-3 pb-5 border-gray-400">
         <img className="rounded-full w-12 h-12" src={profileImage} alt="" />
         <span
@@ -18,7 +18,7 @@ function CreatePost({ newPostModel, setNewPostModel, profileImage, username }) {
         <button onClick={handleModel}>Audio</button>
         <button onClick={handleModel}>Image</button>
       </section>
-    </main>
+    </>
   );
 }
 

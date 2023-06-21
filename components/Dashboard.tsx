@@ -101,14 +101,7 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
               <h1 className="text-3xl font-bold col-span-2 m-auto max-w-3xl space-y-6 overflow-y-auto mt-3 lg:pt-6  dark:text-white">
                 Fresh Posts
               </h1>
-              <CreatePost
-                username={userData?.username}
-                profileImage={
-                  process.env.REACT_APP_IMAGES_PATH + userData?.profilePicture
-                }
-                newPostModel={newPostModel}
-                setNewPostModel={setNewPostModel}
-              />
+
               <div
                 className={
                   newPostModel
@@ -128,6 +121,17 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                 />
               </div>
               <ul>
+                <div className="col-span-2 m-auto h-full max-w-3xl overflow-hidden overflow-y-auto mt-3 lg:pt-6 border-2 rounded-lg border-gray-600">
+                  <CreatePost
+                    username={userData?.username}
+                    profileImage={
+                      process.env.REACT_APP_IMAGES_PATH +
+                      userData?.profilePicture
+                    }
+                    newPostModel={newPostModel}
+                    setNewPostModel={setNewPostModel}
+                  />
+                </div>
                 {posts ? (
                   posts?.length ? (
                     posts?.map((post) => {

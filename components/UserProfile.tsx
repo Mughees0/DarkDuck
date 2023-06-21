@@ -100,7 +100,6 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
             Go Back
           </button>
         </div>
-
         {/* banner modal */}
         <div
           // onClick={() => setModal(!modal)}
@@ -123,9 +122,7 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
             Go Back
           </button>
         </div>
-
         {/* Saba's code */}
-
         <div
           // onClick={() => setBannerModal(!bannerModal)}
           className="h-80 overflow-hidden"
@@ -239,19 +236,10 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
               </div>
             </aside>
             <section className="grow sm:w-6/10 mt-3 border-t-2 lg:border-none lg:mr-10">
-              <nav>
-                <h3 className="text-3xl font-bold pl-2 pt-3 dark:text-white text-center lg:text-left lg:w-44">
-                  Your Posts
-                </h3>
-              </nav>
-              <CreatePost
-                username={userData?.username}
-                profileImage={
-                  process.env.REACT_APP_IMAGES_PATH + userData?.profilePicture
-                }
-                newPostModel={newPostModel}
-                setNewPostModel={setNewPostModel}
-              />
+              <h2 className="text-3xl font-bold col-span-2 m-auto max-w-3xl space-y-6 overflow-y-auto mt-3 lg:pt-6  dark:text-white">
+                Your Posts
+              </h2>
+
               <div
                 className={
                   newPostModel
@@ -270,114 +258,160 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                   updatePosts={updatePosts}
                 />
               </div>
-              <ul className="tweets-user">
-                {posts?.length ? (
-                  posts?.map((post) => {
-                    return (
-                      <li
-                        key={post?._id}
-                        className="flex h-full flex-col justify-center gap-4 p-4 rounded-lg border-2 overflow-hidden border-black dark:border-white m-3"
-                      >
-                        <div className="flex items-center space-x-4 ">
-                          <div className="shrink-0">
-                            <img
-                              alt="Portrait Neil Sims"
-                              src={"/assets/avatar.png"}
-                              className="h-10 w-10 rounded-full"
-                            />
+              <ul>
+                <div className="col-span-2 m-auto h-full max-w-3xl overflow-hidden overflow-y-auto mt-3 lg:pt-6 border-2 rounded-lg border-gray-600">
+                  <CreatePost
+                    username={userData?.username}
+                    profileImage={
+                      process.env.REACT_APP_IMAGES_PATH +
+                      userData?.profilePicture
+                    }
+                    newPostModel={newPostModel}
+                    setNewPostModel={setNewPostModel}
+                  />
+                </div>
+                {posts ? (
+                  posts?.length ? (
+                    posts?.map((post) => {
+                      return (
+                        <li key={post?._id}>
+                          <div className="col-span-2 m-auto h-full max-w-3xl space-y-6 overflow-hidden overflow-y-auto mt-3 lg:pt-6 ">
+                            <div className="flex rounded-lg border-2 overflow-hidden border-black bg-white dark:border-gray-700 dark:bg-gray-800 flex-col shadow ">
+                              <div className="flex h-full flex-col justify-center gap-3 p-6 pb-0">
+                                <div className="flex items-center space-x-4">
+                                  <div className="shrink-0">
+                                    <img
+                                      alt="User Profile Picture"
+                                      src={
+                                        post?.userId?.profilePicture
+                                          ? process.env.REACT_APP_IMAGES_PATH +
+                                            post?.userId?.profilePicture
+                                          : "/assets/avatar.png"
+                                      }
+                                      className="h-10 w-10 rounded-full"
+                                    />
+                                  </div>
+                                  <div className="min-w-0  flex-1 items-start flex flex-col gap-1 h-20  ">
+                                    <strong className=" justify-self-start p-1 px-2 bg-gray-900 text-gray-50 rounded dark:bg-white dark:text-black ">
+                                      {post?.audience === "public"
+                                        ? "Public"
+                                        : "Private" ||
+                                          post?.recordModeSwingId ===
+                                            "633919ee9729ead90e0f6ac4"
+                                        ? "Public World Mode"
+                                        : "Private World Mode"}
+                                    </strong>
+                                    <p className="truncate text-sm  font-semibold text-gray-900 dark:text-white">
+                                      {post?.userId?.username}
+                                    </p>
+                                    <p className="truncate text-sm font-normal text-gray-500 dark:text-gray-400">
+                                      {post?.createdAt
+                                        ? new Date(
+                                            post.createdAt
+                                          ).toLocaleDateString(undefined, {
+                                            year: "numeric",
+                                            month: "long",
+                                            day: "numeric",
+                                          })
+                                        : null}
+                                    </p>
+                                  </div>
+                                  <a className="inline-flex cursor-pointer justify-center rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                    <svg
+                                      stroke="currentColor"
+                                      fill="currentColor"
+                                      strokeWidth="0"
+                                      viewBox="0 0 20 20"
+                                      className="text-2xl"
+                                      height="1em"
+                                      width="1em"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                      <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path>
+                                    </svg>
+                                  </a>
+                                </div>
+                                <div className="space-y-4">
+                                  <div className="flex flex-wrap gap-4">
+                                    {post?.text ? <p>{post?.text}</p> : <></>}
+                                    {post?.image ? (
+                                      <img
+                                        src={
+                                          process.env.REACT_APP_IMAGES_PATH +
+                                          post?.image
+                                        }
+                                      />
+                                    ) : (
+                                      <></>
+                                    )}
+                                    {post?.audio ? (
+                                      <audio controls>
+                                        <source
+                                          src={
+                                            process.env.REACT_APP_AUDIO_PATH +
+                                            post?.audio
+                                          }
+                                          type="audio/mp3"
+                                        />
+                                      </audio>
+                                    ) : (
+                                      <></>
+                                    )}
+                                  </div>
+                                </div>
+                                <div className="flex space-x-3 border-y border-gray-200 py-3 dark:border-gray-700">
+                                  <a className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white">
+                                    <svg
+                                      stroke="currentColor"
+                                      fill="currentColor"
+                                      strokeWidth="0"
+                                      viewBox="0 0 24 24"
+                                      className="mr-2 text-lg"
+                                      height="1em"
+                                      width="1em"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                      <path
+                                        fill="none"
+                                        d="M0 0h24v24H0z"
+                                      ></path>
+                                      <path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18zM18 14H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"></path>
+                                    </svg>
+                                    <button
+                                      data-accordion-target="#accordion-collapse-body-1"
+                                      aria-expanded="true"
+                                      aria-controls="accordion-collapse-body-1"
+                                      // onClick={() => {
+                                      //   setReply(!reply);
+                                      // }}
+                                      className=" mr-3"
+                                    >
+                                      Reply
+                                    </button>
+                                    <LikeButton
+                                      userId={session?.user?.id}
+                                      postId={post?._id}
+                                      setUpdateLikes={setUpdateLikes}
+                                      updateLikes={updateLikes}
+                                      post={post}
+                                    />
+                                  </a>
+
+                                  <div className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white">
+                                    {post.likes.length}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                           </div>
-                          <div className="min-w-0 flex-1">
-                            <p className="truncate text-sm font-semibold text-gray-900 dark:text-white">
-                              {userData?.username}
-                              <span> @{userData?.username}</span>
-                            </p>
-                            <p className="truncate text-sm font-normal text-gray-500 dark:text-gray-400">
-                              {post?.createdAt
-                                ? new Date(post.createdAt).toLocaleDateString(
-                                    undefined,
-                                    {
-                                      year: "numeric",
-                                      month: "long",
-                                      day: "numeric",
-                                    }
-                                  )
-                                : null}
-                            </p>
-                          </div>
-                          <a
-                            href="#hello"
-                            className="inline-flex cursor-pointer justify-center rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                          >
-                            <svg
-                              stroke="currentColor"
-                              fill="currentColor"
-                              strokeWidth="0"
-                              viewBox="0 0 20 20"
-                              className="text-2xl"
-                              height="1em"
-                              width="1em"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path>
-                            </svg>
-                          </a>
-                        </div>
-                        <div className="space-y-4 dark:text-gray-100">
-                          <div className="flex flex-wrap gap-4">
-                            {post?.text ? <p>{post?.text}</p> : <></>}
-                            {post?.image ? (
-                              <img
-                                src={
-                                  process.env.REACT_APP_IMAGES_PATH +
-                                  post?.image
-                                }
-                              />
-                            ) : (
-                              <></>
-                            )}
-                            <audio controls>
-                              <source
-                                src={
-                                  process.env.REACT_APP_AUDIO_PATH + post?.audio
-                                }
-                                type="audio/mp3"
-                              />
-                            </audio>
-                          </div>
-                        </div>
-                        <div className="flex border-y border-gray-200 py-3 dark:border-gray-700">
-                          <a className="flex items-center text-sm font-medium pr-4 text-gray-500 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white">
-                            <svg
-                              stroke="currentColor"
-                              fill="currentColor"
-                              strokeWidth="0"
-                              viewBox="0 0 24 24"
-                              className="mr-2 text-lg"
-                              height="1em"
-                              width="1em"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path fill="none" d="M0 0h24v24H0z"></path>
-                              <path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18zM18 14H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"></path>
-                            </svg>
-                            Reply
-                          </a>
-                          <div>
-                            <LikeButton
-                              userId={session?.user?.id}
-                              postId={post?._id}
-                              post={post}
-                              setUpdateLikes={setUpdateLikes}
-                              updateLikes={updateLikes}
-                            />
-                          </div>
-                          <div className="flex items-center pl-2  text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white">
-                            {post.likes.length}
-                          </div>
-                        </div>
-                      </li>
-                    );
-                  })
+                        </li>
+                      );
+                    })
+                  ) : (
+                    <li className="col-span-2 m-auto h-full max-w-3xl space-y-6 overflow-hidden overflow-y-auto mt-3 lg:pt-6 ">
+                      No Posts Found
+                    </li>
+                  )
                 ) : (
                   <li className="flex h-full flex-col justify-center gap-4 p-4 rounded-lg border-2 overflow-hidden border-black dark:border-white dark:text-white m-3">
                     <div className="flex items-center justify-center space-x-4">
