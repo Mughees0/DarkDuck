@@ -30,6 +30,7 @@ function NewPost({
   const ref = useRef<HTMLInputElement>(null);
   const [currentFile, setCurrentFile] = useState(undefined);
   const [previewImage, setPreviewImage] = useState(undefined);
+  const [postDisabled, setPostDisabled] = useState(true);
   const { milliseconds, setTime, startAndStop, seconds, hours, minutes } =
     useTimer();
 
@@ -37,7 +38,6 @@ function NewPost({
     setCurrentFile(event.target.files[0]);
     setPreviewImage(URL?.createObjectURL(event.target.files[0]));
   };
-
   const startRecording = async () => {
     setIsLoading(true);
     if (isRecording) {
@@ -59,6 +59,9 @@ function NewPost({
         console.log("====================================");
         setIsLoading(false);
       }
+    }
+    if (audioBlob !== null) {
+      setPostDisabled(false);
     }
   };
 
@@ -149,10 +152,11 @@ function NewPost({
     setAudio(null);
     setPreviewImage(null);
     setNewPostModel(!newPostModel);
+    setPostDisabled(true);
   }
 
   return (
-    <main className=" border border-gray-900 dark:border-gray-200 w-72 h-110 rounded-lg">
+    <main className=" border border-gray-900 dark:border-gray-200 w-72 h-110 sm:w-[400px] rounded-lg">
       <section className=" flex h-12 items-center rounded-t-lg justify-between px-4 border-b border-gray-400 dark:text-gray-100">
         <h1 className="font-bold">Create Post</h1>
         <button
@@ -187,23 +191,30 @@ function NewPost({
         </div>
         <input
           className=" text-sm w-full h-12 px-2"
-          onChange={(e) => setUserText(e.target.value)}
+          onChange={(e) => {
+            setUserText(e.target.value);
+            if (e.target.value !== "") {
+              setPostDisabled(false);
+            } else if (e.target.value === "") {
+              setPostDisabled(true);
+            }
+          }}
           placeholder={" What's on your mind, " + username + "?"}
           type="text"
         />
-        <div className=" flex justify-center items-center">
+        <div className=" flex justify-center items-center ">
           <label
             htmlFor="dropzone-file"
-            className="flex flex-col items-center justify-center w-60 h-30 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+            className="flex flex-col items-center justify-center w-60 h-30 sm:w-[380px] sm:h-[200px] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
           >
-            <div className="flex flex-col items-center w-full justify-center pt-5 pb-6">
+            <div className="flex flex-col items-center w-full justify-center pt-5 pb-6  sm:h-[200px]">
               {previewImage ? (
-                <img className=" w-60" src={previewImage} alt="" />
+                <img className="  h-44 " src={previewImage} alt="" />
               ) : (
                 <>
                   <svg
                     aria-hidden="true"
-                    className="w-10 h-10 mb-3 text-gray-400"
+                    className="w-10 h-10  mb-3 text-gray-400"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -230,7 +241,14 @@ function NewPost({
               accept="image/*"
               ref={ref}
               multiple
-              onChange={selectFile}
+              onChange={(e) => {
+                selectFile(e);
+                if (e.target.value !== "") {
+                  setPostDisabled(false);
+                } else if (e.target.value === "") {
+                  setPostDisabled(true);
+                }
+              }}
               id="dropzone-file"
               type="file"
               className="hidden"
@@ -238,7 +256,7 @@ function NewPost({
           </label>
         </div>
         <div className=" flex justify-center border-b pb-2 border-gray-400">
-          <article className="bg-transparent flex flex-col gap-3 w-[200px] items-center">
+          <article className="bg-transparent flex flex-col gap-3 w-[300px] items-center">
             <div className="bg-transparent flex flex-col gap-3 items-center ">
               <div className="space-y-3 sm:p-7 sm:m-2 bg-transparent py-2">
                 <p id="counter" className=" bg-transparent text-3x text-center">
@@ -300,15 +318,16 @@ function NewPost({
           <button
             onClick={handleCancel}
             type="button"
-            className="bg-red-400 dark:bg-red-500 dark:text-gray-900  px-6 rounded-md"
+            className="bg-red-400 dark:bg-red-500 dark:text-gray-900 sm:px-14 px-6 rounded-md"
           >
             Cancel
           </button>
           <button
-            className="bg-green-300 dark:bg-green-500 dark:text-gray-900  px-9 rounded-md"
+            className="bg-green-300 dark:bg-green-500 dark:text-gray-900 sm:px-16  px-9 rounded-md disabled:opacity-50"
+            disabled={postDisabled}
             type="submit"
           >
-            {uploading ? "Please Wait..." : "Post"}
+            {uploading ? "wait..." : "Post"}
           </button>
         </div>
       </form>
