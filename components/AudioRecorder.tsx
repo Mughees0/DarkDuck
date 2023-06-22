@@ -3,9 +3,15 @@ import { useTimer } from "@/hooks/useTimer";
 import { StorageRes } from "@/types";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 const mimeType = "audio/webm";
 import { HiOutlineDownload } from "@react-icons/all-files/hi/HiOutlineDownload";
+import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
+import Loader from "./Loader";
+import { set } from "mongoose";
+const ffmpeg = createFFmpeg({
+  log: true,
+});
 
 const AudioRecorder = ({
   setAudioRecordingModel,
@@ -23,8 +29,21 @@ const AudioRecorder = ({
   const [audioBlob, setAudioBlob] = useState<Blob>(null);
   const [mode, setMode] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [ready, setReady] = useState(false);
   const { milliseconds, setTime, startAndStop, seconds, hours, minutes } =
     useTimer();
+
+  const load = async () => {
+    await ffmpeg.load();
+    setReady(true);
+  };
+
+  const convertToMp3 = async (audioBlob) => {
+    ffmpeg.FS("writeFile", "audio.webm", await fetchFile(audioBlob));
+    await ffmpeg.run("-i", "audio.webm", "audio.mp3");
+    const data = ffmpeg.FS("readFile", "audio.mp3");
+    return new Blob([data.buffer], { type: "audio/mp3" });
+  };
 
   const getMicrophonePermission = async () => {
     if ("MediaRecorder" in window) {
@@ -82,11 +101,12 @@ const AudioRecorder = ({
     setRecordingStatus("inactive");
     //stops the recording instance
     mediaRecorder.current.stop();
-    mediaRecorder.current.onstop = () => {
+    mediaRecorder.current.onstop = async () => {
       //creates a blob file from the audiochunks data
       const audioBlob = new Blob(audioChunks, { type: mimeType });
       //creates a playable URL from the blob file.
-      setAudioBlob(audioBlob);
+      const mp3Blob = await convertToMp3(audioBlob);
+      setAudioBlob(mp3Blob);
       const audioUrl = URL.createObjectURL(audioBlob);
       setAudio(audioUrl);
       setAudioChunks([]);
@@ -153,7 +173,11 @@ const AudioRecorder = ({
     setUploading(false);
   };
 
-  return (
+  useEffect(() => {
+    load();
+  }, []);
+
+  return ready ? (
     <div className="pointer-events-none dark:border-2 dark:border-gray-100 relative rounded-lg lg:w-[30%] translate-y-[-50px] transition-all duration-300 ease-in-out z-[9999] transform-none opacity-100 dark:text-neutral-200 w-[80%] sm:w-[450px] ">
       <div className="min-[576px]:shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] pointer-events-auto relative flex w-full flex-col rounded-md bg-clip-padding text-current outline-none space-y-5">
         <div className="flex flex-shrink-0 items-center justify-between  sm:w-full bg-gray-300 rounded-t-md p-4">
@@ -306,6 +330,8 @@ const AudioRecorder = ({
         </main>
       </div>
     </div>
+  ) : (
+    <Loader />
   );
 };
 export default AudioRecorder;

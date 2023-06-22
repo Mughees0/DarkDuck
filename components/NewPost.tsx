@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { HiOutlineDownload } from "@react-icons/all-files/hi/HiOutlineDownload";
 import { Recorder } from "vmsg";
+import { set } from "mongoose";
 
 const recorder = new Recorder({
   wasmURL: "https://cdn.rawgit.com/Kagami/vmsg/df671f6b/vmsg.wasm",
@@ -121,6 +122,7 @@ function NewPost({
           audience: mode,
           text: userText,
           image: storageResImage?.success,
+          video: storageResImage?.success,
         },
         {
           headers: {
@@ -152,7 +154,9 @@ function NewPost({
     setAudio(null);
     setPreviewImage(null);
     setNewPostModel(!newPostModel);
+    setUserText("");
     setPostDisabled(true);
+    setTime(0);
   }
 
   return (
@@ -238,7 +242,7 @@ function NewPost({
             </div>
             <input
               name="files"
-              accept="image/*"
+              accept="image/* video/*"
               ref={ref}
               multiple
               onChange={(e) => {

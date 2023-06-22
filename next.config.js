@@ -8,6 +8,7 @@ const nextConfig = {
       },
     ],
   },
+
   // experimental: {
   //   appDir: true,
   //   serverComponentsExternalPackages: ["mongoose"],
@@ -18,19 +19,6 @@ const nextConfig = {
   //     topLevelAwait: true,
   //     asyncWebAssembly: true,
   //   };
-  //   config.module.rules.push(
-  //     {
-  //       test: /fibonacci\.js$/,
-  //       loader: "exports-loader",
-  //     },
-  //     {
-  //       test: /fibonacci\.wasm$/,
-  //       loader: "file-loader",
-  //       options: {
-  //         publicPath: "dist/",
-  //       },
-  //     }
-  //   );
   //   return config;
   // },
   reactStrictMode: true,

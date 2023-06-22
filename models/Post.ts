@@ -12,6 +12,7 @@ const PostSchema = new Schema({
   audience: { type: String, default: "public" },
   text: { type: String, trim: true },
   image: { type: String, trim: true },
+  video: { type: String, trim: true },
   updatedAt: { type: Date, default: Date.now() },
   createdAt: { type: Date, default: Date.now() },
   likes: { type: Array },
