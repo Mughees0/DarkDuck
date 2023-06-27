@@ -10,6 +10,7 @@ import LikeButton from "./LikeButton";
 import NewPost from "./NewPost";
 import CreatePost from "./CreatePost";
 import AudioRecorder from "./AudioRecorder";
+import { Carousel } from "react-responsive-carousel";
 
 const convertDate = (TZdate) => {
   let date = new Date(TZdate);
@@ -72,7 +73,7 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
     getPosts();
   }, [updatePosts, updateLikes, session?.user?.id]);
 
-  if (posts && isLoaded) {
+  if (posts && isLoaded && userData) {
     return (
       <>
         <main className="bg-gray-50">
@@ -110,19 +111,13 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                     : "hidden"
                 }
               >
-                {/* <NewPost
+                <NewPost
                   username={userData?.username}
                   profileImage={
                     process.env.REACT_APP_IMAGES_PATH + userData?.profilePicture
                   }
                   setNewPostModel={setNewPostModel}
                   newPostModel={newPostModel}
-                  setUpdatePosts={setUpdatePosts}
-                  updatePosts={updatePosts}
-                /> */}
-                <AudioRecorder
-                  setAudioRecordingModel={setNewPostModel}
-                  audioRecordingModel={newPostModel}
                   setUpdatePosts={setUpdatePosts}
                   updatePosts={updatePosts}
                 />
@@ -201,25 +196,54 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                                   </a>
                                 </div>
                                 <div className="space-y-4">
-                                  <div className="flex dark:text-gray-200 flex-wrap gap-4">
+                                  <div className="flex dark:text-gray-200 flex-col gap-4">
                                     {post?.text ? <p>{post?.text}</p> : <></>}
-                                    {post?.image ? (
-                                      (
-                                        <img
-                                          src={
-                                            process.env.REACT_APP_IMAGES_PATH +
-                                            post?.image
-                                          }
-                                        />
-                                      ) || (
-                                        <video
-                                          controls
-                                          src={
-                                            process.env.REACT_APP_IMAGES_PATH +
-                                            post?.image
-                                          }
-                                        />
-                                      )
+                                    {post?.data?.length !== 0 ? (
+                                      <>
+                                        {" "}
+                                        <Carousel
+                                          showArrows={true}
+                                          showThumbs={false}
+                                          showStatus={false}
+                                          infiniteLoop={true}
+                                          transitionTime={500}
+                                          stopOnHover={true}
+                                          swipeable={true}
+                                          emulateTouch={true}
+                                          dynamicHeight={true}
+                                          // onChange={onChange}
+                                          // onClickItem={onClickItem}
+                                          // onClickThumb={onClickThumb}
+                                          showIndicators={false}
+                                          width={"300px"}
+                                        >
+                                          {post?.data?.map((item) =>
+                                            item.includes("mp4") ||
+                                            item.includes("mov") ||
+                                            item.includes("avi") ? (
+                                              <video
+                                                key={item}
+                                                src={
+                                                  process.env
+                                                    .REACT_APP_IMAGES_PATH +
+                                                  item
+                                                }
+                                                controls
+                                              ></video>
+                                            ) : (
+                                              <img
+                                                key={item}
+                                                src={
+                                                  process.env
+                                                    .REACT_APP_IMAGES_PATH +
+                                                  item
+                                                }
+                                                alt=""
+                                              />
+                                            )
+                                          )}
+                                        </Carousel>
+                                      </>
                                     ) : (
                                       <></>
                                     )}

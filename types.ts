@@ -95,8 +95,8 @@ export type PostsResponse = [
     audio: string;
     recordModeSwingId: string;
     audience: string;
+    data: string[];
     text: string;
-    image: string;
     updatedAt: string;
     createdAt: string;
     __v: string;

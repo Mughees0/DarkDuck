@@ -17,6 +17,7 @@ export async function GET(request: Request, { params }) {
   const { id } = params;
   try {
     const userPosts = await Post.find({ userId: id });
+    userPosts.reverse();
     return NextResponse.json(userPosts, { status: 200 });
   } catch (error) {
     return NextResponse.json({ success: false, error: error }, { status: 400 });

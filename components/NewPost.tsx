@@ -1,16 +1,13 @@
+"use client";
 import { useTimer } from "@/hooks/useTimer";
 import { StorageRes, UserDataResponse } from "@/types";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { HiOutlineDownload } from "@react-icons/all-files/hi/HiOutlineDownload";
-import { Recorder } from "vmsg";
-import { set } from "mongoose";
-
-const recorder = new Recorder({
-  wasmURL: "https://cdn.rawgit.com/Kagami/vmsg/df671f6b/vmsg.wasm",
-  shimURL: "https://unpkg.com/wasm-polyfill.js@0.2.0/wasm-polyfill.js",
-});
+const mimeType = "audio/webm";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { Carousel } from "react-responsive-carousel";
 
 function NewPost({
   profileImage,
@@ -21,49 +18,102 @@ function NewPost({
   updatePosts,
 }) {
   const { data: session } = useSession();
-  const [isLoading, setIsLoading] = useState(false);
-  const [isRecording, setIsRecording] = useState(false);
   const [audio, setAudio] = useState(null);
   const [audioBlob, setAudioBlob] = useState<Blob>(null);
   const [mode, setMode] = useState("public");
   const [uploading, setUploading] = useState(false);
   const [userText, setUserText] = useState("");
-  const ref = useRef<HTMLInputElement>(null);
-  const [currentFile, setCurrentFile] = useState(undefined);
-  const [previewImage, setPreviewImage] = useState(undefined);
+  const [stream, setStream] = useState(null);
+  const [permission, setPermission] = useState(false);
+  const mediaRecorder = useRef(null);
+  const [recordingStatus, setRecordingStatus] = useState("inactive");
+  const [audioChunks, setAudioChunks] = useState([]);
+  // const [currentFile, setCurrentFile] = useState(undefined);
+  const [previewArray, setPreviewArray] = useState([]);
   const [postDisabled, setPostDisabled] = useState(true);
+
   const { milliseconds, setTime, startAndStop, seconds, hours, minutes } =
     useTimer();
 
   const selectFile = (event) => {
-    setCurrentFile(event.target.files[0]);
-    setPreviewImage(URL?.createObjectURL(event.target.files[0]));
+    for (let i = 0; i < event.target.files.length; i++) {
+      setPreviewArray((prev) => [
+        ...prev,
+        event.target.files[i].type.includes("video") // if video file
+          ? URL.createObjectURL(event.target.files[i]).concat("mp4") // create video url
+          : URL.createObjectURL(event.target.files[i]), // else create image url  // create image url
+      ]);
+    }
+  };
+
+  const getMicrophonePermission = async () => {
+    if ("MediaRecorder" in window) {
+      try {
+        const streamData = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+          video: false,
+        });
+        setPermission(true);
+        setStream(streamData);
+      } catch (err) {
+        alert(err.message);
+      }
+    } else {
+      alert("The MediaRecorder API is not supported in your browser.");
+    }
   };
   const startRecording = async () => {
-    setIsLoading(true);
-    if (isRecording) {
-      const blob = await recorder.stopRecording();
-      setAudioBlob(blob);
-      setAudio(URL?.createObjectURL(blob));
-      setIsRecording(false);
-      setIsLoading(false);
-    } else {
-      try {
-        await recorder.initAudio();
-        await recorder.initWorker();
-        recorder.startRecording();
-        setIsRecording(true);
-        setIsLoading(false);
-      } catch (error) {
-        console.log("====================================");
-        console.log(error);
-        console.log("====================================");
-        setIsLoading(false);
-      }
-    }
+    setRecordingStatus("recording");
+    //create new Media recorder instance using the stream
+    const media = new MediaRecorder(stream, { mimeType });
+    //set the MediaRecorder instance to the mediaRecorder ref
+    mediaRecorder.current = media;
+    //invokes the start method to start the recording process
+    mediaRecorder.current.start();
+    let localAudioChunks = [];
+    mediaRecorder.current.ondataavailable = (event) => {
+      if (typeof event.data === "undefined") return;
+      if (event.data.size === 0) return;
+      localAudioChunks.push(event.data);
+    };
+    setAudioChunks(localAudioChunks);
     if (audioBlob !== null) {
       setPostDisabled(false);
     }
+  };
+
+  const pauseRecording = async () => {
+    if (mediaRecorder.current?.state === "recording") {
+      mediaRecorder.current.pause();
+      setRecordingStatus("paused");
+      // recording paused
+    }
+  };
+
+  const resumeRecording = async () => {
+    if (mediaRecorder.current?.state === "paused") {
+      mediaRecorder.current.resume();
+      setRecordingStatus("recording");
+    }
+  };
+
+  // 1. add reference to input element
+  const ref = useRef<HTMLInputElement>(null);
+
+  const stopRecording = () => {
+    setRecordingStatus("inactive");
+    //stops the recording instance
+    mediaRecorder.current.stop();
+    mediaRecorder.current.onstop = async () => {
+      //creates a blob file from the audiochunks data
+      const audioBlob = new Blob(audioChunks, { type: mimeType });
+      //creates a playable URL from the blob file.
+      setAudioBlob(audioBlob);
+      const audioUrl = URL.createObjectURL(audioBlob);
+      // setAudioBlob(mp3Blob);
+      setAudio(audioUrl);
+      setAudioChunks([]);
+    };
   };
 
   const handleNewPost = async (e: FormEvent<HTMLFormElement>) => {
@@ -121,8 +171,7 @@ function NewPost({
           audio: storageResAudio?.success,
           audience: mode,
           text: userText,
-          image: storageResImage?.success,
-          video: storageResImage?.success,
+          data: storageResImage?.success,
         },
         {
           headers: {
@@ -147,14 +196,15 @@ function NewPost({
         console.log("Wrong call to the api.");
       }
     }
+    handleCancel();
     setUploading(false);
   };
 
   function handleCancel() {
-    setAudio(null);
-    setPreviewImage(null);
-    setNewPostModel(!newPostModel);
     setUserText("");
+    setAudio(null);
+    setPreviewArray([]);
+    setNewPostModel(!newPostModel);
     setPostDisabled(true);
     setTime(0);
   }
@@ -194,6 +244,7 @@ function NewPost({
           </span>
         </div>
         <input
+          value={userText}
           className=" text-sm w-full h-12 px-2"
           onChange={(e) => {
             setUserText(e.target.value);
@@ -211,9 +262,36 @@ function NewPost({
             htmlFor="dropzone-file"
             className="flex flex-col items-center justify-center w-60 h-30 sm:w-[380px] sm:h-[200px] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
           >
-            <div className="flex flex-col items-center w-full justify-center pt-5 pb-6  sm:h-[200px]">
-              {previewImage ? (
-                <img className="  h-44 " src={previewImage} alt="" />
+            <div className="flex flex-col items-center w-full justify-center pt-5 pb-6  sm:h-[500px]">
+              {previewArray.length !== 0 ? (
+                <>
+                  {" "}
+                  <Carousel
+                    showArrows={true}
+                    showThumbs={false}
+                    showStatus={false}
+                    infiniteLoop={true}
+                    transitionTime={500}
+                    stopOnHover={true}
+                    swipeable={true}
+                    emulateTouch={true}
+                    dynamicHeight={true}
+                    // onChange={onChange}
+                    // onClickItem={onClickItem}
+                    // onClickThumb={onClickThumb}
+                    showIndicators={false}
+                    width={"200px"}
+                  >
+                    {previewArray.map((item) => {
+                      if (item.includes("mp4")) {
+                        const item2 = item?.substring(0, item.length - 3);
+                        return <video key={item2} src={item2} controls />;
+                      } else {
+                        return <img key={item} src={item} alt="" />;
+                      }
+                    })}
+                  </Carousel>
+                </>
               ) : (
                 <>
                   <svg
@@ -225,9 +303,9 @@ function NewPost({
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                     ></path>
                   </svg>
@@ -235,14 +313,14 @@ function NewPost({
                     <span className="font-semibold">Click to upload</span>
                   </p>
                   <p className="text-xs text-gray-500 dark:text-gray-400">
-                    PNG or JPG (MAX. 800x400px)
-                  </p>{" "}
+                    PNG or JPG / MP4 or MOV
+                  </p>
                 </>
               )}
             </div>
             <input
               name="files"
-              accept="image/* video/*"
+              accept="image/*,video/*"
               ref={ref}
               multiple
               onChange={(e) => {
@@ -269,7 +347,16 @@ function NewPost({
                   {milliseconds.toString().padStart(2, "0")}
                 </p>
                 <div className=" bg-transparent flex justify-center flex-col   items-center">
-                  {!isRecording ? (
+                  {!permission ? (
+                    <button
+                      type="button"
+                      onClick={getMicrophonePermission}
+                      className=" bg-yellow-400 dark:text-gray-900 dark:bg-yellow-400 p-2 text-sm rounded-md"
+                    >
+                      Get Microphone
+                    </button>
+                  ) : null}
+                  {permission && recordingStatus === "inactive" ? (
                     <button
                       type="button"
                       onClick={() => {
@@ -281,13 +368,37 @@ function NewPost({
                       Start Recording
                     </button>
                   ) : null}
-                  {isRecording ? (
+                  {recordingStatus === "recording" ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        pauseRecording();
+                        startAndStop();
+                      }}
+                      className=" bg-blue-400 dark:bg-blue-400 dark:text-gray-900 px-3 py-1 text-sm rounded-md"
+                    >
+                      Pause Recording
+                    </button>
+                  ) : null}
+                  {recordingStatus === "paused" ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        resumeRecording();
+                        startAndStop();
+                      }}
+                      className=" bg-purple-400 dark:text-gray-900 dark:bg-purple-400 px-4 py-1 text-sm rounded-md"
+                    >
+                      Resume Recording
+                    </button>
+                  ) : null}
+                  {recordingStatus === "recording" ? (
                     <button
                       type="button"
                       onClick={() => {
                         startAndStop();
                         setTime(0);
-                        startRecording();
+                        stopRecording();
                       }}
                       className=" bg-red-400 dark:text-gray-900 dark:bg-red-400 px-4 py-1 my-3 text-sm rounded-md"
                     >

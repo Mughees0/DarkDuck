@@ -12,7 +12,7 @@ export async function POST(req: Request) {
   });
   // get the form data
   const data = await req.formData();
-  let fileName: string;
+  let fileName: string[] = [];
   try {
     // map through all the entries
     for (const entry of Array.from(data.entries())) {
@@ -20,7 +20,11 @@ export async function POST(req: Request) {
       // FormDataEntryValue can either be type `Blob` or `string`
       // if its type is object then it's a Blob
       const isFile = typeof value == "object";
-      fileName = key;
+      const blob = value as Blob;
+
+      console.log(blob.name);
+      fileName.push(blob.name);
+
       if (isFile) {
         const blob = value as Blob;
         const filename = blob.name;
@@ -36,7 +40,7 @@ export async function POST(req: Request) {
         //   );
         // }
 
-        //conver the blob to stream
+        //convert the blob to stream
         const buffer = Buffer.from(await blob.arrayBuffer());
         const stream = Readable.from(buffer);
 

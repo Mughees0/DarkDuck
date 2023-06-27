@@ -16,6 +16,7 @@ import Loader from "./Loader";
 import Footer from "./Footer";
 import NewPost from "./NewPost";
 import CreatePost from "./CreatePost";
+import { Carousel } from "react-responsive-carousel";
 
 const UserBio = ({ updatePosts, setUpdatePosts }) => {
   const { data: session } = useSession();
@@ -332,15 +333,53 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                                   </a>
                                 </div>
                                 <div className="space-y-4">
-                                  <div className="flex flex-wrap gap-4">
+                                  <div className="flex dark:text-gray-200 flex-col gap-4">
                                     {post?.text ? <p>{post?.text}</p> : <></>}
-                                    {post?.image ? (
-                                      <img
-                                        src={
-                                          process.env.REACT_APP_IMAGES_PATH +
-                                          post?.image
-                                        }
-                                      />
+                                    {post?.data?.length !== 0 ? (
+                                      <>
+                                        <Carousel
+                                          showArrows={true}
+                                          showThumbs={false}
+                                          showStatus={false}
+                                          infiniteLoop={true}
+                                          transitionTime={500}
+                                          stopOnHover={true}
+                                          swipeable={true}
+                                          emulateTouch={true}
+                                          dynamicHeight={true}
+                                          // onChange={onChange}
+                                          // onClickItem={onClickItem}
+                                          // onClickThumb={onClickThumb}
+                                          showIndicators={false}
+                                          width={"80%"}
+                                        >
+                                          {post?.data?.map((item) =>
+                                            item.includes("mp4") ||
+                                            item.includes("mov") ||
+                                            item.includes("avi") ? (
+                                              <video
+                                                key={item}
+                                                src={
+                                                  process.env
+                                                    .REACT_APP_IMAGES_PATH +
+                                                  item
+                                                }
+                                                controls
+                                              ></video>
+                                            ) : (
+                                              <img
+                                                key={item}
+                                                src={
+                                                  process.env
+                                                    .REACT_APP_IMAGES_PATH +
+                                                  item
+                                                }
+                                                alt=""
+                                              />
+                                            )
+                                          )}
+                                        </Carousel>
+                                      </>
                                     ) : (
                                       <></>
                                     )}
