@@ -351,7 +351,7 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                                           // onClickItem={onClickItem}
                                           // onClickThumb={onClickThumb}
                                           showIndicators={false}
-                                          width={"80%"}
+                                          width={"300px"}
                                         >
                                           {post?.data?.map((item) =>
                                             item.includes("mp4") ||

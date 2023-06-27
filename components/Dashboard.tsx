@@ -73,7 +73,7 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
     getPosts();
   }, [updatePosts, updateLikes, session?.user?.id]);
 
-  if (posts && isLoaded && userData) {
+  if (posts && isLoaded) {
     return (
       <>
         <main className="bg-gray-50">
