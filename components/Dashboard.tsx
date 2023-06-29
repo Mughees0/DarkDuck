@@ -12,6 +12,7 @@ import CreatePost from "./CreatePost";
 import AudioRecorder from "./AudioRecorder";
 import { Carousel } from "react-responsive-carousel";
 import Image from "next/image";
+import ReactPlayer from "react-player/lazy";
 
 const convertDate = (TZdate) => {
   let date = new Date(TZdate);
@@ -223,22 +224,15 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                                             item.includes("mov") ||
                                             item.includes("avi") ? (
                                               <>
-                                                <video
-                                                  width="320"
-                                                  height="240"
+                                                <ReactPlayer
                                                   controls
-                                                >
-                                                  <source
-                                                    src={
-                                                      process.env
-                                                        .REACT_APP_IMAGES_PATH +
-                                                      item
-                                                    }
-                                                    type="video/mp4"
-                                                  />
-                                                  Your browser does not support
-                                                  the video tag.
-                                                </video>
+                                                  width={"100%"}
+                                                  url={
+                                                    process.env
+                                                      .REACT_APP_IMAGES_PATH +
+                                                    item
+                                                  }
+                                                />
                                               </>
                                             ) : (
                                               <Image
