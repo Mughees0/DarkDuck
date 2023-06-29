@@ -17,6 +17,7 @@ import Footer from "./Footer";
 import NewPost from "./NewPost";
 import CreatePost from "./CreatePost";
 import { Carousel } from "react-responsive-carousel";
+import Image from "next/image";
 
 const UserBio = ({ updatePosts, setUpdatePosts }) => {
   const { data: session } = useSession();
@@ -367,7 +368,9 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                                                 controls
                                               ></video>
                                             ) : (
-                                              <img
+                                              <Image
+                                                width={300}
+                                                height={300}
                                                 key={item}
                                                 src={
                                                   process.env

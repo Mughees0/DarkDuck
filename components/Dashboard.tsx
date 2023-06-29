@@ -11,6 +11,7 @@ import NewPost from "./NewPost";
 import CreatePost from "./CreatePost";
 import AudioRecorder from "./AudioRecorder";
 import { Carousel } from "react-responsive-carousel";
+import Image from "next/image";
 
 const convertDate = (TZdate) => {
   let date = new Date(TZdate);
@@ -136,7 +137,7 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                 </div>
                 {posts ? (
                   posts?.length ? (
-                    posts?.map((post) => {
+                    posts?.slice(0, 12).map((post) => {
                       return (
                         <li key={post?._id}>
                           <div className="col-span-2 m-auto h-full max-w-3xl space-y-6 overflow-hidden overflow-y-auto mt-3 lg:pt-6 ">
@@ -221,17 +222,28 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                                             item.includes("mp4") ||
                                             item.includes("mov") ||
                                             item.includes("avi") ? (
-                                              <video
-                                                key={item}
-                                                src={
-                                                  process.env
-                                                    .REACT_APP_IMAGES_PATH +
-                                                  item
-                                                }
-                                                controls
-                                              ></video>
+                                              <>
+                                                <video
+                                                  width="320"
+                                                  height="240"
+                                                  controls
+                                                >
+                                                  <source
+                                                    src={
+                                                      process.env
+                                                        .REACT_APP_IMAGES_PATH +
+                                                      item
+                                                    }
+                                                    type="video/mp4"
+                                                  />
+                                                  Your browser does not support
+                                                  the video tag.
+                                                </video>
+                                              </>
                                             ) : (
-                                              <img
+                                              <Image
+                                                width={300}
+                                                height={300}
                                                 key={item}
                                                 src={
                                                   process.env
