@@ -224,15 +224,24 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                                             item.includes("mov") ||
                                             item.includes("avi") ? (
                                               <>
-                                                <ReactPlayer
+                                                <video
+                                                  preload="yes"
+                                                  width="300"
+                                                  height="auto"
+                                                  playsInline
                                                   controls
-                                                  width={"100%"}
-                                                  url={
-                                                    process.env
-                                                      .REACT_APP_IMAGES_PATH +
-                                                    item
-                                                  }
-                                                />
+                                                >
+                                                  <source
+                                                    src={
+                                                      process.env
+                                                        .REACT_APP_IMAGES_PATH +
+                                                      item
+                                                    }
+                                                    type="video/mp4"
+                                                  />
+                                                  Your browser does not support
+                                                  the video tag.
+                                                </video>
                                               </>
                                             ) : (
                                               <Image
