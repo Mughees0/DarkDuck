@@ -1,7 +1,7 @@
 "use client";
 import { PostsResponse, UserDataResponse } from "@/types";
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, FormEvent } from "react";
 import { BsArrowRight } from "@react-icons/all-files/bs/BsArrowRight";
 import { SiAudiomack } from "@react-icons/all-files/si/SiAudiomack";
 import Loader from "./Loader";
@@ -13,6 +13,8 @@ import AudioRecorder from "./AudioRecorder";
 import { Carousel } from "react-responsive-carousel";
 import Image from "next/image";
 import ReactPlayer from "react-player/lazy";
+import NewComment from "./NewComment";
+import { set } from "mongoose";
 
 const convertDate = (TZdate) => {
   let date = new Date(TZdate);
@@ -26,8 +28,11 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [updateLikes, setUpdateLikes] = useState(false);
   const [newPostModel, setNewPostModel] = useState(false);
+  const [newCommentModel, setNewCommentModel] = useState(false);
   const [userData, setUserData] = useState<UserDataResponse>();
   const { data: session } = useSession();
+  const [userComment, setUserComment] = useState("");
+  const [uploading, setUploading] = useState(false);
 
   const getPosts = async () => {
     try {
@@ -64,6 +69,49 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
         console.log("Wrong call to the api.");
       }
     }
+  };
+
+  const handleNewComment = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("====================================");
+    console.log(e.currentTarget.id);
+    console.log("====================================");
+    setUploading(true);
+    try {
+      const req = await axios.post(
+        "/api/v1/comment",
+        {
+          userId: session?.user?.id,
+          postId: e.currentTarget.id,
+          comment: userComment,
+        },
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (req.status === 200) {
+        setUpdatePosts(!updatePosts);
+        setNewPostModel(!newPostModel);
+      }
+      const res = await req.data;
+      console.log("====================================");
+      console.log(res);
+      console.log("====================================");
+    } catch (err) {
+      if (err.response.status === 400) {
+        console.log(
+          "Data is uploaded but post did not update." +
+            " The error message:> " +
+            err.message
+        );
+      } else {
+        console.log("Wrong call to the api.");
+      }
+    }
+    setUploading(false);
   };
 
   useEffect(() => {
@@ -318,6 +366,17 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                                   <div className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white">
                                     {post.likes.length}
                                   </div>
+                                </div>
+                                <div>
+                                  <NewComment
+                                    reply={reply}
+                                    post={post}
+                                    postId={post?._id}
+                                    setNewPostModel={setNewCommentModel}
+                                    newPostModel={newCommentModel}
+                                    setUpdatePosts={setUpdatePosts}
+                                    updatePosts={updatePosts}
+                                  />
                                 </div>
                               </div>
                             </div>

@@ -90,6 +90,7 @@ export type UserResponse = {
 };
 export type PostsResponse = [
   {
+    comments: string[];
     _id: string;
     userId: UserDataResponse;
     audio: string;

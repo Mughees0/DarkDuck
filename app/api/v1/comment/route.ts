@@ -1,24 +1,22 @@
 import dbConnect from "@/lib/mongodb/dbConnect";
 import Post from "@/models/Post";
+import User from "@/models/User";
 import { NextRequest, NextResponse } from "next/server";
-export const dynamic = "force-dynamic";
 
 export async function POST(request: NextRequest) {
   await dbConnect();
-  const { postId, userId } = await request.json();
+  const { postId, userId, comment } = await request.json();
 
   try {
     const post = await Post.findOne({ _id: postId });
 
-    const likeIds = post.likes;
+    // await post.likes.pull(userId);
+    const user = await User.findById({ _id: userId });
+    const data = { userId: user, comment: comment };
+    await post.comments.push({ userId: user, comment: comment });
 
-    if (likeIds.includes(userId)) {
-      await post.likes.pull(userId);
-    } else {
-      await post.likes.push(userId);
-    }
     await post.save();
-    return NextResponse.json({ success: true }, { status: 200 });
+    return NextResponse.json({ success: data }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ success: false, error: error }, { status: 400 });
   }

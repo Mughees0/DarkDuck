@@ -13,7 +13,8 @@ const PostSchema = new Schema({
   data: { type: Array, trim: true },
   updatedAt: { type: Date, default: Date.now() },
   createdAt: { type: Date, default: Date.now() },
-  likes: { type: Array },
+  likes: { type: Array, default: [ ] },
+  comments: { type: Array },
 });
 
 PostSchema.pre("save", function (next) {
