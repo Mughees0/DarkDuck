@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { FormEvent, useState } from "react";
 
 function NewComment({
+  userData,
   reply,
   post,
   postId,
@@ -61,27 +62,62 @@ function NewComment({
   };
 
   return (
-    <main className={reply && postId == postId ? "" : "hidden"}>
+    <main
+      className={
+        reply && postId == postId
+          ? "flex flex-col justify-evenly py-2 gap-5"
+          : "hidden"
+      }
+    >
       {" "}
-      <section>
-        {post?.comments?.map((comment) => {
-          return <div>{comment.comment}</div>;
+      <section className="flex flex-col justify-evenly gap-2">
+        <h1 className=" underline font-bold text-lg">Comments</h1>
+        {post?.comments?.map((data) => {
+          return data !== null ? (
+            <div className="flex gap-4 rounded-lg border border-gray-500 py-1 px-2">
+              <div className="flex items-center rounded-lg">
+                <img
+                  src={
+                    process.env.REACT_APP_IMAGES_PATH +
+                    data.userId.profilePicture
+                  }
+                  alt=""
+                  className="w-10 h-10 rounded-full"
+                />
+              </div>
+              <div className=" flex flex-col">
+                <h2 className=" font-semibold ">{data.userId.username}</h2>
+                <p> {data.comment}</p>
+              </div>
+            </div>
+          ) : (
+            <h1>No Comments</h1>
+          );
         })}
-        comments
       </section>
-      <form
-        onSubmit={handleNewComment}
-        className=" bg-gray-500 flex justify-between px-5 py-3 rounded-lg"
-      >
-        <input
-          className="bg-transparent "
-          type="text"
-          placeholder="Write a comment..."
-          value={userComment}
-          onChange={(e) => setUserComment(e.target.value)}
-        />
-        <button type="submit">Send</button>
-      </form>
+      <section>
+        <h1 className=" underline font-bold text-lg">Write a comment</h1>
+        <form
+          onSubmit={handleNewComment}
+          className=" bg-gray-200 flex justify-between px-5 py-3 rounded-lg"
+        >
+          <label htmlFor="comment" className="bg-transparent">
+            <img
+              className="w-10 h-10 rounded-full bg-transparent"
+              src={process.env.REACT_APP_IMAGES_PATH + userData?.profilePicture}
+            />
+          </label>
+          <input
+            id="comment"
+            className="bg-transparent "
+            type="text"
+            placeholder="Write a comment..."
+            value={userComment}
+            onChange={(e) => setUserComment(e.target.value)}
+          />
+          <button type="submit">Send</button>
+        </form>
+      </section>
     </main>
   );
 }

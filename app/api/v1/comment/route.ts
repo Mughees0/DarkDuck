@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     await post.comments.push({ userId: user, comment: comment });
 
     await post.save();
-    return NextResponse.json({ success: data }, { status: 200 });
+    return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ success: false, error: error }, { status: 400 });
   }

@@ -369,6 +369,7 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                                 </div>
                                 <div>
                                   <NewComment
+                                    userData={userData}
                                     reply={reply}
                                     post={post}
                                     postId={post?._id}
