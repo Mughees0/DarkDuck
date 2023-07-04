@@ -271,26 +271,25 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                                             item.includes("mp4") ||
                                             item.includes("mov") ||
                                             item.includes("avi") ? (
-                                              <>
-                                                <video
-                                                  preload="yes"
-                                                  width="300"
-                                                  height="auto"
-                                                  playsInline
-                                                  controls
-                                                >
-                                                  <source
-                                                    src={
-                                                      process.env
-                                                        .REACT_APP_IMAGES_PATH +
-                                                      item
-                                                    }
-                                                    type="video/mp4"
-                                                  />
-                                                  Your browser does not support
-                                                  the video tag.
-                                                </video>
-                                              </>
+                                              <video
+                                                key={item}
+                                                preload="yes"
+                                                width="300"
+                                                height="auto"
+                                                playsInline
+                                                controls
+                                              >
+                                                <source
+                                                  src={
+                                                    process.env
+                                                      .REACT_APP_IMAGES_PATH +
+                                                    item
+                                                  }
+                                                  type="video/mp4"
+                                                />
+                                                Your browser does not support
+                                                the video tag.
+                                              </video>
                                             ) : (
                                               <Image
                                                 width={300}

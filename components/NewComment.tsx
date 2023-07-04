@@ -72,9 +72,12 @@ function NewComment({
       {" "}
       <section className="flex flex-col justify-evenly gap-2">
         <h1 className=" underline font-bold text-lg">Comments</h1>
-        {post?.comments?.map((data) => {
+        {post?.comments?.map((data, i) => {
           return data !== null ? (
-            <div className="flex gap-4 rounded-lg border border-gray-500 py-1 px-2">
+            <div
+              key={i}
+              className="flex gap-4 rounded-lg border border-gray-500 py-1 px-2"
+            >
               <div className="flex items-center rounded-lg">
                 <img
                   src={
