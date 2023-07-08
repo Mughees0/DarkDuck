@@ -23,3 +23,14 @@ export async function GET(request: Request, { params }) {
     return NextResponse.json({ success: false, error: error }, { status: 400 });
   }
 }
+
+export async function DELETE(request: Request, { params }) {
+  await dbConnect();
+  const { id } = params;
+  try {
+    const userPosts = await Post.findOneAndDelete({ _id: id });
+    return NextResponse.json({ success: true, userPosts }, { status: 200 });
+  } catch (error) {
+    return NextResponse.json({ success: false, error: error }, { status: 400 });
+  }
+}

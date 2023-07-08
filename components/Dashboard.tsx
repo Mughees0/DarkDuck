@@ -11,6 +11,7 @@ import NewPost from "./NewPost";
 import CreatePost from "./CreatePost";
 import { Carousel } from "react-responsive-carousel";
 import NewComment from "./NewComment";
+import EditModal from "./EditModal";
 
 const convertDate = (TZdate) => {
   let date = new Date(TZdate);
@@ -317,7 +318,6 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                                                 key={item}
                                                 width="300"
                                                 height="auto"
-                                                playsInline
                                                 controls
                                               >
                                                 <source
@@ -350,16 +350,21 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                                       <></>
                                     )}
 
-                                    <video
-                                      width="300"
-                                      height="auto"
-                                      playsInline
+                                    {/* <video
+                                      width="560"
+                                      height="320"
+                                      preload="metadata"
                                       controls
+                                      src="http://thinkingform.com/wp-content/uploads/2017/09/video-sample-mp4.mp4?_=1"
                                     >
-                                      <source src="http://thinkingform.com/wp-content/uploads/2017/09/video-sample-mp4.mp4?_=1" />
-                                      Your browser does not support the video
-                                      tag.
-                                    </video>
+                                      <source
+                                        type="video/mp4"
+                                        src="http://thinkingform.com/wp-content/uploads/2017/09/video-sample-mp4.mp4?_=1"
+                                      />
+                                      <a href="http://thinkingform.com/wp-content/uploads/2017/09/video-sample-mp4.mp4">
+                                        http://thinkingform.com/wp-content/uploads/2017/09/video-sample-mp4.mp4
+                                      </a>
+                                    </video> */}
                                     {post?.audio ? (
                                       <audio controls>
                                         <source

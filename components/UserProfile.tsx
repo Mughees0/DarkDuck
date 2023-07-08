@@ -18,6 +18,7 @@ import NewPost from "./NewPost";
 import CreatePost from "./CreatePost";
 import { Carousel } from "react-responsive-carousel";
 import Image from "next/image";
+import EditModal from "./EditModal";
 
 const UserBio = ({ updatePosts, setUpdatePosts }) => {
   const { data: session } = useSession();
@@ -30,6 +31,8 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
   const [bannerModal, setBannerModal] = useState(false);
   const [updateImage, setUpdateImage] = useState(false);
   const [updateLikes, setUpdateLikes] = useState(false);
+  const [postId, setPostId] = useState("");
+  const [editPostModel, setEditPostModel] = useState(false);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   // apis
@@ -272,6 +275,20 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                     setNewPostModel={setNewPostModel}
                   />
                 </div>
+                {/* the delete post modal div */}
+                <div
+                  className={
+                    editPostModel
+                      ? "flex justify-center items-center bg-opacity-25 dark:bg-opacity-25 bg-gray-400 fixed top-0 z-40 h-screen w-full left-0 right-0"
+                      : "hidden"
+                  }
+                >
+                  <EditModal
+                    editPostModal={editPostModel}
+                    setEditPostModal={setEditPostModel}
+                    postId={postId}
+                  />
+                </div>
                 {posts ? (
                   posts?.length ? (
                     posts?.map((post) => {
@@ -318,7 +335,14 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                                         : null}
                                     </p>
                                   </div>
-                                  <a className="inline-flex cursor-pointer justify-center rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                  {/* the delete post modal toggle */}
+                                  <a
+                                    onClick={() => {
+                                      setPostId(post._id);
+                                      setEditPostModel(!editPostModel);
+                                    }}
+                                    className="inline-flex cursor-pointer justify-center rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                                  >
                                     <svg
                                       stroke="currentColor"
                                       fill="currentColor"
