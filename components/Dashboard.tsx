@@ -33,6 +33,11 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
   const { data: session } = useSession();
   const [userComment, setUserComment] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [show, setShow] = useState(false);
+  const [active, setActive] = useState<string>("-1");
+
+  const toggleHandler = (id: string) => () =>
+    setActive((active) => (active === id ? "-1" : id));
 
   const getPosts = async () => {
     try {
@@ -252,7 +257,43 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                                 </div>
                                 <div className="space-y-4">
                                   <div className="flex dark:text-gray-200 flex-col gap-4">
-                                    {post?.text ? <p>{post?.text}</p> : <></>}
+                                    {post?.text ? (
+                                      post.text.length > 10 ? (
+                                        active === post?._id ? (
+                                          <>
+                                            <p>{post?.text}</p>
+                                            <button
+                                              className="text-blue-500 underline"
+                                              onClick={toggleHandler(post?._id)}
+                                            >
+                                              show less
+                                            </button>
+                                          </>
+                                        ) : (
+                                          <>
+                                            <p className="overflow-hidden h-12 ">
+                                              {post?.text}
+                                            </p>
+                                            <div className="flex gap-2">
+                                              <span>...</span>
+                                              <button
+                                                className="text-blue-500 underline"
+                                                onClick={toggleHandler(
+                                                  post?._id
+                                                )}
+                                              >
+                                                show more
+                                              </button>
+                                            </div>
+                                          </>
+                                        )
+                                      ) : (
+                                        <p>{post?.text}</p>
+                                      )
+                                    ) : (
+                                      <></>
+                                    )}
+
                                     {post?.data?.length !== 0 ? (
                                       <>
                                         {" "}

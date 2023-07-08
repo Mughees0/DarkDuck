@@ -3,7 +3,7 @@
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { FormEvent, useState } from "react";
-import { GrSend } from "@react-icons/all-files/gr/GrSend";
+import { RiSendPlaneLine } from "@react-icons/all-files/ri/RiSendPlaneLine";
 
 function NewComment({
   userData,
@@ -66,7 +66,9 @@ function NewComment({
     >
       {" "}
       <section className="flex flex-col justify-evenly gap-2">
-        <h1 className=" underline font-bold text-lg">Comments</h1>
+        <h1 className=" underline font-bold text-lg dark:text-white">
+          Comments
+        </h1>
         {post?.comments?.map((data, i) => {
           return data !== null ? (
             <div
@@ -97,24 +99,28 @@ function NewComment({
         {/* <h1 className=" underline font-bold text-lg">Write a comment</h1> */}
         <form
           onSubmit={handleNewComment}
-          className=" bg-gray-200 flex justify-between px-5 py-3 rounded-lg"
+          className=" bg-gray-300 flex justify-between px-5 py-2 rounded-lg"
         >
-          <label htmlFor="comment" className="bg-transparent">
-            <img
-              className="w-10 h-10 rounded-full bg-transparent"
-              src={process.env.REACT_APP_IMAGES_PATH + userData?.profilePicture}
+          <div className="flex gap-2">
+            <label htmlFor="comment" className="bg-transparent">
+              <img
+                className="w-10 h-10 rounded-full bg-transparent"
+                src={
+                  process.env.REACT_APP_IMAGES_PATH + userData?.profilePicture
+                }
+              />
+            </label>
+            <input
+              id="comment"
+              className="bg-transparent text-sm dark:text-white"
+              type="text"
+              placeholder="Write a comment..."
+              value={userComment}
+              onChange={(e) => setUserComment(e.target.value)}
             />
-          </label>
-          <input
-            id="comment"
-            className="bg-transparent text-sm"
-            type="text"
-            placeholder="Write a comment..."
-            value={userComment}
-            onChange={(e) => setUserComment(e.target.value)}
-          />
+          </div>
           <button type="submit">
-            <GrSend className="bg-transparent text-blue-500" />
+            <RiSendPlaneLine className="bg-transparent dark:text-white" />
           </button>
         </form>
       </section>
