@@ -9,12 +9,8 @@ import { useSession } from "next-auth/react";
 import LikeButton from "./LikeButton";
 import NewPost from "./NewPost";
 import CreatePost from "./CreatePost";
-import AudioRecorder from "./AudioRecorder";
 import { Carousel } from "react-responsive-carousel";
-import Image from "next/image";
-import ReactPlayer from "react-player/lazy";
 import NewComment from "./NewComment";
-import { set } from "mongoose";
 
 const convertDate = (TZdate) => {
   let date = new Date(TZdate);
@@ -134,7 +130,7 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
         <main className="bg-gray-50">
           <section className="bg-cover bg-center bg-bgCover text-black text-center flex flex-col items-center">
             <div className="bg-transparent dark:bg-transparent pt-5 md:pt-10 font-bold">
-              <Image
+              <img
                 height={100}
                 width={300}
                 src="/assets/name.png"
@@ -202,7 +198,7 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                               <div className="flex h-full flex-col justify-center gap-3 p-6 pb-0">
                                 <div className="flex items-center space-x-4">
                                   <div className="shrink-0">
-                                    <Image
+                                    <img
                                       width={40}
                                       height={40}
                                       alt="User Profile Picture"
@@ -335,7 +331,7 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                                                 the video tag.
                                               </video>
                                             ) : (
-                                              <Image
+                                              <img
                                                 width={300}
                                                 height={300}
                                                 key={item}
@@ -353,6 +349,17 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                                     ) : (
                                       <></>
                                     )}
+
+                                    <video
+                                      width="300"
+                                      height="auto"
+                                      playsInline
+                                      controls
+                                    >
+                                      <source src="http://thinkingform.com/wp-content/uploads/2017/09/video-sample-mp4.mp4?_=1" />
+                                      Your browser does not support the video
+                                      tag.
+                                    </video>
                                     {post?.audio ? (
                                       <audio controls>
                                         <source
