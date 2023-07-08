@@ -20,9 +20,6 @@ function NewComment({
 
   const handleNewComment = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("====================================");
-    console.log(e.currentTarget.id);
-    console.log("====================================");
     setUploading(true);
     try {
       const req = await axios.post(
@@ -44,9 +41,6 @@ function NewComment({
         setNewPostModel(!newPostModel);
       }
       const res = await req.data;
-      console.log("====================================");
-      console.log(res);
-      console.log("====================================");
     } catch (err) {
       if (err.response.status === 400) {
         console.log(
@@ -82,14 +76,14 @@ function NewComment({
                 <img
                   src={
                     process.env.REACT_APP_IMAGES_PATH +
-                    data.userId.profilePicture
+                    data.userId?.profilePicture
                   }
                   alt=""
                   className="w-10 h-10 rounded-full"
                 />
               </div>
               <div className=" flex flex-col">
-                <h2 className=" font-semibold ">{data.userId.username}</h2>
+                <h2 className=" font-semibold ">{data.userId?.username}</h2>
                 <p> {data.comment}</p>
               </div>
             </div>

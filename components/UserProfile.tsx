@@ -368,7 +368,7 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                                                 controls
                                               ></video>
                                             ) : (
-                                              <Image
+                                              <img
                                                 width={300}
                                                 height={300}
                                                 key={item}

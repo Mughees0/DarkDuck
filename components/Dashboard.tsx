@@ -129,9 +129,12 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
         <main className="bg-gray-50">
           <section className="bg-cover bg-center bg-bgCover text-black text-center flex flex-col items-center">
             <div className="bg-transparent dark:bg-transparent pt-5 md:pt-10 font-bold">
-              <img
+              <Image
+                height={100}
+                width={300}
                 src="/assets/name.png"
                 className=" w-36 h-10 md:w-96 md:h-24 bg-transparent dark:bg-transparent "
+                alt="DarkDuck Logos"
               />
             </div>
 
@@ -194,7 +197,9 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                               <div className="flex h-full flex-col justify-center gap-3 p-6 pb-0">
                                 <div className="flex items-center space-x-4">
                                   <div className="shrink-0">
-                                    <img
+                                    <Image
+                                      width={40}
+                                      height={40}
                                       alt="User Profile Picture"
                                       src={
                                         post?.userId?.profilePicture
@@ -273,7 +278,6 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                                             item.includes("avi") ? (
                                               <video
                                                 key={item}
-                                                preload="yes"
                                                 width="300"
                                                 height="auto"
                                                 playsInline
