@@ -3,6 +3,7 @@
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { FormEvent, useState } from "react";
+import { GrSend } from "@react-icons/all-files/gr/GrSend";
 
 function NewComment({
   userData,
@@ -76,14 +77,14 @@ function NewComment({
                 <img
                   src={
                     process.env.REACT_APP_IMAGES_PATH +
-                    data.userId?.profilePicture
+                    data?.userId?.profilePicture
                   }
                   alt=""
                   className="w-10 h-10 rounded-full"
                 />
               </div>
-              <div className=" flex flex-col">
-                <h2 className=" font-semibold ">{data.userId?.username}</h2>
+              <div className=" flex flex-col dark:text-gray-200">
+                <h2 className=" font-semibold ">{data?.userId?.username}</h2>
                 <p> {data.comment}</p>
               </div>
             </div>
@@ -92,8 +93,8 @@ function NewComment({
           );
         })}
       </section>
-      <section>
-        <h1 className=" underline font-bold text-lg">Write a comment</h1>
+      <section className="border border-gray-500 rounded-lg overflow-hidden">
+        {/* <h1 className=" underline font-bold text-lg">Write a comment</h1> */}
         <form
           onSubmit={handleNewComment}
           className=" bg-gray-200 flex justify-between px-5 py-3 rounded-lg"
@@ -106,13 +107,15 @@ function NewComment({
           </label>
           <input
             id="comment"
-            className="bg-transparent "
+            className="bg-transparent text-sm"
             type="text"
             placeholder="Write a comment..."
             value={userComment}
             onChange={(e) => setUserComment(e.target.value)}
           />
-          <button type="submit">Send</button>
+          <button type="submit">
+            <GrSend className="bg-transparent text-blue-500" />
+          </button>
         </form>
       </section>
     </main>
