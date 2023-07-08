@@ -194,7 +194,7 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                 </div>
                 {posts ? (
                   posts?.length ? (
-                    posts?.slice(0, 12).map((post) => {
+                    posts?.map((post) => {
                       return (
                         <li key={post?._id}>
                           <div className="col-span-2 m-auto h-full max-w-3xl space-y-6 overflow-hidden overflow-y-auto mt-3 lg:pt-6 ">
@@ -330,7 +330,6 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                                                       .REACT_APP_IMAGES_PATH +
                                                     item
                                                   }
-                                                  type="video/mp4"
                                                 />
                                                 Your browser does not support
                                                 the video tag.

@@ -12,8 +12,11 @@ interface ResponseData {
 export async function GET(request: Request) {
   await dbConnect();
   try {
-    const userPosts = await Post.find().populate("userId").exec();
-    userPosts.reverse();
+    const userPosts = await Post.find()
+      .sort({ createdAt: "desc" })
+      .limit(8)
+      .populate("userId")
+      .exec();
     return NextResponse.json(userPosts, { status: 200 });
   } catch (error) {
     return NextResponse.json({ success: false, error: error }, { status: 400 });
