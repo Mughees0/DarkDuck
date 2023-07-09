@@ -284,6 +284,8 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                   }
                 >
                   <EditModal
+                    updatePosts={updatePosts}
+                    setUpdatePosts={setUpdatePosts}
                     editPostModal={editPostModel}
                     setEditPostModal={setEditPostModel}
                     postId={postId}
