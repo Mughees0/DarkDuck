@@ -13,9 +13,9 @@ import { ChangeEventHandler, MouseEventHandler } from "react";
 import S3 from "aws-sdk/clients/s3";
 
 const s3 = new S3({
-  accessKeyId: process.env.accessKeyId,
-  secretAccessKey: process.env.secretAccessKey,
-  region: process.env.region,
+  accessKeyId: process.env.ACCESSKEYID,
+  secretAccessKey: process.env.SECRETACCESSKEY,
+  region: process.env.REGION,
 });
 
 function NewPost({
@@ -144,38 +144,39 @@ function NewPost({
 
   const handleNewPost = async (e: FormEvent<HTMLFormElement>) => {
     let names: string[] = [];
-    let audioName: string = `${Date.now()}.mp3`;
+    let aName = "";
     e.preventDefault();
     setUploading(true);
-    try {
-      // 3. build form data for audio
-      const formData = new FormData();
-      formData.append(`${Date.now()}.mp3`, audioBlob);
-      const params = {
-        Bucket: "darkduck",
-        Key: audioName,
-        Body: audioBlob,
-      };
-
+    if (audioBlob) {
       try {
-        const upload = s3.upload(params);
-        setUpload(upload);
-        upload.on("httpUploadProgress", (p) => {
-          progress.set(p.loaded / p.total);
-        });
-        await upload.promise();
-      } catch (err) {
-        console.error(err);
-      }
-    } catch (error) {
-      if (error) {
-        console.log(
-          "Audio recording not uploaded." +
-            " The error message:> " +
-            error.message
-        );
-      } else {
-        console.log("Wrong call to the api.");
+        // 3. build form data for audio
+        let audioName: string = `${Date.now()}.mp3`;
+        const params = {
+          Bucket: "darkduck",
+          Key: audioName,
+          Body: audioBlob,
+        };
+        aName = audioName;
+        try {
+          const upload = s3.upload(params);
+          setUpload(upload);
+          upload.on("httpUploadProgress", (p) => {
+            progress.set(p.loaded / p.total);
+          });
+          await upload.promise();
+        } catch (err) {
+          console.error(err);
+        }
+      } catch (error) {
+        if (error) {
+          console.log(
+            "Audio recording not uploaded." +
+              " The error message:> " +
+              error.message
+          );
+        } else {
+          console.log("Wrong call to the api.");
+        }
       }
     }
     if (!files) return;
@@ -205,7 +206,7 @@ function NewPost({
         "/api/v1/posts/new_post",
         {
           userId: session?.user?.id,
-          audio: audioName,
+          audio: aName,
           audience: mode,
           text: userText,
           data: names,

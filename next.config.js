@@ -71,6 +71,9 @@ const nextConfig = {
   env: {
     REACT_APP_AUDIO_PATH: process.env.REACT_APP_AUDIO_PATH,
     REACT_APP_IMAGES_PATH: process.env.REACT_APP_IMAGES_PATH,
+    ACCESSKEYID: process.env.ACCESSKEYID,
+    SECRETACCESSKEY: process.env.SECRETACCESSKEY,
+    REGION: process.env.REGION,
   },
 };
 

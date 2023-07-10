@@ -9,9 +9,9 @@ import {
 import S3 from "aws-sdk/clients/s3";
 
 const s3 = new S3({
-  accessKeyId: process.env.accessKeyId,
-  secretAccessKey: process.env.secretAccessKey,
-  region: process.env.region,
+  accessKeyId: process.env.ACCESSKEYID,
+  secretAccessKey: process.env.SECRETACCESSKEY,
+  region: process.env.REGION,
 });
 
 export default function Upload() {
