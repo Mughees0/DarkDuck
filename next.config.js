@@ -9,6 +9,7 @@ const nextConfig = {
         // pathname: "/api/v1/images/uploads/**",
         // protocol: "http",
         hostname: "thinkingform.com",
+        hostname: "darkduck.s3.eu-north-1.amazonaws.com",
         // pathname: "/wp-content/uploads/2017/09/**",
       },
     ],

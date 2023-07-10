@@ -8,6 +8,15 @@ import { HiOutlineDownload } from "@react-icons/all-files/hi/HiOutlineDownload";
 const mimeType = "audio/webm";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
+import { useMotionValue } from "framer-motion";
+import { ChangeEventHandler, MouseEventHandler } from "react";
+import S3 from "aws-sdk/clients/s3";
+
+const s3 = new S3({
+  accessKeyId: "AKIA2ARLEFL4TZQSFZWJ",
+  secretAccessKey: "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",
+  region: "EU(Stockholm)eu-north-1",
+});
 
 function NewPost({
   profileImage,
@@ -31,6 +40,23 @@ function NewPost({
   // const [currentFile, setCurrentFile] = useState(undefined);
   const [previewArray, setPreviewArray] = useState([]);
   const [postDisabled, setPostDisabled] = useState(true);
+  const [files, setFiles] = useState<FileList | null>(null);
+  const [upload, setUpload] = useState<S3.ManagedUpload | null>(null);
+  const progress = useMotionValue(0);
+
+  useEffect(() => {
+    return upload?.abort();
+  }, []);
+
+  useEffect(() => {
+    progress.set(0);
+    setUpload(null);
+  }, [files]);
+
+  const handleFileChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    e.preventDefault();
+    setFiles(e.target.files);
+  };
 
   const { milliseconds, setTime, startAndStop, seconds, hours, minutes } =
     useTimer();
@@ -117,42 +143,32 @@ function NewPost({
   };
 
   const handleNewPost = async (e: FormEvent<HTMLFormElement>) => {
+    let names: string[] = [];
+    let audioName: string = `${Date.now()}.mp3`;
     e.preventDefault();
     setUploading(true);
-    let storageResImage: StorageRes;
-    let storageResAudio: StorageRes;
-    const input = ref.current!;
-    // 1. Store Audio Data In Mongo Blob
-    try {
-      // 2. build form data
-      const formData = new FormData();
-      for (const file of Array.from(input.files ?? [])) {
-        formData.append(file.name, file);
-      }
-      const storageReq = await axios.post("/api/v1/images/upload", formData);
-      if (storageReq.status == 200) {
-        storageResImage = await storageReq.data;
-      }
-    } catch (error) {
-      if (error.response.status === 400) {
-        console.log(
-          "Image not uploaded." + " The error message:> " + error.message
-        );
-      } else {
-        console.log("Wrong call to the api.");
-      }
-    }
     try {
       // 3. build form data for audio
       const formData = new FormData();
       formData.append(`${Date.now()}.mp3`, audioBlob);
-      const storageReq = await axios.post("/api/v1/audios/upload", formData);
+      const params = {
+        Bucket: "darkduck",
+        Key: audioName,
+        Body: audioBlob,
+      };
 
-      if (storageReq.status == 200) {
-        storageResAudio = await storageReq.data;
+      try {
+        const upload = s3.upload(params);
+        setUpload(upload);
+        upload.on("httpUploadProgress", (p) => {
+          progress.set(p.loaded / p.total);
+        });
+        await upload.promise();
+      } catch (err) {
+        console.error(err);
       }
     } catch (error) {
-      if (error.response.status === 400) {
+      if (error) {
         console.log(
           "Audio recording not uploaded." +
             " The error message:> " +
@@ -162,16 +178,37 @@ function NewPost({
         console.log("Wrong call to the api.");
       }
     }
+    if (!files) return;
+    for (let i = 0; i < files.length; i++) {
+      let file = files[i];
+      const params = {
+        Bucket: "darkduck",
+        Key: file.name,
+        Body: file,
+      };
+
+      try {
+        const upload = s3.upload(params);
+        setUpload(upload);
+        upload.on("httpUploadProgress", (p) => {
+          progress.set(p.loaded / p.total);
+        });
+        await upload.promise();
+        names.push(file.name);
+      } catch (err) {
+        console.error(err);
+      }
+    }
     // 2. Use the FileName and store the Post Data in MongoDB
     try {
       const req = await axios.post(
         "/api/v1/posts/new_post",
         {
           userId: session?.user?.id,
-          audio: storageResAudio?.success,
+          audio: audioName,
           audience: mode,
           text: userText,
-          data: storageResImage?.success,
+          data: names,
         },
         {
           headers: {
@@ -201,6 +238,10 @@ function NewPost({
   };
 
   function handleCancel() {
+    if (!upload) return;
+    upload.abort();
+    progress.set(0);
+    setUpload(null);
     setUserText("");
     setAudio(null);
     setPreviewArray([]);
@@ -325,6 +366,7 @@ function NewPost({
               multiple
               onChange={(e) => {
                 selectFile(e);
+                handleFileChange(e);
                 if (e.target.value !== "") {
                   setPostDisabled(false);
                 } else if (e.target.value === "") {

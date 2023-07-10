@@ -2,8 +2,22 @@
 import { StorageRes } from "@/types";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import React, { FormEvent, useRef, useState } from "react";
+import React, {
+  ChangeEventHandler,
+  FormEvent,
+  MouseEventHandler,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { AiFillCloseCircle } from "@react-icons/all-files/ai/AiFillCloseCircle";
+import S3 from "aws-sdk/clients/s3";
+
+const s3 = new S3({
+  accessKeyId: "AKIA2ARLEFL4TZQSFZWJ",
+  secretAccessKey: "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",
+  region: "EU(Stockholm)eu-north-1",
+});
 
 const ImageUploader = ({
   setUpdateImage,
@@ -17,30 +31,54 @@ const ImageUploader = ({
   const { data: Session } = useSession();
   const [currentFile, setCurrentFile] = useState(undefined);
   const [previewImage, setPreviewImage] = useState(undefined);
+  const [file, setFile] = useState<File | null>(null);
+  const [upload, setUpload] = useState<S3.ManagedUpload | null>(null);
+
+  useEffect(() => {
+    return upload?.abort();
+  }, []);
+
+  useEffect(() => {
+    setUpload(null);
+  }, [file]);
+
+  const handleFileChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    e.preventDefault();
+    setFile(e.target.files![0]);
+  };
 
   const selectFile = (event) => {
-    setCurrentFile(event.target.files[0]);
+    setCurrentFile(event.target.files);
     setPreviewImage(URL.createObjectURL(event.target.files[0]));
   };
 
   const handleImageSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setUploading(true);
-    let storageRes: StorageRes;
-    const input = ref.current!;
+    let imgName: string = "";
     // 1. Store Audio Data In Mongo Blob
     try {
       // 3. build form data
-      const formData = new FormData();
-      for (const file of Array.from(input.files ?? [])) {
-        formData.append(file.name, file);
+      const params = {
+        Bucket: "darkduck",
+        Key: file.name,
+        Body: file,
+      };
+      console.log("====================================");
+      console.log(file.name);
+      imgName = file.name;
+      console.log("====================================");
+      try {
+        const upload = s3.upload(params);
+        setUpload(upload);
+        await upload.promise();
+      } catch (err) {
+        console.error(err);
       }
-      const storageReq = await axios.post("/api/v1/images/upload", formData);
-      if (storageReq.status == 200) {
-        storageRes = await storageReq.data;
-      }
+
+      if (!file) return;
     } catch (error) {
-      if (error.response.status === 400) {
+      if (error) {
         console.log(
           "profile Image not uploaded." +
             " The error message:> " +
@@ -56,7 +94,7 @@ const ImageUploader = ({
         "/api/v1/users/upload/profile_img",
         {
           id: Session?.user?.id,
-          profilePicture: storageRes?.success,
+          profilePicture: imgName,
         },
         {
           headers: {
@@ -104,8 +142,10 @@ const ImageUploader = ({
                 name="files"
                 accept="image/*"
                 ref={ref}
-                multiple
-                onChange={selectFile}
+                onChange={(e) => {
+                  selectFile(e);
+                  handleFileChange(e);
+                }}
                 className=" w-full my-5 border border-gray-300 rounded-r-md flex items-center justify-between"
               />
             </label>

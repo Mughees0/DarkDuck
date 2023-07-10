@@ -1,9 +1,21 @@
 "use client";
-import { StorageRes } from "@/types";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import React, { FormEvent, useRef, useState } from "react";
+import React, {
+  ChangeEventHandler,
+  FormEvent,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { AiFillCloseCircle } from "@react-icons/all-files/ai/AiFillCloseCircle";
+import S3 from "aws-sdk/clients/s3";
+
+const s3 = new S3({
+  accessKeyId: "AKIA2ARLEFL4TZQSFZWJ",
+  secretAccessKey: "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",
+  region: "EU(Stockholm)eu-north-1",
+});
 
 const ImageUploader = ({
   setUpdateImage,
@@ -17,32 +29,56 @@ const ImageUploader = ({
   const { data: Session } = useSession();
   const [currentFile, setCurrentFile] = useState(undefined);
   const [previewImage, setPreviewImage] = useState(undefined);
+  const [file, setFile] = useState<File | null>(null);
+  const [upload, setUpload] = useState<S3.ManagedUpload | null>(null);
+
+  useEffect(() => {
+    return upload?.abort();
+  }, []);
+
+  useEffect(() => {
+    setUpload(null);
+  }, [file]);
+
+  const handleFileChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    e.preventDefault();
+    setFile(e.target.files![0]);
+  };
 
   const selectFile = (event) => {
-    setCurrentFile(event.target.files[0]);
+    setCurrentFile(event.target.files);
     setPreviewImage(URL.createObjectURL(event.target.files[0]));
   };
 
   const handleImageSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setUploading(true);
-    let storageRes: StorageRes;
-    const input = ref.current!;
+    let imgName: string = "";
     // 1. Store Audio Data In Mongo Blob
     try {
       // 3. build form data
-      const formData = new FormData();
-      for (const file of Array.from(input.files ?? [])) {
-        formData.append(file.name, file);
+      const params = {
+        Bucket: "darkduck",
+        Key: file.name,
+        Body: file,
+      };
+      console.log("====================================");
+      console.log(file.name);
+      imgName = file.name;
+      console.log("====================================");
+      try {
+        const upload = s3.upload(params);
+        setUpload(upload);
+        await upload.promise();
+      } catch (err) {
+        console.error(err);
       }
-      const storageReq = await axios.post("/api/v1/images/upload", formData);
-      if (storageReq.status == 200) {
-        storageRes = await storageReq.data;
-      }
+
+      if (!file) return;
     } catch (error) {
-      if (error.response.status === 400) {
+      if (error) {
         console.log(
-          "Banner Image not uploaded." + " The error message:> " + error.message
+          "banner Image not uploaded." + " The error message:> " + error.message
         );
       } else {
         console.log("Wrong call to the api.");
@@ -54,7 +90,7 @@ const ImageUploader = ({
         "/api/v1/users/upload/banner_img",
         {
           id: Session?.user?.id,
-          bannerPicture: storageRes?.success,
+          bannerPicture: imgName,
         },
         {
           headers: {
@@ -63,17 +99,18 @@ const ImageUploader = ({
           },
         }
       );
+
       if (req.status === 200) {
         setUpdateImage(!updateImage);
         setBannerModal(!bannerModal);
       }
       const res = await req.data;
-    } catch (err) {
-      if (err.response.status === 400) {
+    } catch (error) {
+      if (error.response.status === 400) {
         console.log(
-          "Banner Image is uploaded but profile did not update." +
+          "Profile Image is uploaded but profile did not update." +
             " The error message:> " +
-            err.message
+            error.message
         );
       } else {
         console.log("Wrong call to the api.");
@@ -82,33 +119,72 @@ const ImageUploader = ({
     setUploading(false);
   };
 
+  // const selectFile = (event) => {
+  //   setCurrentFile(event.target.files[0]);
+  //   setPreviewImage(URL.createObjectURL(event.target.files[0]));
+  // };
+
+  // const handleImageSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   setUploading(true);
+  //   let storageRes: StorageRes;
+  //   const input = ref.current!;
+  //   // 1. Store Audio Data In Mongo Blob
+  //   try {
+  //     // 3. build form data
+  //     const formData = new FormData();
+  //     for (const file of Array.from(input.files ?? [])) {
+  //       formData.append(file.name, file);
+  //     }
+  //     const storageReq = await axios.post("/api/v1/images/upload", formData);
+  //     if (storageReq.status == 200) {
+  //       storageRes = await storageReq.data;
+  //     }
+  //   } catch (error) {
+  //     if (error.response.status === 400) {
+  //       console.log(
+  //         "Banner Image not uploaded." + " The error message:> " + error.message
+  //       );
+  //     } else {
+  //       console.log("Wrong call to the api.");
+  //     }
+  //   }
+  //   // 2. Use the FileName and store the Post Data in MongoDB
+  //   try {
+  //     const req = await axios.post(
+  //       "/api/v1/users/upload/banner_img",
+  //       {
+  //         id: Session?.user?.id,
+  //         bannerPicture: storageRes?.success,
+  //       },
+  //       {
+  //         headers: {
+  //           Accept: "application/json",
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+  //     if (req.status === 200) {
+  //       setUpdateImage(!updateImage);
+  //       setBannerModal(!bannerModal);
+  //     }
+  //     const res = await req.data;
+  //   } catch (err) {
+  //     if (err.response.status === 400) {
+  //       console.log(
+  //         "Banner Image is uploaded but profile did not update." +
+  //           " The error message:> " +
+  //           err.message
+  //       );
+  //     } else {
+  //       console.log("Wrong call to the api.");
+  //     }
+  //   }
+  //   setUploading(false);
+  // };
+
   return (
     <>
-      {/* <form
-        onSubmit={handleImageSubmit}
-        className=" bg-yellow-300 h-64 w-[350px] flex justify-center items-center flex-col"
-      >
-        <label htmlFor="picture" className="btn btn-default  p-0">
-          <input
-            id="picture"
-            type="file"
-            name="files"
-            accept="image/*"
-            ref={ref}
-            multiple
-            onChange={selectFile}
-            className="bg-red-400"
-          />
-        </label>
-        {previewImage && <img className=" w-60" src={previewImage} alt="" />}
-        <input
-          className="px-2 py-1 rounded-md bg-violet-50 text-violet-500"
-          disabled={!currentFile}
-          type="submit"
-          value={uploading ? "Please Wait..." : "Change Banner Image"}
-        />
-      </form> */}
-
       <div className="fixed z-10 top-0 w-full h-full flex bg-black bg-opacity-60">
         <div className="extraOutline p-2 bg-white w-[90%] sm:w-max m-auto rounded-lg flex justify-end flex-col dark:bg-gray-600 dark:text-gray-50">
           <AiFillCloseCircle
@@ -127,8 +203,10 @@ const ImageUploader = ({
                   name="files"
                   accept="image/*"
                   ref={ref}
-                  multiple
-                  onChange={selectFile}
+                  onChange={(e) => {
+                    selectFile(e);
+                    handleFileChange(e);
+                  }}
                   className=" w-full my-5 border border-gray-300 rounded-r-md flex items-center justify-between"
                 />
               </label>
