@@ -30,13 +30,9 @@ export default function OtpInput({ value, valueLength, onChange }: Props) {
   }
 
   // Don't Stop intial render for build
-  const notInitialRender = useRef(false);
+
   useEffect(() => {
-    if (notInitialRender.current) {
-      getValueItems();
-    } else {
-      notInitialRender.current = true;
-    }
+    getValueItems();
   }, [value]);
 
   const focusToNextInput = (target: HTMLElement) => {
