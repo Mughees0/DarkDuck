@@ -14,14 +14,15 @@ export async function GET(request: NextRequest, params: Params) {
   await dbConnect();
   const { searchParams } = new URL(request.url);
   let page = searchParams.get("page");
-  const endIndex = Number(page) * 10;
-  const startIndex = endIndex - 10;
+  const perPage = 5;
+  const endIndex = Number(page) * perPage;
+  const startIndex = endIndex - perPage;
   try {
     const totalCount = await Post.count();
     let pageCount = 1;
     let userPosts = {};
-    if (totalCount > 10) {
-      const num = totalCount / 10 + 1;
+    if (totalCount > perPage) {
+      const num = totalCount / perPage + 1;
       pageCount = Math.trunc(num);
       userPosts = await Post.find()
         .sort({ createdAt: "desc" })
@@ -44,7 +45,7 @@ export async function GET(request: NextRequest, params: Params) {
           totalCount,
           pageCount,
           currentPage: Number(page),
-          perPage: 10,
+          perPage,
         },
         result: userPosts,
       },

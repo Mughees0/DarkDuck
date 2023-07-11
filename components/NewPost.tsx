@@ -327,7 +327,9 @@ function NewPost({
                     {previewArray.map((item) => {
                       if (item.includes("mp4")) {
                         const item2 = item?.substring(0, item.length - 3);
-                        return <video key={item2} src={item2} controls />;
+                        return (
+                          <video key={item2} src={item2} controls playsInline />
+                        );
                       } else {
                         return <img key={item} src={item} alt="" />;
                       }

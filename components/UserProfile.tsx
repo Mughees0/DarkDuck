@@ -392,6 +392,7 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                                                   item
                                                 }
                                                 controls
+                                                playsInline
                                               ></video>
                                             ) : (
                                               <img

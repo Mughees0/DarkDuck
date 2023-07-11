@@ -12,6 +12,7 @@ import CreatePost from "./CreatePost";
 import { Carousel } from "react-responsive-carousel";
 import NewComment from "./NewComment";
 import EditModal from "./EditModal";
+import ReactPaginate from "react-paginate";
 
 const convertDate = (TZdate) => {
   let date = new Date(TZdate);
@@ -32,15 +33,22 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
   const [uploading, setUploading] = useState(false);
   const [show, setShow] = useState(false);
   const [active, setActive] = useState<string>("-1");
+  const [currentPage, setCurrentPage] = useState(null);
+  const [pageCount, setPageCount] = useState(1);
 
   const toggleHandler = (id: string) => () =>
     setActive((active) => (active === id ? "-1" : id));
 
-  const getPosts = async () => {
+  const getPosts = async (page) => {
     try {
-      const req = await fetch("/api/v1/posts", { cache: "no-store" });
+      const req = await fetch(`/api/v1/posts?page=${page}`, {
+        cache: "no-store",
+      });
       const res = await req.json();
-      setPosts(res);
+      console.log("posts data =>", res);
+      setPageCount(res.meta.pageCount);
+      setCurrentPage(res.meta.currentPage);
+      setPosts(res.result);
     } catch (error) {
       if (error.response.status === 400) {
         console.log(
@@ -116,13 +124,35 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
     setUploading(false);
   };
 
+  //pagination
+  const pagginationHandler = (page) => {
+    // const currentPath = props.router.pathname;
+    // const currentQuery = { ...props.router.query }; //Copy current query to avoid its removing
+    // currentQuery.page = page.selected + 1;
+    // props.router.push({
+    //   pathname: currentPath,
+    //   query: currentQuery,
+    // });
+  };
+
+  function handlePageClick({ selected: selectedPage }) {
+    console.log("selected page", selectedPage);
+
+    getPosts(selectedPage + 1);
+    console.log("api called", posts);
+  }
+
   useEffect(() => {
     if (!session?.user?.id) {
       return;
     }
     fetchUserData(session?.user?.id);
     setIsLoaded((isLoaded) => true);
-    getPosts();
+    if (currentPage === null) {
+      getPosts(1);
+    } else {
+      getPosts(currentPage);
+    }
   }, [updatePosts, updateLikes, session?.user?.id]);
 
   if (posts && isLoaded) {
@@ -571,98 +601,18 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
               </div>
             </aside>
           </div>
-          <div className="flex justify-center mb-10">
-            <nav aria-label="Page navigation example">
-              <ul className="flex items-center -space-x-px h-10 text-base">
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center justify-center px-4 h-10 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                  >
-                    <span className="sr-only">Previous</span>
-                    <svg
-                      className="w-3 h-3"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 6 10"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M5 1 1 5l4 4"
-                      />
-                    </svg>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                  >
-                    1
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                  >
-                    2
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    aria-current="page"
-                    className="z-10 flex items-center justify-center px-4 h-10 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
-                  >
-                    3
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                  >
-                    4
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                  >
-                    5
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                  >
-                    <span className="sr-only">Next</span>
-                    <svg
-                      className="w-3 h-3"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 6 10"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="m1 9 4-4-4-4"
-                      />
-                    </svg>
-                  </a>
-                </li>
-              </ul>
-            </nav>
+          <div className="mb-10 pt-5">
+            <ReactPaginate
+              previousLabel={"← Previous"}
+              nextLabel={"Next →"}
+              pageCount={pageCount}
+              onPageChange={handlePageClick}
+              containerClassName={"pagination"}
+              previousLinkClassName={"pagination__link"}
+              nextLinkClassName={"pagination__link"}
+              disabledClassName={"pagination__link--disabled"}
+              activeClassName={"pagination__link--active"}
+            />
           </div>
         </main>
 
