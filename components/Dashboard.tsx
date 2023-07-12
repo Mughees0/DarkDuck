@@ -45,7 +45,6 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
         cache: "no-store",
       });
       const res = await req.json();
-      console.log("posts data =>", res);
       setPageCount(res.meta.pageCount);
       setCurrentPage(res.meta.currentPage);
       setPosts(res.result);

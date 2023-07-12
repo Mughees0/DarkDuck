@@ -9,7 +9,7 @@ export type UserInputData = {
   country?: string;
   language?: string;
   occupation?: string;
-  instruments?: string[];
+  instruments?: string;
   research?: string;
   software?: string;
   highEducation?: string;

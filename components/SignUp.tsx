@@ -31,7 +31,7 @@ const SignUp = () => {
     phone: "",
     age: "",
     occupation: "",
-    instruments: [],
+    instruments: "",
     research: "",
     software: "",
     highEducation: "",
@@ -663,7 +663,7 @@ const SignUp = () => {
                       onChange={(e) =>
                         setUser({
                           ...user!,
-                          instruments: [...user.instruments, e.target.value]!,
+                          instruments: e.target.value!,
                         })
                       }
                     />
