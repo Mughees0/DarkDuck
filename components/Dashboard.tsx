@@ -347,6 +347,9 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                                                 key={item}
                                                 width="300"
                                                 height="auto"
+                                                playsInline
+                                                muted
+                                                autoPlay
                                                 controls
                                               >
                                                 <source
