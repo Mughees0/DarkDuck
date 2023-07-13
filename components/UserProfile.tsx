@@ -19,11 +19,13 @@ import CreatePost from "./CreatePost";
 import { Carousel } from "react-responsive-carousel";
 import Image from "next/image";
 import EditModal from "./EditModal";
+import NewComment from "./NewComment";
 
 const UserBio = ({ updatePosts, setUpdatePosts }) => {
   const { data: session } = useSession();
   const userIdFromSession = session?.user?.id;
-
+  const [reply, setReply] = useState(false);
+  const [newCommentModel, setNewCommentModel] = useState(false);
   const [userData, setUserData] = useState<UserDataResponse>();
   const [posts, setPosts] = useState<PostsResponse>(null);
   const [newPostModel, setNewPostModel] = useState(false);
@@ -459,9 +461,9 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                                       data-accordion-target="#accordion-collapse-body-1"
                                       aria-expanded="true"
                                       aria-controls="accordion-collapse-body-1"
-                                      // onClick={() => {
-                                      //   setReply(!reply);
-                                      // }}
+                                      onClick={() => {
+                                        setReply(!reply);
+                                      }}
                                       className=" mr-3"
                                     >
                                       Reply
@@ -474,10 +476,21 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                                       post={post}
                                     />
                                   </a>
-
                                   <div className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white">
                                     {post.likes.length}
                                   </div>
+                                </div>
+                                <div>
+                                  <NewComment
+                                    userData={userData}
+                                    reply={reply}
+                                    post={post}
+                                    postId={post?._id}
+                                    setNewPostModel={setNewCommentModel}
+                                    newPostModel={newCommentModel}
+                                    setUpdatePosts={setUpdatePosts}
+                                    updatePosts={updatePosts}
+                                  />
                                 </div>
                               </div>
                             </div>

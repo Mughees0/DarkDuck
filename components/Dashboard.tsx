@@ -381,22 +381,6 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                                     ) : (
                                       <></>
                                     )}
-
-                                    {/* <video
-                                      width="560"
-                                      height="320"
-                                      preload="metadata"
-                                      controls
-                                      src="http://thinkingform.com/wp-content/uploads/2017/09/video-sample-mp4.mp4?_=1"
-                                    >
-                                      <source
-                                        type="video/mp4"
-                                        src="http://thinkingform.com/wp-content/uploads/2017/09/video-sample-mp4.mp4?_=1"
-                                      />
-                                      <a href="http://thinkingform.com/wp-content/uploads/2017/09/video-sample-mp4.mp4">
-                                        http://thinkingform.com/wp-content/uploads/2017/09/video-sample-mp4.mp4
-                                      </a>
-                                    </video> */}
                                     {post?.audio ? (
                                       <audio controls>
                                         <source
