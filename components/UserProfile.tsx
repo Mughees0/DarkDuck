@@ -386,14 +386,23 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                                             item.includes("avi") ? (
                                               <video
                                                 key={item}
-                                                src={
-                                                  process.env
-                                                    .REACT_APP_IMAGES_PATH +
-                                                  item
-                                                }
-                                                controls
+                                                width="300"
+                                                height="auto"
                                                 playsInline
-                                              ></video>
+                                                muted
+                                                autoPlay
+                                                controls
+                                              >
+                                                <source
+                                                  src={
+                                                    process.env
+                                                      .REACT_APP_IMAGES_PATH +
+                                                    item
+                                                  }
+                                                />
+                                                Your browser does not support
+                                                the video tag.
+                                              </video>
                                             ) : (
                                               <img
                                                 width={300}

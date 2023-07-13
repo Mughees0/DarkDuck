@@ -16,7 +16,7 @@ export async function GET(request: Request, { params }) {
   await dbConnect();
   const { id } = params;
   try {
-    const userPosts = await Post.find({ userId: id });
+    const userPosts = await Post.find({ userId: id }).populate("userId");
     userPosts.reverse();
     return NextResponse.json(userPosts, { status: 200 });
   } catch (error) {
