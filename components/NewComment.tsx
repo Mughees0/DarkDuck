@@ -40,6 +40,7 @@ function NewComment({
       if (req.status === 200) {
         setUpdatePosts(!updatePosts);
         setNewPostModel(!newPostModel);
+        setUserComment("");
       }
       const res = await req.data;
     } catch (err) {

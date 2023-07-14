@@ -123,17 +123,6 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
     setUploading(false);
   };
 
-  //pagination
-  const pagginationHandler = (page) => {
-    // const currentPath = props.router.pathname;
-    // const currentQuery = { ...props.router.query }; //Copy current query to avoid its removing
-    // currentQuery.page = page.selected + 1;
-    // props.router.push({
-    //   pathname: currentPath,
-    //   query: currentQuery,
-    // });
-  };
-
   function handlePageClick({ selected: selectedPage }) {
     console.log("selected page", selectedPage);
 
@@ -158,7 +147,7 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
     return (
       <>
         <main className="bg-gray-50">
-          <section className="bg-cover bg-center bg-bgCover text-black text-center flex flex-col items-center">
+          {/* <section className="bg-cover bg-center bg-bgCover text-black text-center flex flex-col items-center">
             <div className="bg-transparent dark:bg-transparent pt-5 md:pt-10 font-bold">
               <img
                 height={100}
@@ -181,11 +170,11 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                 <BsArrowRight className=" bg-transparent dark:bg-transparent" />
               </button>
             </div>
-          </section>
+          </section> */}
           <div className="flex flex-col items-center lg:flex-row lg:items-start ">
             <section className="lg:w-2/3 pb-4 md:px-6 md:w-full">
-              <h1 className="text-3xl font-bold col-span-2 m-auto max-w-3xl space-y-6 overflow-y-auto mt-3 lg:pt-6  dark:text-white">
-                Fresh Posts
+              <h1 className="text-3xl font-serif font-bold col-span-2 m-auto max-w-3xl space-y-6 overflow-y-auto mt-3 lg:pt-6  dark:text-white">
+                Latest
               </h1>
 
               <div
