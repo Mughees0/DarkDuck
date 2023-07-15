@@ -2,6 +2,8 @@
 
 import axios from "axios";
 import { IoMdCloseCircle } from "@react-icons/all-files/io/IoMdCloseCircle";
+import { RiDeleteBin5Line } from "@react-icons/all-files/ri/RiDeleteBin5Line";
+import { RiEdit2Line } from "@react-icons/all-files/ri/RiEdit2Line";
 
 function EditModal({
   postId,
@@ -37,14 +39,27 @@ function EditModal({
   }
 
   return (
-    <div className="flex justify-between w-40 h-10 my-4 px-4 text-base list-none bg-white rounded divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
-      <button onClick={handleDelete} className="hover:text-gray-500">
-        Delete Post
-      </button>
-      <IoMdCloseCircle
-        className=" bg-transparent mt-3"
-        onClick={() => setEditPostModal(!editPostModal)}
-      />
+    <div className="flex justify-between flex-col w-40 pb-3 my-4 px-2 text-base list-none bg-white rounded-xl divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
+      <div className=" flex justify-end bg-transparent">
+        <IoMdCloseCircle
+          className=" bg-transparent mt-3"
+          onClick={() => setEditPostModal(!editPostModal)}
+        />
+      </div>
+      <div className=" bg-transparent">
+        <div className="flex gap-2 items-center bg-transparent">
+          <RiDeleteBin5Line />
+          <button onClick={handleDelete} className="hover:text-gray-500">
+            Delete Post
+          </button>
+        </div>
+        <div className="flex gap-2 items-center bg-transparent">
+          <RiEdit2Line className=" bg-transparent" />
+          <button onClick={handleDelete} className="hover:text-gray-500">
+            Edit Post
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
