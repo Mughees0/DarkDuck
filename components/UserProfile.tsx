@@ -311,7 +311,7 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                                             post?.userId?.profilePicture
                                           : "/assets/avatar.png"
                                       }
-                                      className="h-10 w-10 rounded-full"
+                                      className="h-10 w-10 object-cover rounded-full"
                                     />
                                   </div>
                                   <div className="min-w-0  flex-1 items-start flex flex-col gap-1 h-20  ">
