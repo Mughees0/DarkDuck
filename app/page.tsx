@@ -6,7 +6,6 @@ import Loader from "../components/Loader";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import Footer from "@/components/Footer";
-import Upload from "@/components/Upload";
 
 export default function Home() {
   const { data: session, status } = useSession();

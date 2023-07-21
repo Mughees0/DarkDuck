@@ -7,6 +7,8 @@ import { RiEdit2Line } from "@react-icons/all-files/ri/RiEdit2Line";
 
 function EditModal({
   postId,
+  deletePostModal,
+  setDeletePostModal,
   editPostModal,
   setEditPostModal,
   updatePosts,
@@ -17,11 +19,8 @@ function EditModal({
       // const id = session?.user?.id;
       const req = await axios.delete(`/api/v1/posts/post/${id}`);
       const res = await req.data;
-      console.log("====================================");
-      console.log(res);
-      console.log("====================================");
       setUpdatePosts(!updatePosts);
-      setEditPostModal(!editPostModal);
+      setDeletePostModal(!deletePostModal);
     } catch (error) {
       if (error.response.status === 400) {
         console.log(
@@ -43,7 +42,7 @@ function EditModal({
       <div className=" flex justify-end bg-transparent">
         <IoMdCloseCircle
           className=" bg-transparent mt-3"
-          onClick={() => setEditPostModal(!editPostModal)}
+          onClick={() => setDeletePostModal(!deletePostModal)}
         />
       </div>
       <div className=" bg-transparent">
@@ -55,7 +54,13 @@ function EditModal({
         </div>
         <div className="flex gap-2 items-center bg-transparent">
           <RiEdit2Line className=" bg-transparent" />
-          <button onClick={handleDelete} className="hover:text-gray-500">
+          <button
+            onClick={() => {
+              setEditPostModal(!editPostModal);
+              setDeletePostModal(!deletePostModal);
+            }}
+            className="hover:text-gray-500"
+          >
             Edit Post
           </button>
         </div>

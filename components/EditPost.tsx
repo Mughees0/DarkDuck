@@ -1,9 +1,9 @@
 "use client";
 import { useTimer } from "@/hooks/useTimer";
-import { StorageRes, UserDataResponse } from "@/types";
+import { StorageRes, UserDataResponse, UserPostResponse } from "@/types";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { HiOutlineDownload } from "@react-icons/all-files/hi/HiOutlineDownload";
 const mimeType = "audio/webm";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -11,6 +11,7 @@ import { Carousel } from "react-responsive-carousel";
 import { useMotionValue } from "framer-motion";
 import { ChangeEventHandler, MouseEventHandler } from "react";
 import S3 from "aws-sdk/clients/s3";
+import { log } from "console";
 
 const s3 = new S3({
   accessKeyId: process.env.ACCESSKEYID,
@@ -18,18 +19,21 @@ const s3 = new S3({
   region: process.env.REGION,
 });
 
-function NewPost({
+function EditPost({
+  postId,
   profileImage,
   username,
-  setNewPostModel,
-  newPostModel,
+  setEditPostModel,
+  EditPostModel,
   setUpdatePosts,
   updatePosts,
+  updateAudio,
 }) {
   const { data: session } = useSession();
   const [audio, setAudio] = useState(null);
   const [audioBlob, setAudioBlob] = useState<Blob>(null);
   const [mode, setMode] = useState("public");
+  const [inputDisable, setInputDisable] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [userText, setUserText] = useState("");
   const [stream, setStream] = useState(null);
@@ -37,7 +41,6 @@ function NewPost({
   const mediaRecorder = useRef(null);
   const [recordingStatus, setRecordingStatus] = useState("inactive");
   const [audioChunks, setAudioChunks] = useState([]);
-  // const [currentFile, setCurrentFile] = useState(undefined);
   const [previewArray, setPreviewArray] = useState([]);
   const [postDisabled, setPostDisabled] = useState(true);
   const [files, setFiles] = useState<FileList | null>(null);
@@ -49,9 +52,52 @@ function NewPost({
   }, []);
 
   useEffect(() => {
+    getUserData();
+  }, [postId]);
+
+  useEffect(() => {
     progress.set(0);
     setUpload(null);
   }, [files]);
+
+  const options = ["public", "private"];
+  const onOptionChangeHandler = (event) => {
+    setMode(event.target.value);
+  };
+
+  async function getUserData() {
+    try {
+      const req = await axios.get(`/api/v1/posts/post/${postId}`, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+      if (req.status === 200) {
+        const res = await req.data;
+        setUserText(res?.userPost?.text);
+        setAudio(res?.userPost?.audio);
+        setMode(res?.userPost?.audience);
+        const imagesArray = [];
+        for (let i = 0; i < res?.userPost?.data.length; i++) {
+          imagesArray.push(
+            process.env.REACT_APP_IMAGES_PATH + res?.userPost?.data[i]
+          );
+        }
+        setPreviewArray(imagesArray);
+      }
+    } catch (err) {
+      if (err.response.status === 400) {
+        console.log(
+          "Data is uploaded but post did not update." +
+            " The error message:> " +
+            err.message
+        );
+      } else {
+        console.log("Wrong call to the api.");
+      }
+    }
+  }
 
   const handleFileChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     e.preventDefault();
@@ -61,7 +107,7 @@ function NewPost({
   const { milliseconds, setTime, startAndStop, seconds, hours, minutes } =
     useTimer();
 
-  const selectFile = (event) => {
+  const selectFile = (event: ChangeEvent<HTMLInputElement>) => {
     for (let i = 0; i < event.target.files.length; i++) {
       setPreviewArray((prev) => [
         ...prev,
@@ -71,7 +117,6 @@ function NewPost({
       ]);
     }
   };
-
   const getMicrophonePermission = async () => {
     if ("MediaRecorder" in window) {
       try {
@@ -124,7 +169,6 @@ function NewPost({
   };
 
   // 1. add reference to input element
-  const ref = useRef<HTMLInputElement>(null);
 
   const stopRecording = () => {
     setRecordingStatus("inactive");
@@ -132,21 +176,25 @@ function NewPost({
     mediaRecorder.current.stop();
     mediaRecorder.current.onstop = async () => {
       //creates a blob file from the audiochunks data
-      const audioBlob = new Blob(audioChunks, { type: mimeType });
+      const audioBlob2 = new Blob(audioChunks, { type: mimeType });
       //creates a playable URL from the blob file.
-      setAudioBlob(audioBlob);
-      const audioUrl = URL.createObjectURL(audioBlob);
+      setAudioBlob(audioBlob2);
+      const audioUrl = URL.createObjectURL(audioBlob2);
       // setAudioBlob(mp3Blob);
       setAudio(audioUrl);
+      setPostDisabled(false);
       setAudioChunks([]);
     };
   };
-
+  console.log("====================================");
+  console.log(audio);
+  console.log("====================================");
   const handleNewPost = async (e: FormEvent<HTMLFormElement>) => {
     let names: string[] = [];
     let aName = "";
     e.preventDefault();
     setUploading(true);
+
     if (audioBlob) {
       try {
         // 3. build form data for audio
@@ -200,15 +248,31 @@ function NewPost({
       }
     }
     // 2. Use the FileName and store the Post Data in MongoDB
+    for (let i = 0; i < previewArray.length; i++) {
+      if (
+        previewArray[i].includes(
+          "https://darkduck.s3.eu-north-1.amazonaws.com/"
+        )
+      ) {
+        previewArray[i] = previewArray[i].replace(
+          "https://darkduck.s3.eu-north-1.amazonaws.com/",
+          ""
+        );
+      } else if (previewArray[i].includes("blob:http://localhost:300")) {
+        previewArray.splice(i, 1);
+      }
+    }
+    console.log(aName);
+
     try {
       const req = await axios.post(
-        "/api/v1/posts/new_post",
+        `/api/v1/posts/post/${postId}`,
         {
           userId: session?.user?.id,
           audio: aName,
           audience: mode,
           text: userText,
-          data: names,
+          data: [...previewArray, ...names],
         },
         {
           headers: {
@@ -217,11 +281,12 @@ function NewPost({
           },
         }
       );
+
       if (req.status === 200) {
-        setUpdatePosts(!updatePosts);
-        setNewPostModel(!newPostModel);
+        // handleCancel();
+        updateAudio("https://darkduck.s3.eu-north-1.amazonaws.com/" + aName);
+        setEditPostModel(!EditPostModel);
       }
-      const res = await req.data;
     } catch (err) {
       if (err.response.status === 400) {
         console.log(
@@ -233,8 +298,11 @@ function NewPost({
         console.log("Wrong call to the api.");
       }
     }
-    handleCancel();
+
+    getUserData();
+    setUpdatePosts(!updatePosts);
     setUploading(false);
+    handleCancel();
   };
 
   function handleCancel() {
@@ -245,7 +313,7 @@ function NewPost({
     setUserText("");
     setAudio(null);
     setPreviewArray([]);
-    setNewPostModel(!newPostModel);
+    setEditPostModel(!EditPostModel);
     setPostDisabled(true);
     setTime(0);
   }
@@ -255,7 +323,10 @@ function NewPost({
       <section className=" flex h-12 items-center rounded-t-lg justify-between px-4 border-b border-gray-400 dark:text-gray-100">
         <h1 className="font-bold">Create Post</h1>
         <button
-          onClick={() => setNewPostModel(!newPostModel)}
+          onClick={() => {
+            setEditPostModel(!EditPostModel);
+            getUserData();
+          }}
           className="  bg-gray-300 dark:bg-gray-600 px-2 rounded-full"
         >
           X
@@ -274,13 +345,11 @@ function NewPost({
               className=" text-sm bg-gray-300 dark:bg-gray-700 border border-black dark:border-gray-200  rounded-md px-1 "
               name="audience"
               id="audience"
+              onChange={onOptionChangeHandler}
             >
-              <option onSelect={() => setMode("public")} value="public">
-                Public
-              </option>
-              <option onSelect={() => setMode("private")} value="private">
-                Only Me
-              </option>
+              {options.map((option, index) => {
+                return <option key={index}>{option}</option>;
+              })}
             </select>
           </span>
         </div>
@@ -300,13 +369,12 @@ function NewPost({
         />
         <div className=" flex justify-center items-center ">
           <label
-            htmlFor="dropzone-file"
+            htmlFor="dropzone-file2"
             className="flex flex-col items-center justify-center w-60 h-30 sm:w-[380px] sm:h-[200px] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
           >
             <div className="flex flex-col items-center w-full justify-center pt-5 pb-6  sm:h-[500px]">
-              {previewArray.length !== 0 ? (
+              {previewArray?.length !== 0 ? (
                 <>
-                  {" "}
                   <Carousel
                     showArrows={true}
                     showThumbs={false}
@@ -317,20 +385,84 @@ function NewPost({
                     swipeable={true}
                     emulateTouch={true}
                     dynamicHeight={true}
-                    // onChange={onChange}
-                    // onClickItem={onClickItem}
-                    // onClickThumb={onClickThumb}
                     showIndicators={false}
                     width={"200px"}
                   >
-                    {previewArray.map((item) => {
-                      if (item.includes("mp4")) {
+                    {previewArray?.map((item) => {
+                      if (
+                        item?.includes(
+                          "https://darkduck.s3.eu-north-1.amazonaws.com/"
+                        ) &&
+                        item?.includes("mp4", "mov")
+                      ) {
+                        return (
+                          <>
+                            <video key={item} src={item} controls playsInline />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const index = previewArray.indexOf(item);
+                                if (index > -1) {
+                                  previewArray.splice(index, 1);
+                                }
+                                setPostDisabled(false);
+                              }}
+                              className="top-0 left-0 right-0 text-yellow-700 bg-gray-200 bg-opacity-70 font-bold absolute "
+                            >
+                              Remove
+                            </button>
+                          </>
+                        );
+                      } else if (item?.includes("mp4")) {
                         const item2 = item?.substring(0, item.length - 3);
                         return (
-                          <video key={item2} src={item2} controls playsInline />
+                          <div>
+                            <video
+                              key={item2}
+                              src={item2}
+                              controls
+                              playsInline
+                            />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const index = previewArray.indexOf(
+                                  item2.concat("mp4")
+                                );
+                                if (index > -1) {
+                                  previewArray.splice(index, 1);
+                                }
+                              }}
+                              className="top-0 left-0 right-0 text-yellow-700 bg-gray-200 bg-opacity-70 font-bold absolute "
+                            >
+                              Remove
+                            </button>
+                          </div>
                         );
                       } else {
-                        return <img key={item} src={item} alt="" />;
+                        return (
+                          <div>
+                            <img
+                              onClick={() => setInputDisable(false)}
+                              key={item}
+                              src={item}
+                              alt=""
+                            />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const index = previewArray.indexOf(item);
+                                if (index > -1) {
+                                  previewArray.splice(index, 1);
+                                }
+                                setPostDisabled(false);
+                              }}
+                              className="top-0 left-0 right-0 text-yellow-700 bg-gray-200 bg-opacity-70 font-bold absolute "
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        );
                       }
                     })}
                   </Carousel>
@@ -360,25 +492,24 @@ function NewPost({
                   </p>
                 </>
               )}
+              <input
+                name="files2"
+                className="hidden"
+                accept="image/*,video/*"
+                multiple
+                onChange={(e) => {
+                  selectFile(e);
+                  handleFileChange(e);
+                  if (e.target.value !== "") {
+                    setPostDisabled(false);
+                  } else if (e.target.value === "") {
+                    setPostDisabled(true);
+                  }
+                }}
+                id="dropzone-file2"
+                type="file"
+              />
             </div>
-            <input
-              name="files"
-              accept="image/*,video/*"
-              ref={ref}
-              multiple
-              onChange={(e) => {
-                selectFile(e);
-                handleFileChange(e);
-                if (e.target.value !== "") {
-                  setPostDisabled(false);
-                } else if (e.target.value === "") {
-                  setPostDisabled(true);
-                }
-              }}
-              id="dropzone-file"
-              type="file"
-              className="hidden"
-            />
           </label>
         </div>
         <div className=" flex justify-center border-b pb-2 border-gray-400">
@@ -452,11 +583,17 @@ function NewPost({
                 </div>
                 {audio ? (
                   <div className=" bg-transparent flex items-center flex-col gap-3">
-                    <audio
-                      src={audio}
-                      className="w-56 h-9 rounded-full"
-                      controls
-                    ></audio>
+                    <audio className="w-56 h-9 rounded-full" controls>
+                      <source
+                        src={
+                          audio.includes("blob:http")
+                            ? audio
+                            : "https://darkduck.s3.eu-north-1.amazonaws.com/" +
+                              audio
+                        }
+                        type="audio/mpeg"
+                      />
+                    </audio>
                     <a
                       download
                       href={audio}
@@ -494,4 +631,4 @@ function NewPost({
   );
 }
 
-export default NewPost;
+export default EditPost;

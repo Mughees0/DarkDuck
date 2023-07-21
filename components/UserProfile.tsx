@@ -2,7 +2,7 @@
 import { PostsResponse, UserDataResponse } from "@/types";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { GiGuitarBassHead } from "@react-icons/all-files/gi/GiGuitarBassHead";
 import { BsCamera } from "@react-icons/all-files/bs/BsCamera";
@@ -20,12 +20,15 @@ import { Carousel } from "react-responsive-carousel";
 import Image from "next/image";
 import EditModal from "./EditModal";
 import NewComment from "./NewComment";
+import EditPost from "./EditPost";
 
 const UserBio = ({ updatePosts, setUpdatePosts }) => {
   const { data: session } = useSession();
   const userIdFromSession = session?.user?.id;
   const [reply, setReply] = useState(false);
   const [newCommentModel, setNewCommentModel] = useState(false);
+  const [editPostModal, setEditPostModal] = useState(false);
+  const [deletePostModal, setDeletePostModal] = useState(false);
   const [userData, setUserData] = useState<UserDataResponse>();
   const [posts, setPosts] = useState<PostsResponse>(null);
   const [newPostModel, setNewPostModel] = useState(false);
@@ -36,6 +39,17 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
   const [postId, setPostId] = useState("");
   const [editPostModel, setEditPostModel] = useState(false);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const audioRef = useRef<HTMLAudioElement>();
+
+  const updateAudio = (src) => {
+    // setAudio(source);
+    if (audioRef.current) {
+      // audioRef.current.pause();
+      audioRef.current.src = src;
+      audioRef.current.load();
+    }
+    // audioRef.current.play();
+  };
 
   // apis
   const getUserDetails = async (userId: string) => {
@@ -60,7 +74,7 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
 
   async function getUserPosts(userId: string) {
     try {
-      const res = await axios.get(`/api/v1/posts/post/${userId}`);
+      const res = await axios.get(`/api/v1/posts/posts/${userId}`);
       const posts = await res.data;
       setPosts(posts);
     } catch (error) {
@@ -280,16 +294,39 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                 {/* the delete post modal div */}
                 <div
                   className={
-                    editPostModel
+                    editPostModal
+                      ? "flex justify-center items-center bg-opacity-25 dark:bg-opacity-25 bg-gray-400 fixed top-0 z-40 h-screen w-full left-0 right-0  "
+                      : "hidden"
+                  }
+                >
+                  <EditPost
+                    EditPostModel={editPostModal}
+                    setEditPostModel={setEditPostModal}
+                    postId={postId}
+                    profileImage={
+                      process.env.REACT_APP_IMAGES_PATH +
+                      userData?.profilePicture
+                    }
+                    updateAudio={updateAudio}
+                    username={userData?.username}
+                    setUpdatePosts={setUpdatePosts}
+                    updatePosts={updatePosts}
+                  />
+                </div>
+                <div
+                  className={
+                    deletePostModal
                       ? "flex justify-center items-center bg-opacity-25 dark:bg-opacity-25 bg-gray-400 fixed top-0 z-40 h-screen w-full left-0 right-0"
                       : "hidden"
                   }
                 >
                   <EditModal
+                    editPostModal={editPostModal}
+                    setEditPostModal={setEditPostModal}
                     updatePosts={updatePosts}
                     setUpdatePosts={setUpdatePosts}
-                    editPostModal={editPostModel}
-                    setEditPostModal={setEditPostModel}
+                    deletePostModal={deletePostModal}
+                    setDeletePostModal={setDeletePostModal}
                     postId={postId}
                   />
                 </div>
@@ -311,18 +348,14 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                                             post?.userId?.profilePicture
                                           : "/assets/avatar.png"
                                       }
-                                      className="h-10 w-10 object-cover rounded-full"
+                                      className="w-12 h-12 object-cover rounded-full"
                                     />
                                   </div>
                                   <div className="min-w-0  flex-1 items-start flex flex-col gap-1 h-20  ">
-                                    <strong className=" justify-self-start p-1 px-2 bg-gray-900 text-gray-50 rounded dark:bg-white dark:text-black ">
+                                    <strong className=" justify-self-start  px-2 bg-gray-900 text-gray-50 rounded dark:bg-white dark:text-black ">
                                       {post?.audience === "public"
                                         ? "Public"
-                                        : "Private" ||
-                                          post?.recordModeSwingId ===
-                                            "633919ee9729ead90e0f6ac4"
-                                        ? "Public World Mode"
-                                        : "Private World Mode"}
+                                        : "Private"}
                                     </strong>
                                     <p className="truncate text-sm  font-semibold text-gray-900 dark:text-white">
                                       {post?.userId?.username}
@@ -343,7 +376,7 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                                   <a
                                     onClick={() => {
                                       setPostId(post._id);
-                                      setEditPostModel(!editPostModel);
+                                      setDeletePostModal(!deletePostModal);
                                     }}
                                     className="inline-flex cursor-pointer justify-center rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                                   >
@@ -425,7 +458,7 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                                       <></>
                                     )}
                                     {post?.audio ? (
-                                      <audio controls>
+                                      <audio ref={audioRef} controls>
                                         <source
                                           src={
                                             process.env.REACT_APP_AUDIO_PATH +

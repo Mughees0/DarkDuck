@@ -82,9 +82,6 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
 
   const handleNewComment = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("====================================");
-    console.log(e.currentTarget.id);
-    console.log("====================================");
     setUploading(true);
     try {
       const req = await axios.post(
@@ -124,10 +121,7 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
   };
 
   function handlePageClick({ selected: selectedPage }) {
-    console.log("selected page", selectedPage);
-
     getPosts(selectedPage + 1);
-    console.log("api called", posts);
   }
 
   useEffect(() => {
@@ -227,18 +221,14 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                                             post?.userId?.profilePicture
                                           : "/assets/avatar.png"
                                       }
-                                      className="h-10 w-10 object-cover rounded-full"
+                                      className="w-12 h-12 object-cover rounded-full"
                                     />
                                   </div>
                                   <div className="min-w-0  flex-1 items-start flex flex-col gap-1 h-20  ">
-                                    <strong className=" justify-self-start p-1 px-2 bg-gray-900 text-gray-50 rounded dark:bg-white dark:text-black ">
+                                    <strong className=" justify-self-start  px-2 bg-gray-900 text-gray-50 rounded dark:bg-white dark:text-black ">
                                       {post?.audience === "public"
                                         ? "Public"
-                                        : "Private" ||
-                                          post?.recordModeSwingId ===
-                                            "633919ee9729ead90e0f6ac4"
-                                        ? "Public World Mode"
-                                        : "Private World Mode"}
+                                        : "Private"}
                                     </strong>
                                     <p className="truncate text-sm  font-semibold text-gray-900 dark:text-white">
                                       {post?.userId?.username}

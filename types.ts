@@ -127,3 +127,43 @@ export type UserDataResponse = {
   bannerPicture?: string;
   createdAt?: string;
 };
+
+export interface UserPostResponse {
+  success: boolean;
+  userPost: UserPost;
+}
+
+interface UserPost {
+  _id: string;
+  userId: string;
+  audio: string;
+  audience: string;
+  text: string;
+  data: string[];
+  updatedAt: string;
+  createdAt: string;
+  likes: string[];
+  comments: Comment[];
+  __v: number;
+}
+
+interface Comment {
+  userId: UserId;
+  comment: string;
+}
+
+interface UserId {
+  instruments: any[];
+  _id: string;
+  username: string;
+  email: string;
+  password: string;
+  termsCondition: boolean;
+  otp: number;
+  updatedAt: string;
+  createdAt: string;
+  __v: number;
+  bannerPicture: string;
+  hashedPassword: string;
+  profilePicture: string;
+}

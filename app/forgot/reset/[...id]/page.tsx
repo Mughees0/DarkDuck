@@ -21,7 +21,7 @@ function ResetPage() {
   const [password, setPassword] = useState("");
   const { data: session, status } = useSession();
 
-  const fetchUserData = async (id: string) => {
+  const fetchUserData = async (id) => {
     try {
       const req = await axios.get(`/api/v1/users/user/${id}`);
       const res = await req.data;

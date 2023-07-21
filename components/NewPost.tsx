@@ -31,7 +31,7 @@ function NewPost({
   const [audioBlob, setAudioBlob] = useState<Blob>(null);
   const [mode, setMode] = useState("public");
   const [uploading, setUploading] = useState(false);
-  const [userText, setUserText] = useState("");
+  const [userText, setUserText] = useState<string>();
   const [stream, setStream] = useState(null);
   const [permission, setPermission] = useState(false);
   const mediaRecorder = useRef(null);
@@ -249,6 +249,10 @@ function NewPost({
     setPostDisabled(true);
     setTime(0);
   }
+  const options = ["public", "private"];
+  const onOptionChangeHandler = (event) => {
+    setMode(event.target.value);
+  };
 
   return (
     <main className=" border border-gray-900 dark:border-gray-200 w-72 h-110 sm:w-[400px] rounded-lg">
@@ -274,6 +278,16 @@ function NewPost({
               className=" text-sm bg-gray-300 dark:bg-gray-700 border border-black dark:border-gray-200  rounded-md px-1 "
               name="audience"
               id="audience"
+              onChange={onOptionChangeHandler}
+            >
+              {options.map((option, index) => {
+                return <option key={index}>{option}</option>;
+              })}
+            </select>
+            {/* <select
+              className=" text-sm bg-gray-300 dark:bg-gray-700 border border-black dark:border-gray-200  rounded-md px-1 "
+              name="audience"
+              id="audience"
             >
               <option onSelect={() => setMode("public")} value="public">
                 Public
@@ -281,7 +295,7 @@ function NewPost({
               <option onSelect={() => setMode("private")} value="private">
                 Only Me
               </option>
-            </select>
+            </select> */}
           </span>
         </div>
         <input
@@ -364,9 +378,11 @@ function NewPost({
             <input
               name="files"
               accept="image/*,video/*"
-              ref={ref}
               multiple
               onChange={(e) => {
+                console.log("====================================");
+                console.log(e);
+                console.log("====================================");
                 selectFile(e);
                 handleFileChange(e);
                 if (e.target.value !== "") {
