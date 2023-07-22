@@ -3,7 +3,7 @@
 const Footer = () => {
   return (
     <>
-      <footer className="w-full rounded-lg bg-white shadow border dark:bg-gray-800 md:flex md:items-center md:justify-between overflow-hidden">
+      <footer className="w-full rounded-lg bg-white shadow border dark:bg-gray-800 md:flex md:items-center md:justify-between overflow-hidden mt-5">
         <div className="flex w-full flex-col gap-y-6 lg:flex-row lg:justify-between lg:gap-y-0 pt-3 px-3 overflow-hidden">
           <ul
             data-testid="footer-groupLink"

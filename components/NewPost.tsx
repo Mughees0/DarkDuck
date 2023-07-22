@@ -314,67 +314,65 @@ function NewPost({
         />
         <div className=" flex justify-center items-center ">
           <label
-            htmlFor="dropzone-file"
-            className="flex flex-col items-center justify-center w-60 h-30 sm:w-[380px] sm:h-[200px] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+            htmlFor="dropzone-file2"
+            className="flex flex-col items-center justify-center w-60 sm:w-[380px] h-[200px] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 label-scroll"
           >
-            <div className="flex flex-col items-center w-full justify-center pt-5 pb-6  sm:h-[500px]">
-              {previewArray.length !== 0 ? (
-                <>
-                  {" "}
-                  <Carousel
-                    showArrows={true}
-                    showThumbs={false}
-                    showStatus={false}
-                    infiniteLoop={true}
-                    transitionTime={500}
-                    stopOnHover={true}
-                    swipeable={true}
-                    emulateTouch={true}
-                    dynamicHeight={true}
-                    // onChange={onChange}
-                    // onClickItem={onClickItem}
-                    // onClickThumb={onClickThumb}
-                    showIndicators={false}
-                    width={"200px"}
-                  >
-                    {previewArray.map((item) => {
-                      if (item.includes("mp4")) {
-                        const item2 = item?.substring(0, item.length - 3);
-                        return (
-                          <video key={item2} src={item2} controls playsInline />
-                        );
-                      } else {
-                        return <img key={item} src={item} alt="" />;
-                      }
-                    })}
-                  </Carousel>
-                </>
-              ) : (
-                <>
-                  <svg
-                    aria-hidden="true"
-                    className="w-10 h-10  mb-3 text-gray-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                    ></path>
-                  </svg>
-                  <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                    <span className="font-semibold">Click to upload</span>
-                  </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
-                    PNG or JPG / MP4 or MOV
-                  </p>
-                </>
-              )}
-            </div>
+            {previewArray.length !== 0 ? (
+              <div className="max-h-44 my-4">
+                {" "}
+                <Carousel
+                  showArrows={true}
+                  showThumbs={false}
+                  showStatus={false}
+                  infiniteLoop={true}
+                  transitionTime={500}
+                  stopOnHover={true}
+                  swipeable={true}
+                  emulateTouch={true}
+                  dynamicHeight={true}
+                  // onChange={onChange}
+                  // onClickItem={onClickItem}
+                  // onClickThumb={onClickThumb}
+                  showIndicators={false}
+                  width={"200px"}
+                >
+                  {previewArray.map((item) => {
+                    if (item.includes("mp4")) {
+                      const item2 = item?.substring(0, item.length - 3);
+                      return (
+                        <video key={item2} src={item2} controls playsInline />
+                      );
+                    } else {
+                      return <img key={item} src={item} alt="" />;
+                    }
+                  })}
+                </Carousel>
+              </div>
+            ) : (
+              <>
+                <svg
+                  aria-hidden="true"
+                  className="w-10 h-10  mb-3 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                  ></path>
+                </svg>
+                <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                  <span className="font-semibold">Click to upload</span>
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  PNG or JPG / MP4 or MOV
+                </p>
+              </>
+            )}
             <input
               name="files"
               accept="image/*,video/*"

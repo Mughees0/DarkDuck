@@ -186,9 +186,6 @@ function EditPost({
       setAudioChunks([]);
     };
   };
-  console.log("====================================");
-  console.log(audio);
-  console.log("====================================");
   const handleNewPost = async (e: FormEvent<HTMLFormElement>) => {
     let names: string[] = [];
     let aName = "";
@@ -318,6 +315,19 @@ function EditPost({
     setTime(0);
   }
 
+  function handleRemoveImage(item) {
+    const index = previewArray.indexOf(item);
+    console.log("index:", index);
+
+    if (index > -1) {
+      const newArr = previewArray.filter(function (i) {
+        return i !== item;
+      });
+      setPreviewArray(newArr);
+    }
+    setPostDisabled(false);
+  }
+
   return (
     <main className=" border border-gray-900 dark:border-gray-200 w-72 h-110 sm:w-[400px] rounded-lg">
       <section className=" flex h-12 items-center rounded-t-lg justify-between px-4 border-b border-gray-400 dark:text-gray-100">
@@ -367,149 +377,123 @@ function EditPost({
           placeholder={" What's on your mind, " + username + "?"}
           type="text"
         />
-        <div className=" flex justify-center items-center ">
+        <div className=" flex justify-center items-start">
           <label
             htmlFor="dropzone-file2"
-            className="flex flex-col items-center justify-center w-60 h-30 sm:w-[380px] sm:h-[200px] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+            className="flex flex-col items-center justify-center w-60 sm:w-[380px] h-[200px] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 label-scroll"
           >
-            <div className="flex flex-col items-center w-full justify-center pt-5 pb-6  sm:h-[500px]">
-              {previewArray?.length !== 0 ? (
-                <>
-                  <Carousel
-                    showArrows={true}
-                    showThumbs={false}
-                    showStatus={false}
-                    infiniteLoop={true}
-                    transitionTime={500}
-                    stopOnHover={true}
-                    swipeable={true}
-                    emulateTouch={true}
-                    dynamicHeight={true}
-                    showIndicators={false}
-                    width={"200px"}
-                  >
-                    {previewArray?.map((item) => {
-                      if (
-                        item?.includes(
-                          "https://darkduck.s3.eu-north-1.amazonaws.com/"
-                        ) &&
-                        item?.includes("mp4", "mov")
-                      ) {
-                        return (
-                          <>
-                            <video key={item} src={item} controls playsInline />
-                            <button
-                              type="button"
-                              onClick={() => {
-                                const index = previewArray.indexOf(item);
-                                if (index > -1) {
-                                  previewArray.splice(index, 1);
-                                }
-                                setPostDisabled(false);
-                              }}
-                              className="top-0 left-0 right-0 text-yellow-700 bg-gray-200 bg-opacity-70 font-bold absolute "
-                            >
-                              Remove
-                            </button>
-                          </>
-                        );
-                      } else if (item?.includes("mp4")) {
-                        const item2 = item?.substring(0, item.length - 3);
-                        return (
-                          <div>
-                            <video
-                              key={item2}
-                              src={item2}
-                              controls
-                              playsInline
-                            />
-                            <button
-                              type="button"
-                              onClick={() => {
-                                const index = previewArray.indexOf(
-                                  item2.concat("mp4")
-                                );
-                                if (index > -1) {
-                                  previewArray.splice(index, 1);
-                                }
-                              }}
-                              className="top-0 left-0 right-0 text-yellow-700 bg-gray-200 bg-opacity-70 font-bold absolute "
-                            >
-                              Remove
-                            </button>
-                          </div>
-                        );
-                      } else {
-                        return (
-                          <div>
-                            <img
-                              onClick={() => setInputDisable(false)}
-                              key={item}
-                              src={item}
-                              alt=""
-                            />
-                            <button
-                              type="button"
-                              onClick={() => {
-                                const index = previewArray.indexOf(item);
-                                if (index > -1) {
-                                  previewArray.splice(index, 1);
-                                }
-                                setPostDisabled(false);
-                              }}
-                              className="top-0 left-0 right-0 text-yellow-700 bg-gray-200 bg-opacity-70 font-bold absolute "
-                            >
-                              Remove
-                            </button>
-                          </div>
-                        );
-                      }
-                    })}
-                  </Carousel>
-                </>
-              ) : (
-                <>
-                  <svg
-                    aria-hidden="true"
-                    className="w-10 h-10  mb-3 text-gray-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                    ></path>
-                  </svg>
-                  <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                    <span className="font-semibold">Click to upload</span>
-                  </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
-                    PNG or JPG / MP4 or MOV
-                  </p>
-                </>
-              )}
-              <input
-                name="files2"
-                className="hidden"
-                accept="image/*,video/*"
-                multiple
-                onChange={(e) => {
-                  selectFile(e);
-                  handleFileChange(e);
-                  if (e.target.value !== "") {
-                    setPostDisabled(false);
-                  } else if (e.target.value === "") {
-                    setPostDisabled(true);
-                  }
-                }}
-                id="dropzone-file2"
-                type="file"
-              />
-            </div>
+            {previewArray?.length !== 0 ? (
+              <div className="max-h-44 my-4">
+                <Carousel
+                  showArrows={true}
+                  showThumbs={false}
+                  showStatus={false}
+                  infiniteLoop={true}
+                  transitionTime={500}
+                  stopOnHover={true}
+                  swipeable={true}
+                  emulateTouch={true}
+                  dynamicHeight={true}
+                  showIndicators={false}
+                  width={"200px"}
+                >
+                  {previewArray?.map((item, i) => {
+                    if (
+                      item?.includes(
+                        "https://darkduck.s3.eu-north-1.amazonaws.com/"
+                      ) &&
+                      item?.includes("mp4", "mov")
+                    ) {
+                      return (
+                        <>
+                          <video key={item} src={item} controls playsInline />
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveImage(item)}
+                            className="top-0 left-0 right-0 text-yellow-700 bg-gray-200 bg-opacity-70 font-bold absolute "
+                          >
+                            Remove
+                          </button>
+                        </>
+                      );
+                    } else if (item?.includes("mp4")) {
+                      const item2 = item?.substring(0, item.length - 3);
+                      return (
+                        <div>
+                          <video key={item2} src={item2} controls playsInline />
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveImage(item)}
+                            className="top-0 left-0 right-0 text-yellow-700 bg-gray-200 bg-opacity-70 font-bold absolute "
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      );
+                    } else {
+                      return (
+                        <div>
+                          <img
+                            onClick={() => setInputDisable(false)}
+                            key={item}
+                            src={item}
+                            alt=""
+                          />
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveImage(item)}
+                            className="top-0 left-0 right-0 text-yellow-700 bg-gray-200 bg-opacity-70 font-bold absolute "
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      );
+                    }
+                  })}
+                </Carousel>
+              </div>
+            ) : (
+              <>
+                <svg
+                  aria-hidden="true"
+                  className="w-10 h-10  mb-3 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                  ></path>
+                </svg>
+                <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                  <span className="font-semibold">Click to upload</span>
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  PNG or JPG / MP4 or MOV
+                </p>
+              </>
+            )}
+            <input
+              name="files2"
+              className="hidden"
+              accept="image/*,video/*"
+              multiple
+              onChange={(e) => {
+                selectFile(e);
+                handleFileChange(e);
+                if (e.target.value !== "") {
+                  setPostDisabled(false);
+                } else if (e.target.value === "") {
+                  setPostDisabled(true);
+                }
+              }}
+              id="dropzone-file2"
+              type="file"
+            />
           </label>
         </div>
         <div className=" flex justify-center border-b pb-2 border-gray-400">

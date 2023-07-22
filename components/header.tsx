@@ -279,7 +279,7 @@ const Header = ({ setUpdatePosts, updatePosts }) => {
                   >
                     <span className="sr-only">Open user menu</span>
                     <img
-                      className="w-8 h-8 rounded-full"
+                      className="w-8 h-8 object-cover rounded-full"
                       src={
                         userData?.profilePicture
                           ? process.env.REACT_APP_IMAGES_PATH +
