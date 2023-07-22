@@ -33,7 +33,6 @@ function EditPost({
   const [audio, setAudio] = useState(null);
   const [audioBlob, setAudioBlob] = useState<Blob>(null);
   const [mode, setMode] = useState("public");
-  const [inputDisable, setInputDisable] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [userText, setUserText] = useState("");
   const [stream, setStream] = useState(null);
@@ -46,6 +45,7 @@ function EditPost({
   const [files, setFiles] = useState<FileList | null>(null);
   const [upload, setUpload] = useState<S3.ManagedUpload | null>(null);
   const progress = useMotionValue(0);
+  const [disableInput, setDisableInput] = useState(false);
 
   useEffect(() => {
     return upload?.abort();
@@ -303,9 +303,6 @@ function EditPost({
   };
 
   function handleCancel() {
-    if (!upload) return;
-    upload.abort();
-    progress.set(0);
     setUpload(null);
     setUserText("");
     setAudio(null);
@@ -313,9 +310,13 @@ function EditPost({
     setEditPostModel(!EditPostModel);
     setPostDisabled(true);
     setTime(0);
+    if (!upload) return;
+    upload.abort();
+    progress.set(0);
   }
 
   function handleRemoveImage(item) {
+    setDisableInput(true);
     const index = previewArray.indexOf(item);
     console.log("index:", index);
 
@@ -379,6 +380,9 @@ function EditPost({
         />
         <div className=" flex justify-center items-start">
           <label
+            onClick={() =>
+              disableInput ? setDisableInput(false) : disableInput
+            }
             htmlFor="dropzone-file2"
             className="flex flex-col items-center justify-center w-60 sm:w-[380px] h-[200px] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 label-scroll"
           >
@@ -433,12 +437,7 @@ function EditPost({
                     } else {
                       return (
                         <div>
-                          <img
-                            onClick={() => setInputDisable(false)}
-                            key={item}
-                            src={item}
-                            alt=""
-                          />
+                          <img key={item} src={item} alt="" />
                           <button
                             type="button"
                             onClick={() => handleRemoveImage(item)}
@@ -481,6 +480,7 @@ function EditPost({
               name="files2"
               className="hidden"
               accept="image/*,video/*"
+              disabled={disableInput}
               multiple
               onChange={(e) => {
                 selectFile(e);

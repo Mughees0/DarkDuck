@@ -9,7 +9,7 @@ const mimeType = "audio/webm";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import { useMotionValue } from "framer-motion";
-import { ChangeEventHandler, MouseEventHandler } from "react";
+import { ChangeEventHandler } from "react";
 import S3 from "aws-sdk/clients/s3";
 
 const s3 = new S3({
@@ -31,13 +31,13 @@ function NewPost({
   const [audioBlob, setAudioBlob] = useState<Blob>(null);
   const [mode, setMode] = useState("public");
   const [uploading, setUploading] = useState(false);
+  const [disableInput, setDisableInput] = useState(false);
   const [userText, setUserText] = useState<string>();
   const [stream, setStream] = useState(null);
   const [permission, setPermission] = useState(false);
   const mediaRecorder = useRef(null);
   const [recordingStatus, setRecordingStatus] = useState("inactive");
   const [audioChunks, setAudioChunks] = useState([]);
-  // const [currentFile, setCurrentFile] = useState(undefined);
   const [previewArray, setPreviewArray] = useState([]);
   const [postDisabled, setPostDisabled] = useState(true);
   const [files, setFiles] = useState<FileList | null>(null);
@@ -238,21 +238,38 @@ function NewPost({
   };
 
   function handleCancel() {
-    if (!upload) return;
-    upload.abort();
-    progress.set(0);
+    setNewPostModel(!newPostModel);
     setUpload(null);
     setUserText("");
     setAudio(null);
     setPreviewArray([]);
-    setNewPostModel(!newPostModel);
     setPostDisabled(true);
     setTime(0);
+    if (!upload) return;
+    upload.abort();
+    progress.set(0);
   }
   const options = ["public", "private"];
   const onOptionChangeHandler = (event) => {
     setMode(event.target.value);
   };
+
+  function handleRemoveImage(item) {
+    setDisableInput(true);
+    const index = previewArray.indexOf(item);
+    console.log("index:", index);
+
+    if (index > -1) {
+      const newArr = previewArray.filter(function (i) {
+        return i !== item;
+      });
+      setPreviewArray(newArr);
+    }
+    console.log("====================================");
+    console.log(files);
+    console.log("====================================");
+    setPostDisabled(false);
+  }
 
   return (
     <main className=" border border-gray-900 dark:border-gray-200 w-72 h-110 sm:w-[400px] rounded-lg">
@@ -284,18 +301,6 @@ function NewPost({
                 return <option key={index}>{option}</option>;
               })}
             </select>
-            {/* <select
-              className=" text-sm bg-gray-300 dark:bg-gray-700 border border-black dark:border-gray-200  rounded-md px-1 "
-              name="audience"
-              id="audience"
-            >
-              <option onSelect={() => setMode("public")} value="public">
-                Public
-              </option>
-              <option onSelect={() => setMode("private")} value="private">
-                Only Me
-              </option>
-            </select> */}
           </span>
         </div>
         <input
@@ -314,7 +319,10 @@ function NewPost({
         />
         <div className=" flex justify-center items-center ">
           <label
-            htmlFor="dropzone-file2"
+            onClick={() =>
+              disableInput ? setDisableInput(false) : disableInput
+            }
+            htmlFor="dropzone-file"
             className="flex flex-col items-center justify-center w-60 sm:w-[380px] h-[200px] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 label-scroll"
           >
             {previewArray.length !== 0 ? (
@@ -330,9 +338,6 @@ function NewPost({
                   swipeable={true}
                   emulateTouch={true}
                   dynamicHeight={true}
-                  // onChange={onChange}
-                  // onClickItem={onClickItem}
-                  // onClickThumb={onClickThumb}
                   showIndicators={false}
                   width={"200px"}
                 >
@@ -340,10 +345,30 @@ function NewPost({
                     if (item.includes("mp4")) {
                       const item2 = item?.substring(0, item.length - 3);
                       return (
-                        <video key={item2} src={item2} controls playsInline />
+                        <>
+                          <video key={item2} src={item2} controls playsInline />
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveImage(item)}
+                            className="top-0 left-0 right-0 text-yellow-700 bg-gray-200 bg-opacity-70 font-bold absolute "
+                          >
+                            Remove
+                          </button>
+                        </>
                       );
                     } else {
-                      return <img key={item} src={item} alt="" />;
+                      return (
+                        <>
+                          <img key={item} src={item} alt="" />
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveImage(item)}
+                            className="top-0 left-0 right-0 text-yellow-700 bg-gray-200 bg-opacity-70 font-bold absolute "
+                          >
+                            Remove
+                          </button>
+                        </>
+                      );
                     }
                   })}
                 </Carousel>
@@ -377,10 +402,8 @@ function NewPost({
               name="files"
               accept="image/*,video/*"
               multiple
+              disabled={disableInput}
               onChange={(e) => {
-                console.log("====================================");
-                console.log(e);
-                console.log("====================================");
                 selectFile(e);
                 handleFileChange(e);
                 if (e.target.value !== "") {
@@ -489,7 +512,7 @@ function NewPost({
         </div>
         <div className=" flex gap-2 pb-3 mt-3 rounded-lg  justify-center w-full">
           <button
-            onClick={handleCancel}
+            onClick={() => handleCancel()}
             type="button"
             className="bg-red-400 dark:bg-red-500 dark:text-gray-900 sm:px-14 px-6 rounded-md"
           >
