@@ -38,28 +38,31 @@ function EditModal({
   }
 
   return (
-    <div className="flex justify-between flex-col w-40 pb-3 my-4 px-2 text-base list-none bg-white rounded-xl divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
-      <div className=" flex justify-end bg-transparent">
+    <div className="flex justify-between flex-col w-40 pb-3 my-4 px-2 text-base list-none bg-white rounded-xl divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600 dark:text-gray-50">
+      <div className=" flex justify-end bg-transparent dark:bg-gray-700">
         <IoMdCloseCircle
-          className=" bg-transparent mt-3"
+          className=" bg-transparent mt-3 dark:bg-gray-700"
           onClick={() => setDeletePostModal(!deletePostModal)}
         />
       </div>
-      <div className=" bg-transparent">
-        <div className="flex gap-2 items-center bg-transparent">
-          <RiDeleteBin5Line />
-          <button onClick={handleDelete} className="hover:text-gray-500">
+      <div className=" bg-transparent dark:bg-gray-700">
+        <div className="flex gap-2 items-center bg-transparent dark:bg-gray-700">
+          <RiDeleteBin5Line className=" dark:bg-gray-700" />
+          <button
+            onClick={handleDelete}
+            className="hover:text-gray-500 dark:bg-gray-700"
+          >
             Delete Post
           </button>
         </div>
-        <div className="flex gap-2 items-center bg-transparent">
-          <RiEdit2Line className=" bg-transparent" />
+        <div className="flex gap-2 items-center bg-transparent dark:bg-gray-700">
+          <RiEdit2Line className=" bg-transparent dark:bg-gray-700" />
           <button
             onClick={() => {
               setEditPostModal(!editPostModal);
               setDeletePostModal(!deletePostModal);
             }}
-            className="hover:text-gray-500"
+            className="hover:text-gray-500 dark:bg-gray-700"
           >
             Edit Post
           </button>

@@ -5,6 +5,7 @@ import { BsMoon } from "@react-icons/all-files/bs/BsMoon";
 import { BiSun } from "@react-icons/all-files/bi/BiSun";
 import { FiMessageCircle } from "@react-icons/all-files/fi/FiMessageCircle";
 import { GoHome } from "@react-icons/all-files/go/GoHome";
+import { RiNotification4Line } from "@react-icons/all-files/ri/RiNotification4Line";
 
 import axios from "axios";
 import useColorMode from "@/hooks/useColorMode";
@@ -144,7 +145,7 @@ const Header = ({ setUpdatePosts, updatePosts }) => {
               >
                 <span className="sr-only">View notifications</span>
                 {/* <!-- Bell icon --> */}
-                <svg
+                {/* <svg
                   aria-hidden="true"
                   className="w-6 h-6 bg-gray-200 hover:bg-transparent"
                   fill="currentColor"
@@ -152,7 +153,8 @@ const Header = ({ setUpdatePosts, updatePosts }) => {
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path>
-                </svg>
+                </svg> */}
+                <RiNotification4Line className="w-6 h-6 bg-gray-200 hover:bg-transparent" />
               </button>
               {/* <!-- Dropdown menu --> */}
               <div

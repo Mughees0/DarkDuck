@@ -9,9 +9,9 @@ const mimeType = "audio/webm";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import { useMotionValue } from "framer-motion";
-import { ChangeEventHandler, MouseEventHandler } from "react";
+import { ChangeEventHandler } from "react";
 import S3 from "aws-sdk/clients/s3";
-import { log } from "console";
+import { IoMdCloseCircle } from "@react-icons/all-files/io/IoMdCloseCircle";
 
 const s3 = new S3({
   accessKeyId: process.env.ACCESSKEYID,
@@ -332,21 +332,20 @@ function EditPost({
   return (
     <main className=" border border-gray-900 dark:border-gray-200 w-72 h-110 sm:w-[400px] rounded-lg">
       <section className=" flex h-12 items-center rounded-t-lg justify-between px-4 border-b border-gray-400 dark:text-gray-100">
-        <h1 className="font-bold">Create Post</h1>
+        <h1 className="font-bold">Edit Post</h1>
         <button
           onClick={() => {
             setEditPostModel(!EditPostModel);
             getUserData();
           }}
-          className="  bg-gray-300 dark:bg-gray-600 px-2 rounded-full"
         >
-          X
+          <IoMdCloseCircle className=" text-lg" />
         </button>
       </section>
       <form className="dark:text-gray-100 rounded-lg" onSubmit={handleNewPost}>
         <div className=" flex items-center gap-2 pl-3 pt-3 ">
           <img
-            className="w-8 h-8 rounded-full"
+            className="w-8 h-8 rounded-full object-cover"
             src={profileImage ? profileImage : "/assets/avatar.png"}
             alt=""
           />
@@ -455,7 +454,7 @@ function EditPost({
               <>
                 <svg
                   aria-hidden="true"
-                  className="w-10 h-10  mb-3 text-gray-400"
+                  className="w-10 h-10  mb-3 text-gray-400 bg-gray-50 dark:bg-gray-700"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -468,10 +467,12 @@ function EditPost({
                     d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                   ></path>
                 </svg>
-                <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                  <span className="font-semibold">Click to upload</span>
+                <p className="mb-2 text-sm text-gray-500 bg-gray-50 dark:text-gray-400 dark:bg-gray-700">
+                  <span className="font-semibold bg-gray-50 dark:bg-gray-700">
+                    Click to upload
+                  </span>
                 </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
+                <p className="text-xs text-gray-500 bg-gray-50 dark:text-gray-400 dark:bg-gray-700">
                   PNG or JPG / MP4 or MOV
                 </p>
               </>
