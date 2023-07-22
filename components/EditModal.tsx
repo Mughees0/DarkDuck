@@ -4,6 +4,13 @@ import axios from "axios";
 import { IoMdCloseCircle } from "@react-icons/all-files/io/IoMdCloseCircle";
 import { RiDeleteBin5Line } from "@react-icons/all-files/ri/RiDeleteBin5Line";
 import { RiEdit2Line } from "@react-icons/all-files/ri/RiEdit2Line";
+import { S3 } from "aws-sdk";
+
+const s3 = new S3({
+  accessKeyId: process.env.ACCESSKEYID,
+  secretAccessKey: process.env.SECRETACCESSKEY,
+  region: process.env.REGION,
+});
 
 function EditModal({
   postId,
@@ -19,6 +26,23 @@ function EditModal({
       // const id = session?.user?.id;
       const req = await axios.delete(`/api/v1/posts/post/${id}`);
       const res = await req.data;
+      for (let i = 0; i < res?.userPosts.data?.length; i++) {
+        const params = {
+          Bucket: "darkduck",
+          Key: res?.userPosts?.data[i],
+        };
+
+        try {
+          await s3.headObject(params).promise();
+          try {
+            await s3.deleteObject(params).promise();
+          } catch (err) {
+            console.log("ERROR in file Deleting : " + JSON.stringify(err));
+          }
+        } catch (err) {
+          console.log("File not Found ERROR : " + err.code);
+        }
+      }
       setUpdatePosts(!updatePosts);
       setDeletePostModal(!deletePostModal);
     } catch (error) {

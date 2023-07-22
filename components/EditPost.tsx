@@ -41,6 +41,7 @@ function EditPost({
   const [recordingStatus, setRecordingStatus] = useState("inactive");
   const [audioChunks, setAudioChunks] = useState([]);
   const [previewArray, setPreviewArray] = useState([]);
+  const [previousArray, setPreviousArray] = useState([]);
   const [postDisabled, setPostDisabled] = useState(true);
   const [files, setFiles] = useState<FileList | null>(null);
   const [upload, setUpload] = useState<S3.ManagedUpload | null>(null);
@@ -78,6 +79,7 @@ function EditPost({
         setUserText(res?.userPost?.text);
         setAudio(res?.userPost?.audio);
         setMode(res?.userPost?.audience);
+        setPreviousArray(res?.userPost?.data);
         const imagesArray = [];
         for (let i = 0; i < res?.userPost?.data.length; i++) {
           imagesArray.push(
@@ -259,7 +261,30 @@ function EditPost({
         previewArray.splice(i, 1);
       }
     }
-    console.log(aName);
+
+    const toBeDeleted = previousArray.filter((x) => !previewArray.includes(x));
+
+    console.log("====================================");
+    console.log(toBeDeleted);
+    console.log("====================================");
+
+    for (let i = 0; i < toBeDeleted?.length; i++) {
+      const params = {
+        Bucket: "darkduck",
+        Key: toBeDeleted[i],
+      };
+
+      try {
+        await s3.headObject(params).promise();
+        try {
+          await s3.deleteObject(params).promise();
+        } catch (err) {
+          console.log("ERROR in file Deleting : " + JSON.stringify(err));
+        }
+      } catch (err) {
+        console.log("File not Found ERROR : " + err.code);
+      }
+    }
 
     try {
       const req = await axios.post(

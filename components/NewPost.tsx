@@ -264,11 +264,16 @@ function NewPost({
       const newArr = previewArray.filter(function (i) {
         return i !== item;
       });
+      let list = new DataTransfer();
+      for (let i = 0; i < files.length; i++) {
+        if (files[i] !== files[index]) {
+          list.items.add(files[i]);
+        }
+      }
+      let myFileList = list.files;
       setPreviewArray(newArr);
+      setFiles(myFileList);
     }
-    console.log("====================================");
-    console.log(files);
-    console.log("====================================");
     setPostDisabled(false);
   }
 
