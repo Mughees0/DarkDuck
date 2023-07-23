@@ -81,11 +81,13 @@ function LikeButton({ userId, postId, setUpdateLikes, updateLikes, post }) {
             handleLike(postId);
           }
         }}
-        className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white"
+        className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white bg-transparent"
       >
         <img
           src={liked ? "/assets/solid-red-duck.png" : "/assets/yellow-duck.png"}
-          className={liked ? " w-6 h-6" : " w-6 h-6"}
+          className={
+            liked ? " w-6 h-6 bg-transparent" : " w-6 h-6 bg-transparent"
+          }
         />
       </button>
     </>

@@ -30,7 +30,7 @@ function NewPost({
   const { data: session } = useSession();
   const [audio, setAudio] = useState(null);
   const [audioBlob, setAudioBlob] = useState<Blob>(null);
-  const [mode, setMode] = useState("public");
+  const [mode, setMode] = useState("Public");
   const [uploading, setUploading] = useState(false);
   const [disableInput, setDisableInput] = useState(false);
   const [userText, setUserText] = useState<string>();
@@ -139,6 +139,7 @@ function NewPost({
       const audioUrl = URL.createObjectURL(audioBlob);
       // setAudioBlob(mp3Blob);
       setAudio(audioUrl);
+      setPostDisabled(false);
       setAudioChunks([]);
     };
   };
@@ -250,7 +251,7 @@ function NewPost({
     upload.abort();
     progress.set(0);
   }
-  const options = ["public", "private"];
+  const options = ["Public", "Private"];
   const onOptionChangeHandler = (event) => {
     setMode(event.target.value);
   };
@@ -288,8 +289,13 @@ function NewPost({
       <form className="dark:text-gray-100 rounded-lg" onSubmit={handleNewPost}>
         <div className=" flex items-center gap-2 pl-3 pt-3 ">
           <img
-            className="w-8 h-8 rounded-full object-cover"
-            src={profileImage ? profileImage : "/assets/avatar.png"}
+            className="w-12 h-12 rounded-full object-cover"
+            src={
+              profileImage !=
+              "https://darkduck.s3.eu-north-1.amazonaws.com/undefined"
+                ? profileImage
+                : "/assets/avatar.png"
+            }
             alt=""
           />
           <span>
@@ -308,7 +314,7 @@ function NewPost({
         </div>
         <input
           value={userText}
-          className=" text-sm w-full h-12 px-2"
+          className=" text-sm w-full h-12 px-4"
           onChange={(e) => {
             setUserText(e.target.value);
             if (e.target.value !== "") {
@@ -326,7 +332,7 @@ function NewPost({
               disableInput ? setDisableInput(false) : disableInput
             }
             htmlFor="dropzone-file"
-            className="flex flex-col items-center justify-center w-60 sm:w-[370px] h-[200px] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-400 label-scroll"
+            className="flex flex-col items-center justify-center w-60 sm:w-[370px] h-[200px] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  dark:bg-gray-700 hover:border-gray-500 dark:border-gray-600 dark:hover:border-gray-400 label-scroll"
           >
             {previewArray.length !== 0 ? (
               <div className="max-h-44 my-4">
@@ -411,7 +417,7 @@ function NewPost({
               onChange={(e) => {
                 selectFile(e);
                 handleFileChange(e);
-                if (e.target.value !== "") {
+                if (e.target.value !== "" || previewArray.length > -1) {
                   setPostDisabled(false);
                 } else if (e.target.value === "") {
                   setPostDisabled(true);

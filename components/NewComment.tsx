@@ -56,31 +56,31 @@ function NewComment({
     }
     setUploading(false);
   };
+  console.log(userData?.profilePicture);
 
   return (
     <main
       className={
         reply && postId == postId
-          ? "flex flex-col justify-evenly py-2 gap-5"
+          ? "flex flex-col justify-evenly py-4 gap-5 bg-white"
           : "hidden"
       }
     >
       {" "}
-      <section className="flex flex-col justify-evenly gap-2">
-        <h1 className=" underline font-bold text-lg dark:text-white">
+      <section className="flex flex-col justify-evenly gap-2 bg-transparent">
+        <h1 className=" underline font-bold text-lg dark:text-white bg-transparent">
           Comments
         </h1>
         {post?.comments?.map((data, i) => {
           return data !== null ? (
-            <div
-              key={i}
-              className="flex gap-4 rounded-lg border border-gray-500 py-1 px-2"
-            >
+            <div key={i} className="flex gap-4 rounded-lg  py-1 px-2">
               <div className="flex items-center rounded-lg">
                 <img
                   src={
-                    process.env.REACT_APP_IMAGES_PATH +
-                    data?.userId?.profilePicture
+                    userData?.profilePicture != undefined
+                      ? process.env.REACT_APP_IMAGES_PATH +
+                        userData?.profilePicture
+                      : "/assets/avatar.png"
                   }
                   alt=""
                   className="w-10 h-10 rounded-full"
@@ -96,24 +96,27 @@ function NewComment({
           );
         })}
       </section>
-      <section className="border border-gray-500 rounded-lg overflow-hidden">
+      <section className="border border-gray-500 rounded-lg overflow-hidden shadow-slate-400 shadow-md">
         {/* <h1 className=" underline font-bold text-lg">Write a comment</h1> */}
         <form
           onSubmit={handleNewComment}
-          className=" bg-gray-300 flex justify-between px-5 py-2 rounded-lg"
+          className=" bg-slate-200 flex justify-between px-3 py-2 rounded-lg "
         >
-          <div className="flex gap-2 bg-transparent">
+          <div className="flex gap-2 bg-transparent ">
             <label htmlFor="comment" className="bg-transparent">
               <img
                 className="w-10 h-10 rounded-full bg-transparent"
                 src={
-                  process.env.REACT_APP_IMAGES_PATH + userData?.profilePicture
+                  userData?.profilePicture != undefined
+                    ? process.env.REACT_APP_IMAGES_PATH +
+                      userData?.profilePicture
+                    : "/assets/avatar.png"
                 }
               />
             </label>
             <input
               id="comment"
-              className="bg-transparent text-sm dark:text-white"
+              className="bg-transparent  text-sm dark:text-white"
               type="text"
               placeholder="Write a comment..."
               value={userComment}

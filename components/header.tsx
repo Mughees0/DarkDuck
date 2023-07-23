@@ -52,22 +52,22 @@ const Header = ({ setUpdatePosts, updatePosts }) => {
   return (
     <>
       <header>
-        <nav className="bg-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800 dark:border dark:border-l-0 dark:border-t-0 dark:border-b-2 dark:border-r-0 dark:border-red-700">
-          <div className="flex bg-gray-200 dark:bg-gray-800 flex-wrap justify-between items-center">
-            <div className="flex bg-gray-200 dark:bg-gray-800  justify-start items-center">
+        <nav className="bg-white  bg-opacity-80 px-4 lg:px-6 py-2.5 dark:bg-gray-800 dark:border dark:border-l-0 dark:border-t-0 dark:border-b-2 dark:border-r-0 dark:border-red-700">
+          <div className="flex bg-transparent dark:bg-gray-800 flex-wrap justify-between items-center">
+            <div className="flex bg-transparent dark:bg-gray-800  justify-start items-center">
               {/* Icon/logo */}
-              <a href="/" className="flex mr-4 bg-gray-200 dark:bg-gray-800">
+              <a href="/" className="flex mr-4 bg-transparent dark:bg-gray-800">
                 <img
                   src={
                     colorMode === "light"
                       ? "/assets/logo.png"
                       : "/assets/solid-red-duck.png"
                   }
-                  className="mr-3 h-8 w-8 bg-gray-200  dark:bg-gray-800"
+                  className="mr-3 h-8 w-8 bg-transparent  dark:bg-gray-800"
                 />
               </a>
             </div>
-            <div className="flex items-center bg-gray-200 dark:bg-gray-800 lg:order-2">
+            <div className="flex items-center bg-transparent dark:bg-gray-800 lg:order-2">
               {/* <button
                 onClick={() => setAudioRecordingModel(!audioRecordingModel)}
                 type="button"
@@ -128,14 +128,14 @@ const Header = ({ setUpdatePosts, updatePosts }) => {
                 type="button"
                 className="p-2 text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white mr-1"
               >
-                <GoHome className="h-6 w-6 bg-gray-200 hover:bg-transparent" />
+                <GoHome className="h-6 w-6 bg-transparent hover:bg-transparent" />
               </a>
               {/* <!-- Messages --> */}
               <button
                 type="button"
                 className="p-2 text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white mr-1"
               >
-                <FiMessageCircle className="h-6 w-6 bg-gray-200 hover:bg-transparent" />
+                <FiMessageCircle className="h-6 w-6 bg-transparent hover:bg-transparent" />
               </button>
               {/* <!-- Notifications --> */}
               <button
@@ -147,18 +147,18 @@ const Header = ({ setUpdatePosts, updatePosts }) => {
                 {/* <!-- Bell icon --> */}
                 {/* <svg
                   aria-hidden="true"
-                  className="w-6 h-6 bg-gray-200 hover:bg-transparent"
+                  className="w-6 h-6 bg-transparent hover:bg-transparent"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path>
                 </svg> */}
-                <RiNotification4Line className="w-6 h-6 bg-gray-200 hover:bg-transparent" />
+                <RiNotification4Line className="w-6 h-6 bg-transparent hover:bg-transparent" />
               </button>
               {/* <!-- Dropdown menu --> */}
               <div
-                className="hidden overflow-hidden z-50 my-4 max-w-sm text-base list-none bg-white rounded divide-y divide-gray-100 shadow-lg dark:divide-gray-600 dark:bg-gray-700"
+                className="hidden overflow-hidden z-50 my-4 max-w-sm text-base list-none bg-gray-50 rounded divide-y divide-gray-100 shadow-lg dark:divide-gray-600 dark:bg-gray-700"
                 id="notification-dropdown"
               >
                 <div className="block py-2 px-4 text-base font-medium text-center text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -295,7 +295,7 @@ const Header = ({ setUpdatePosts, updatePosts }) => {
                   <div
                     className={
                       toggleUserModal
-                        ? " absolute z-50 my-4 w-56 h-50 right-4 top-8 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
+                        ? " absolute z-50 my-4 w-56 h-50 right-4 top-8 text-base list-none bg-gray-50 rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
                         : "hidden"
                     }
                     id="dropdown"
@@ -346,13 +346,13 @@ const Header = ({ setUpdatePosts, updatePosts }) => {
               )}
               {/* <!-- Toggle --> */}
               <button
-                className=" text-white bg-blue-400 dark:bg-yellow-800 ml-3 dark:text-white"
+                className=" text-white dark:bg-yellow-800 ml-3 dark:text-white"
                 onClick={() =>
                   setColorMode(colorMode === "light" ? "dark" : "light")
                 }
               >
                 {colorMode === "light" ? (
-                  <BsMoon className="text-black bg-gray-200" />
+                  <BsMoon className="text-black bg-transparent" />
                 ) : (
                   <BiSun className="dark:bg-gray-800" />
                 )}

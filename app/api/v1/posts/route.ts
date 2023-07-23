@@ -1,14 +1,8 @@
-import type { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "../../../../lib/mongodb/dbConnect";
 import { NextRequest, NextResponse } from "next/server";
 import Post from "../../../../models/Post";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 export const dynamic = "force-dynamic";
-
-interface ResponseData {
-  error?: string;
-  msg?: string;
-}
 
 export async function GET(request: NextRequest, params: Params) {
   await dbConnect();
@@ -25,17 +19,14 @@ export async function GET(request: NextRequest, params: Params) {
       const num = totalCount / perPage + 1;
       pageCount = Math.trunc(num);
       userPosts = await Post.find()
-        .sort({ createdAt: "desc" })
+        .sort({ _id: -1 })
         .skip(startIndex)
         .limit(endIndex)
         .populate("userId")
         .exec();
     } else {
       page = "1";
-      userPosts = await Post.find()
-        .sort({ createdAt: "desc" })
-        .populate("userId")
-        .exec();
+      userPosts = await Post.find().sort({ _id: -1 }).populate("userId").exec();
     }
 
     return NextResponse.json(

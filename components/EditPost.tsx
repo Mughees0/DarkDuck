@@ -32,7 +32,7 @@ function EditPost({
   const { data: session } = useSession();
   const [audio, setAudio] = useState(null);
   const [audioBlob, setAudioBlob] = useState<Blob>(null);
-  const [mode, setMode] = useState("public");
+  const [mode, setMode] = useState("Public");
   const [uploading, setUploading] = useState(false);
   const [userText, setUserText] = useState("");
   const [stream, setStream] = useState(null);
@@ -61,7 +61,7 @@ function EditPost({
     setUpload(null);
   }, [files]);
 
-  const options = ["public", "private"];
+  const options = ["Public", "Private"];
   const onOptionChangeHandler = (event) => {
     setMode(event.target.value);
   };
@@ -370,8 +370,13 @@ function EditPost({
       <form className="dark:text-gray-100 rounded-lg" onSubmit={handleNewPost}>
         <div className=" flex items-center gap-2 pl-3 pt-3 ">
           <img
-            className="w-8 h-8 rounded-full object-cover"
-            src={profileImage ? profileImage : "/assets/avatar.png"}
+            className="w-12 h-12 rounded-full object-cover"
+            src={
+              profileImage !=
+              "https://darkduck.s3.eu-north-1.amazonaws.com/undefined"
+                ? profileImage
+                : "/assets/avatar.png"
+            }
             alt=""
           />
           <span>
@@ -390,7 +395,7 @@ function EditPost({
         </div>
         <input
           value={userText}
-          className=" text-sm w-full h-12 px-2"
+          className=" text-sm w-full h-12 px-4"
           onChange={(e) => {
             setUserText(e.target.value);
             if (e.target.value !== "") {
@@ -408,7 +413,7 @@ function EditPost({
               disableInput ? setDisableInput(false) : disableInput
             }
             htmlFor="dropzone-file2"
-            className="flex flex-col items-center justify-center w-60 sm:w-[380px] h-[200px] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 label-scroll"
+            className="flex flex-col items-center justify-center w-60 sm:w-[370px] h-[200px] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  dark:bg-gray-700 hover:border-gray-500 dark:border-gray-600 dark:hover:border-gray-400 label-scroll"
           >
             {previewArray?.length !== 0 ? (
               <div className="max-h-44 my-4">
@@ -492,12 +497,12 @@ function EditPost({
                     d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                   ></path>
                 </svg>
-                <p className="mb-2 text-sm text-gray-500 bg-gray-50 dark:text-gray-400 dark:bg-gray-700">
+                <p className="mb-2 text-sm text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700">
                   <span className="font-semibold bg-gray-50 dark:bg-gray-700">
                     Click to upload
                   </span>
                 </p>
-                <p className="text-xs text-gray-500 bg-gray-50 dark:text-gray-400 dark:bg-gray-700">
+                <p className="text-xs text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700">
                   PNG or JPG / MP4 or MOV
                 </p>
               </>

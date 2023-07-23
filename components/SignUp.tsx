@@ -164,7 +164,7 @@ const SignUp = () => {
       }
 
       if (user.countryCode && !Validation.countryCode(user.countryCode)) {
-        error.countryCode = "Should be '+' and 3 numbers";
+        error.countryCode = "Should be '+' and 4 numbers";
         isValid = false;
       }
 

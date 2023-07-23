@@ -337,7 +337,7 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                         <li key={post?._id}>
                           <div className="col-span-2 m-auto h-full max-w-3xl space-y-6 overflow-hidden overflow-y-auto mt-3 lg:pt-6 ">
                             <div className="flex rounded-lg border-2 overflow-hidden border-black bg-white dark:border-gray-700 dark:bg-gray-800 flex-col shadow ">
-                              <div className="flex h-full flex-col justify-center gap-3 p-6 pb-0">
+                              <div className="flex h-full flex-col justify-center gap-3 px-6 pt-4 pb-0">
                                 <div className="flex items-center space-x-4">
                                   <div className="shrink-0">
                                     <img
@@ -348,18 +348,18 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                                             post?.userId?.profilePicture
                                           : "/assets/avatar.png"
                                       }
-                                      className="w-12 h-12 object-cover rounded-full"
+                                      className="w-16 h-16 object-cover rounded-full"
                                     />
                                   </div>
                                   <div className="min-w-0  flex-1 items-start flex flex-col gap-1 h-20  ">
-                                    <strong className=" justify-self-start  px-2 bg-gray-900 text-gray-50 rounded dark:bg-white dark:text-black ">
+                                    <p className="truncate text-sm mt-2 font-semibold text-gray-900 dark:text-white">
+                                      {post?.userId?.username}
+                                    </p>
+                                    <strong className=" justify-self-start px-2 bg-gray-900 text-gray-50 rounded dark:bg-white dark:text-black text-sm">
                                       {post?.audience === "public"
                                         ? "Public"
                                         : "Private"}
                                     </strong>
-                                    <p className="truncate text-sm  font-semibold text-gray-900 dark:text-white">
-                                      {post?.userId?.username}
-                                    </p>
                                     <p className="truncate text-sm font-normal text-gray-500 dark:text-gray-400">
                                       {post?.createdAt
                                         ? new Date(
@@ -398,7 +398,7 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                                   <div className="flex dark:text-gray-200 flex-col gap-4">
                                     {post?.text ? <p>{post?.text}</p> : <></>}
                                     {post?.data?.length !== 0 ? (
-                                      <>
+                                      <div className="flex flex-col items-center object-contain bg-stone-600 rounded-xl">
                                         <Carousel
                                           showArrows={true}
                                           showThumbs={false}
@@ -413,7 +413,7 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                                           // onClickItem={onClickItem}
                                           // onClickThumb={onClickThumb}
                                           showIndicators={false}
-                                          width={"300px"}
+                                          width={"400px"}
                                         >
                                           {post?.data?.map((item) =>
                                             item.includes("mp4") ||
@@ -421,8 +421,6 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                                             item.includes("avi") ? (
                                               <video
                                                 key={item}
-                                                width="300"
-                                                height="auto"
                                                 playsInline
                                                 muted
                                                 autoPlay
@@ -453,7 +451,7 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                                             )
                                           )}
                                         </Carousel>
-                                      </>
+                                      </div>
                                     ) : (
                                       <></>
                                     )}

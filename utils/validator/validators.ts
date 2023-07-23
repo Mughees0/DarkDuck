@@ -98,7 +98,7 @@ export const password = (value) => {
 
 export const countryCode = (value) => {
   // export const re = /^[a-zA-Z0-9!@#$%^&]+$/;
-  const re = /^(\+?\d{1,3}|\d{1,4})$/;
+  const re = /^\+(\d{1}\s)?(\d{1,3})$/;
   return !empty(value) && re.test(value);
 };
 
