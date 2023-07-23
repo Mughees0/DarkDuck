@@ -18,8 +18,9 @@ function NewComment({
   const { data: session } = useSession();
   const [userComment, setUserComment] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [commentDisabled, setCommentDisable] = useState(true);
 
-  const handleNewComment = async (e: FormEvent<HTMLFormElement>) => {
+  const uploadNewComment = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setUploading(true);
     try {
@@ -56,7 +57,12 @@ function NewComment({
     }
     setUploading(false);
   };
-  console.log(userData?.profilePicture);
+  function handleComment(event: React.ChangeEvent<HTMLInputElement>) {
+    setUserComment(event.target.value);
+    if (userComment !== "") {
+      setCommentDisable(false);
+    }
+  }
 
   return (
     <main
@@ -99,7 +105,7 @@ function NewComment({
       <section className="border border-gray-500 rounded-lg overflow-hidden shadow-slate-400 shadow-md">
         {/* <h1 className=" underline font-bold text-lg">Write a comment</h1> */}
         <form
-          onSubmit={handleNewComment}
+          onSubmit={uploadNewComment}
           className=" bg-slate-200 flex justify-between px-3 py-2 rounded-lg "
         >
           <div className="flex gap-2 bg-transparent ">
@@ -120,10 +126,10 @@ function NewComment({
               type="text"
               placeholder="Write a comment..."
               value={userComment}
-              onChange={(e) => setUserComment(e.target.value)}
+              onChange={handleComment}
             />
           </div>
-          <button type="submit">
+          <button disabled={commentDisabled} type="submit">
             <RiSendPlaneLine className="bg-transparent dark:text-white" />
           </button>
         </form>
