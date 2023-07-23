@@ -103,9 +103,6 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
         setNewPostModel(!newPostModel);
       }
       const res = await req.data;
-      console.log("====================================");
-      console.log(res);
-      console.log("====================================");
     } catch (err) {
       if (err.response.status === 400) {
         console.log(

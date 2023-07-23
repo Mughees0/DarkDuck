@@ -264,10 +264,6 @@ function EditPost({
 
     const toBeDeleted = previousArray.filter((x) => !previewArray.includes(x));
 
-    console.log("====================================");
-    console.log(toBeDeleted);
-    console.log("====================================");
-
     for (let i = 0; i < toBeDeleted?.length; i++) {
       const params = {
         Bucket: "darkduck",

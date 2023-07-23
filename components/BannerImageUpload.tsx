@@ -62,10 +62,7 @@ const ImageUploader = ({
         Key: file.name,
         Body: file,
       };
-      console.log("====================================");
-      console.log(file.name);
       imgName = file.name;
-      console.log("====================================");
       try {
         const upload = s3.upload(params);
         setUpload(upload);

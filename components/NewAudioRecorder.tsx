@@ -44,9 +44,6 @@ export const AudioRecorder = ({
         setIsRecording(true);
         setIsLoading(false);
       } catch (error) {
-        console.log("====================================");
-        console.log(error);
-        console.log("====================================");
         setIsLoading(false);
       }
     }
