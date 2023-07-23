@@ -138,30 +138,6 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
     return (
       <>
         <main className="bg-gray-50">
-          {/* <section className="bg-cover bg-center bg-bgCover text-black text-center flex flex-col items-center">
-            <div className="bg-transparent dark:bg-transparent pt-5 md:pt-10 font-bold">
-              <img
-                height={100}
-                width={300}
-                src="/assets/name.png"
-                className=" w-36 h-10 md:w-96 md:h-24 bg-transparent dark:bg-transparent "
-                alt="DarkDuck Logos"
-              />
-            </div>
-
-            <p className="bg-transparent dark:bg-transparent pt-2 text-sm lg:text-2xl w-3/4 lg:w-2/4 pb-3">
-              "Experience the future of comprehensive digital interaction with
-              DarkDuck, an all-in-one solution for housing, supply chain
-              management, musical collaboration, and social connectivity –
-              transforming your online world seamlessly."
-            </p>
-            <div className=" text-black rounded items-center p-2 m-5 bg-gray-200 dark:bg-gray-400  hover:bg-gray-400 hover:text-lg dark:hover:bg-gray-600 px-3">
-              <button className="flex items-center gap-2 bg-transparent dark:bg-transparent">
-                View Posts
-                <BsArrowRight className=" bg-transparent dark:bg-transparent" />
-              </button>
-            </div>
-          </section> */}
           <div className="flex flex-col items-center lg:flex-row lg:items-start ">
             <section className="lg:w-2/3 pb-4 md:px-6 md:w-full">
               <h1 className="text-3xl font-serif font-bold col-span-2 m-auto max-w-3xl space-y-6 overflow-y-auto mt-3 lg:pt-6  dark:text-white">
@@ -315,7 +291,7 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                                     {post?.data?.length !== 0 ? (
                                       <div className=" flex flex-col items-center object-contain bg-stone-600 dark:bg-stone-600 rounded-xl">
                                         <Carousel
-                                          className="sm:w-[500px]"
+                                          className="w-[300px] sm:w-[500px]"
                                           showArrows={true}
                                           showThumbs={false}
                                           showStatus={false}
@@ -335,7 +311,7 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                                               <video
                                                 key={item}
                                                 height={"auto"}
-                                                width={"sm:w-[500px]"}
+                                                width={"w-[300px] sm:w-[500px]"}
                                                 playsInline
                                                 muted
                                                 autoPlay

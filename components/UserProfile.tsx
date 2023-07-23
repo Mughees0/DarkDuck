@@ -438,10 +438,27 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                                     ) : (
                                       <></>
                                     )}
+                                    {post?.audio ? (
+                                      <audio
+                                        controls
+                                        className=" bg-transparent dark:bg-transparent"
+                                      >
+                                        <source
+                                          src={
+                                            process.env.REACT_APP_AUDIO_PATH +
+                                            post?.audio
+                                          }
+                                          type="audio/mp3"
+                                        />
+                                      </audio>
+                                    ) : (
+                                      <></>
+                                    )}
+
                                     {post?.data?.length !== 0 ? (
-                                      <div className="flex flex-col items-center object-contain bg-stone-600 dark:bg-stone-600 rounded-xl">
+                                      <div className=" flex flex-col items-center object-contain bg-stone-600 dark:bg-stone-600 rounded-xl">
                                         <Carousel
-                                          className="sm:w-[400px]"
+                                          className="w-[300px] sm:w-[500px]"
                                           showArrows={true}
                                           showThumbs={false}
                                           showStatus={false}
@@ -451,11 +468,8 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                                           swipeable={true}
                                           emulateTouch={true}
                                           dynamicHeight={true}
-                                          // onChange={onChange}
-                                          // onClickItem={onClickItem}
-                                          // onClickThumb={onClickThumb}
                                           showIndicators={false}
-                                          // width={"400px"}
+                                          // width={"300px"}
                                         >
                                           {post?.data?.map((item) =>
                                             item.includes("mp4") ||
@@ -463,12 +477,13 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                                             item.includes("avi") ? (
                                               <video
                                                 key={item}
+                                                height={"auto"}
+                                                width={"w-[300px] sm:w-[500px]"}
                                                 playsInline
                                                 muted
                                                 autoPlay
                                                 controls
-                                                height={"auto"}
-                                                width={"sm:w-[500px]"}
+                                                preload="auto"
                                               >
                                                 <source
                                                   src={
@@ -482,8 +497,6 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                                               </video>
                                             ) : (
                                               <img
-                                                width={300}
-                                                height={300}
                                                 key={item}
                                                 src={
                                                   process.env
@@ -496,19 +509,6 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                                           )}
                                         </Carousel>
                                       </div>
-                                    ) : (
-                                      <></>
-                                    )}
-                                    {post?.audio ? (
-                                      <audio ref={audioRef} controls>
-                                        <source
-                                          src={
-                                            process.env.REACT_APP_AUDIO_PATH +
-                                            post?.audio
-                                          }
-                                          type="audio/mp3"
-                                        />
-                                      </audio>
                                     ) : (
                                       <></>
                                     )}

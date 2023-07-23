@@ -6,26 +6,21 @@ import { BiSun } from "@react-icons/all-files/bi/BiSun";
 import { FiMessageCircle } from "@react-icons/all-files/fi/FiMessageCircle";
 import { GoHome } from "@react-icons/all-files/go/GoHome";
 import { RiNotification4Line } from "@react-icons/all-files/ri/RiNotification4Line";
-
 import axios from "axios";
 import useColorMode from "@/hooks/useColorMode";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { UserDataResponse } from "@/types";
-import AudioRecorder from "./NewAudioRecorder";
-import NewPost from "./NewPost";
-import { set } from "mongoose";
 
 const Header = ({ setUpdatePosts, updatePosts }) => {
   const [colorMode, setColorMode] = useColorMode();
-  const [audioRecordingModel, setAudioRecordingModel] = useState(false);
+  // const [audioRecordingModel, setAudioRecordingModel] = useState(false);
   const [userData, setUserData] = useState<UserDataResponse>();
   const [toggleUserModal, setToggleUserModal] = useState(false);
   const { data: session } = useSession();
 
   const fetchUserData = async (id: string) => {
     try {
-      // const id = session?.user?.id;
       const req = await axios.get(`/api/v1/users/user/${id}`);
       const res = await req.data;
       setUserData(res);
@@ -68,60 +63,6 @@ const Header = ({ setUpdatePosts, updatePosts }) => {
               </a>
             </div>
             <div className="flex items-center bg-transparent dark:bg-gray-800 lg:order-2">
-              {/* <button
-                onClick={() => setAudioRecordingModel(!audioRecordingModel)}
-                type="button"
-                className="sm:hidden items-center justify-center text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-xs p-2 mr-2 dark:bg-gray-600 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
-              >
-                <svg
-                  aria-hidden="true"
-                  className=" w-5 h-5 text-gray-200 dark:bg-transparent bg-gray-700"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
-              </button> */}
-              {/* Big Screen New Post Button */}
-              {/* <button
-                onClick={() => setAudioRecordingModel(!audioRecordingModel)}
-                type="button"
-                className=" hidden sm:inline-flex items-center justify-center text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-xs px-3 py-1.5 mr-2 dark:bg-gray-600 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
-              >
-                <svg
-                  aria-hidden="true"
-                  className="mr-1 -ml-1 w-5 h-5 text-white bg-gray-800"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
-                New Post
-              </button>
-              <div
-                className={
-                  audioRecordingModel
-                    ? "h-screen w-screen absolute flex justify-center items-center bg-opacity-25 dark:bg-opacity-25 bg-gray-400 top-0 left-0 right-0 bottom-0 "
-                    : "hidden"
-                }
-              >
-                <NewPost
-                  setNewPostModel={setAudioRecordingModel}
-                  newPostModel={audioRecordingModel}
-                  setUpdatePosts={setUpdatePosts}
-                  updatePosts={updatePosts}
-                />
-              </div> */}
               {/* <!-- Home --> */}
               <a
                 href="/"
@@ -145,15 +86,6 @@ const Header = ({ setUpdatePosts, updatePosts }) => {
               >
                 <span className="sr-only">View notifications</span>
                 {/* <!-- Bell icon --> */}
-                {/* <svg
-                  aria-hidden="true"
-                  className="w-6 h-6 bg-transparent hover:bg-transparent"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path>
-                </svg> */}
                 <RiNotification4Line className="w-6 h-6 bg-transparent hover:bg-transparent" />
               </button>
               {/* <!-- Dropdown menu --> */}
@@ -227,11 +159,11 @@ const Header = ({ setUpdatePosts, updatePosts }) => {
                       <div className="text-gray-500 font-normal text-sm mb-1.5 dark:text-gray-400">
                         <span className="font-semibold text-gray-900 dark:text-white">
                           Jese leos
-                        </span>{" "}
-                        and{" "}
+                        </span>
+                        and
                         <span className="font-medium text-gray-900 dark:text-white">
                           5 others
-                        </span>{" "}
+                        </span>
                         started following you.
                       </div>
                       <div className="text-xs font-medium text-primary-700 dark:text-primary-400">
@@ -320,14 +252,6 @@ const Header = ({ setUpdatePosts, updatePosts }) => {
                           My profile
                         </Link>
                       </li>
-                      {/* <li>
-                        <a
-                          href="#"
-                          className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white"
-                        >
-                          Account settings
-                        </a>
-                      </li> */}
                       <li className="hover:text-blue-700  hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white dark:text-gray-400">
                         <button
                           className="block py-2 px-4 text-sm bg-transparent  dark:bg-transparent"
