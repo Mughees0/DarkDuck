@@ -355,20 +355,20 @@ function EditPost({
   }
 
   return (
-    <main className=" border border-gray-900 dark:border-gray-200 w-72 h-110 sm:w-[400px] rounded-lg">
-      <section className=" flex h-12 items-center rounded-t-lg justify-between px-4 border-b border-gray-400 dark:text-gray-100">
-        <h1 className="font-bold">Edit Post</h1>
+    <main className=" bg-white dark:bg-gray-800 w-72 h-110 sm:w-[400px] rounded-lg">
+      <section className=" flex h-12 items-center rounded-t-lg justify-between px-4 border-b border-gray-400 dark:text-gray-100 dark:bg-gray-800">
+        <h1 className="font-bold dark:bg-gray-800">Edit Post</h1>
         <button
           onClick={() => {
             setEditPostModel(!EditPostModel);
             getUserData();
           }}
         >
-          <IoMdCloseCircle className=" text-lg" />
+          <IoMdCloseCircle className=" text-lg dark:bg-gray-800" />
         </button>
       </section>
       <form className="dark:text-gray-100 rounded-lg" onSubmit={handleNewPost}>
-        <div className=" flex items-center gap-2 pl-3 pt-3 ">
+        <div className=" flex items-center gap-2 pl-3 pt-3 dark:bg-gray-900">
           <img
             className="w-12 h-12 rounded-full object-cover"
             src={
@@ -379,8 +379,10 @@ function EditPost({
             }
             alt=""
           />
-          <span>
-            <h2 className=" font-semibold text-sm"> {username}</h2>
+          <span className="dark:bg-transparent">
+            <h2 className=" font-semibold text-sm dark:bg-gray-900">
+              {username}
+            </h2>
             <select
               className=" text-sm bg-gray-300 dark:bg-gray-700 border border-black dark:border-gray-200  rounded-md px-1 "
               name="audience"
@@ -407,7 +409,7 @@ function EditPost({
           placeholder={" What's on your mind, " + username + "?"}
           type="text"
         />
-        <div className=" flex justify-center items-start">
+        <div className=" flex justify-center items-center dark:bg-gray-900">
           <label
             onClick={() =>
               disableInput ? setDisableInput(false) : disableInput
@@ -527,16 +529,19 @@ function EditPost({
             />
           </label>
         </div>
-        <div className=" flex justify-center border-b pb-2 border-gray-400">
-          <article className="bg-transparent flex flex-col gap-3 w-[300px] items-center">
-            <div className="bg-transparent flex flex-col gap-3 items-center ">
-              <div className="space-y-3 sm:p-7 sm:m-2 bg-transparent py-2">
-                <p id="counter" className=" bg-transparent text-3x text-center">
+        <div className=" flex justify-center border-b pb-2 border-gray-400 dark:bg-gray-900">
+          <article className="bg-transparent flex flex-col gap-3 w-[300px] items-center dark:bg-transparent">
+            <div className="bg-transparent flex flex-col gap-3 items-center dark:bg-transparent">
+              <div className="space-y-3 sm:p-7 sm:m-2 bg-transparent py-2 dark:bg-transparent">
+                <p
+                  id="counter"
+                  className=" bg-transparent text-3x text-center dark:bg-transparent"
+                >
                   {hours}:{minutes.toString().padStart(2, "0")}:
                   {seconds.toString().padStart(2, "0")}:
                   {milliseconds.toString().padStart(2, "0")}
                 </p>
-                <div className=" bg-transparent flex justify-center flex-col   items-center">
+                <div className=" bg-transparent flex justify-center flex-col items-center dark:bg-transparent">
                   {!permission ? (
                     <button
                       type="button"
@@ -625,7 +630,7 @@ function EditPost({
             </div>
           </article>
         </div>
-        <div className=" flex gap-2 pb-3 mt-3 rounded-lg  justify-center w-full">
+        <div className=" flex gap-2 pb-3 pt-3 rounded-b-lg  justify-center w-full dark:bg-gray-800">
           <button
             onClick={handleCancel}
             type="button"

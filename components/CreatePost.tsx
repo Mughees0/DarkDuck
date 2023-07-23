@@ -8,7 +8,7 @@ function CreatePost({ newPostModel, setNewPostModel, profileImage, username }) {
 
   return (
     <>
-      <section className=" flex items-center gap-3 px-5 pt-5 sm:pt-1 border-b pb-5 border-gray-400 bg-white">
+      <section className=" flex items-center gap-3 px-5 pt-5 sm:pt-1 border-b pb-5 border-gray-400 bg-white dark:bg-gray-800">
         <img
           className=" rounded-full w-16 h-16 object-cover"
           src={
@@ -21,25 +21,25 @@ function CreatePost({ newPostModel, setNewPostModel, profileImage, username }) {
         />
         <span
           onClick={handleModel}
-          className=" text-sm text-white flex justify-center items-center bg-slate-600 w-[90%] h-12  border border-white rounded-full"
+          className=" text-sm text-white flex justify-center items-center bg-slate-600 w-[90%] h-12  border border-white rounded-full dark:bg-slate-900"
         >
           What's on your mind, {username}?
         </span>
       </section>
-      <section className="flex dark:text-white justify-around py-3 bg-gray-50">
+      <section className="flex dark:text-white justify-around py-3 bg-gray-50 dark:bg-slate-900">
         <button
           onClick={handleModel}
-          className="flex items-center gap-2 text-sm"
+          className="flex items-center gap-2 text-sm dark:bg-transparent"
         >
-          <AiFillAudio className=" text-red-400 text-lg" />
+          <AiFillAudio className=" text-red-400 text-lg dark:bg-transparent" />
           Audio
         </button>
 
         <button
           onClick={handleModel}
-          className="flex items-center gap-2 text-sm"
+          className="flex items-center gap-2 text-sm dark:bg-transparent"
         >
-          <FcAddImage className="text-xl" />
+          <FcAddImage className="text-xl dark:bg-transparent" />
           Image/Video
         </button>
       </section>

@@ -39,7 +39,11 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
   const [postId, setPostId] = useState("");
   const [editPostModel, setEditPostModel] = useState(false);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [active, setActive] = useState<string>("-1");
   const audioRef = useRef<HTMLAudioElement>();
+
+  const toggleHandler = (id: string) => () =>
+    setActive((active) => (active === id ? "-1" : id));
 
   const updateAudio = (src) => {
     // setAudio(source);
@@ -280,7 +284,7 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                 />
               </div>
               <ul>
-                <div className="col-span-2 m-auto h-full max-w-3xl overflow-hidden overflow-y-auto mt-3 lg:pt-6 border-2 rounded-lg border-gray-600">
+                <div className="col-span-2 m-auto h-full max-w-3xl overflow-hidden dark:border-1 overflow-y-auto mt-3 lg:pt-6 shadow-slate-300 drop-shadow-md bg-white dark:bg-gray-800 dark:drop-shadow-md dark:shadow-slate-300 rounded-lg">
                   <CreatePost
                     username={userData?.username}
                     profileImage={
@@ -335,11 +339,11 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                     posts?.map((post) => {
                       return (
                         <li key={post?._id}>
-                          <div className="col-span-2 m-auto h-full max-w-3xl space-y-6 overflow-hidden overflow-y-auto mt-3 lg:pt-6 ">
-                            <div className="flex rounded-lg border-2 overflow-hidden border-black bg-white dark:border-gray-700 dark:bg-gray-800 flex-col shadow ">
-                              <div className="flex h-full flex-col justify-center gap-3 px-6 pt-4 pb-0">
-                                <div className="flex items-center space-x-4">
-                                  <div className="shrink-0">
+                          <div className="col-span-2 m-auto h-full max-w-3xl space-y-6 overflow-hidden overflow-y-auto mt-3 lg:mt-6 shadow-slate-300 drop-shadow-md rounded-b-lg dark:shadow-slate-300">
+                            <div className="flex rounded-lg overflow-hidden bg-white dark:border-gray-700 dark:bg-gray-800 flex-col">
+                              <div className="flex h-full flex-col justify-center gap-3 px-6 pt-4  pb-0  bg-white dark:bg-gray-800">
+                                <div className="flex items-center space-x-4 bg-transparent dark:bg-transparent">
+                                  <div className="shrink-0 bg-transparent">
                                     <img
                                       alt="User Profile Picture"
                                       src={
@@ -348,11 +352,11 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                                             post?.userId?.profilePicture
                                           : "/assets/avatar.png"
                                       }
-                                      className="w-16 h-16 object-cover rounded-full"
+                                      className="w-16 h-16 object-cover rounded-full bg-transparent dark:bg-transparent"
                                     />
                                   </div>
-                                  <div className="min-w-0  flex-1 items-start flex flex-col gap-1 h-20  ">
-                                    <p className="truncate text-sm mt-2 font-semibold text-gray-900 dark:text-white">
+                                  <div className="min-w-0  flex-1 items-start flex flex-col gap-1 h-20 bg-transparent dark:bg-transparent">
+                                    <p className="truncate text-sm mt-2 font-semibold text-gray-900 dark:text-white bg-transparent dark:bg-transparent">
                                       {post?.userId?.username}
                                     </p>
                                     <strong className=" justify-self-start px-2 bg-gray-900 text-gray-50 rounded dark:bg-white dark:text-black text-sm">
@@ -360,7 +364,7 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                                         ? "Public"
                                         : "Private"}
                                     </strong>
-                                    <p className="truncate text-sm font-normal text-gray-500 dark:text-gray-400">
+                                    <p className="truncate text-sm font-normal text-gray-500 dark:text-gray-400 bg-transparent dark:bg-transparent">
                                       {post?.createdAt
                                         ? new Date(
                                             post.createdAt
@@ -395,11 +399,49 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                                   </a>
                                 </div>
                                 <div className="space-y-4">
-                                  <div className="flex dark:text-gray-200 flex-col gap-4">
-                                    {post?.text ? <p>{post?.text}</p> : <></>}
+                                  <div className="flex dark:text-gray-200 flex-col gap-4 bg-white dark:bg-gray-800">
+                                    {post?.text ? (
+                                      post.text.length > 182 ? (
+                                        active === post?._id ? (
+                                          <>
+                                            <p>{post?.text}</p>
+                                            <button
+                                              className="text-blue-500 underline"
+                                              onClick={toggleHandler(post?._id)}
+                                            >
+                                              show less
+                                            </button>
+                                          </>
+                                        ) : (
+                                          <>
+                                            <p className="overflow-hidden h-12 bg-transparent dark:bg-transparent">
+                                              {post?.text}
+                                            </p>
+                                            <div className="flex gap-2">
+                                              <span>...</span>
+                                              <button
+                                                className="text-blue-500 underline"
+                                                onClick={toggleHandler(
+                                                  post?._id
+                                                )}
+                                              >
+                                                show more
+                                              </button>
+                                            </div>
+                                          </>
+                                        )
+                                      ) : (
+                                        <p className=" bg-transparent dark:bg-transparent">
+                                          {post?.text}
+                                        </p>
+                                      )
+                                    ) : (
+                                      <></>
+                                    )}
                                     {post?.data?.length !== 0 ? (
-                                      <div className="flex flex-col items-center object-contain bg-stone-600 rounded-xl">
+                                      <div className="flex flex-col items-center object-contain bg-stone-600 dark:bg-stone-600 rounded-xl">
                                         <Carousel
+                                          className="sm:w-[400px]"
                                           showArrows={true}
                                           showThumbs={false}
                                           showStatus={false}
@@ -413,7 +455,7 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                                           // onClickItem={onClickItem}
                                           // onClickThumb={onClickThumb}
                                           showIndicators={false}
-                                          width={"400px"}
+                                          // width={"400px"}
                                         >
                                           {post?.data?.map((item) =>
                                             item.includes("mp4") ||
@@ -425,6 +467,8 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                                                 muted
                                                 autoPlay
                                                 controls
+                                                height={"auto"}
+                                                width={"sm:w-[500px]"}
                                               >
                                                 <source
                                                   src={
@@ -470,14 +514,14 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                                     )}
                                   </div>
                                 </div>
-                                <div className="flex space-x-3 border-y border-gray-200 py-3 dark:border-gray-700">
-                                  <a className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white">
+                                <div className="flex space-x-3 border-y border-gray-200 py-3 dark:border-gray-700 bg-transparent dark:bg-transparent">
+                                  <a className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white bg-transparent dark:bg-transparent">
                                     <svg
                                       stroke="currentColor"
                                       fill="currentColor"
                                       strokeWidth="0"
                                       viewBox="0 0 24 24"
-                                      className="mr-2 text-lg"
+                                      className="mr-2 text-lg bg-transparent dark:bg-transparent"
                                       height="1em"
                                       width="1em"
                                       xmlns="http://www.w3.org/2000/svg"
@@ -495,9 +539,9 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                                       onClick={() => {
                                         setReply(!reply);
                                       }}
-                                      className=" mr-3"
+                                      className=" mr-3 bg-transparent dark:bg-transparent"
                                     >
-                                      Reply
+                                      Comment
                                     </button>
                                     <LikeButton
                                       userId={session?.user?.id}

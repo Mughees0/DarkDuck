@@ -190,7 +190,7 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                 />
               </div>
               <ul>
-                <div className="col-span-2 m-auto h-full max-w-3xl overflow-hidden overflow-y-auto mt-3 lg:pt-6 shadow-slate-300 drop-shadow-md bg-white rounded-lg">
+                <div className="col-span-2 m-auto h-full max-w-3xl overflow-hidden dark:border-1 overflow-y-auto mt-3 lg:pt-6 shadow-slate-300 drop-shadow-md bg-white dark:bg-gray-800 dark:drop-shadow-md dark:shadow-slate-300 rounded-lg">
                   <CreatePost
                     username={userData?.username}
                     profileImage={
@@ -206,11 +206,11 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                     posts?.map((post) => {
                       return (
                         <li key={post?._id}>
-                          <div className="col-span-2 m-auto h-full max-w-3xl space-y-6 overflow-hidden overflow-y-auto mt-3 lg:mt-6 shadow-slate-300 drop-shadow-md rounded-b-lg">
+                          <div className="col-span-2 m-auto h-full max-w-3xl space-y-6 overflow-hidden overflow-y-auto mt-3 lg:mt-6 shadow-slate-300 drop-shadow-md rounded-b-lg dark:shadow-slate-300 dark:drop-shadow-2xl">
                             <div className="flex rounded-lg overflow-hidden bg-white dark:border-gray-700 dark:bg-gray-800 flex-col">
-                              <div className="flex h-full flex-col justify-center gap-3 px-6 pt-4  pb-0  bg-white">
-                                <div className="flex items-center space-x-4 bg-transparent">
-                                  <div className="shrink-0 bg-transparent">
+                              <div className="flex h-full flex-col justify-center gap-3 px-6 pt-4  pb-0  bg-white dark:bg-gray-800">
+                                <div className="flex items-center space-x-4 bg-transparent dark:bg-transparent">
+                                  <div className="shrink-0 bg-transparent dark:bg-transparent">
                                     <img
                                       alt="User Profile Picture"
                                       src={
@@ -219,11 +219,11 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                                             post?.userId?.profilePicture
                                           : "/assets/avatar.png"
                                       }
-                                      className="w-16 h-16 object-cover rounded-full bg-transparent"
+                                      className="w-16 h-16 object-cover rounded-full bg-transparent dark:bg-transparent"
                                     />
                                   </div>
-                                  <div className="min-w-0  flex-1 items-start flex flex-col gap-1 h-20  bg-transparent">
-                                    <p className="truncate mt-2 text-sm  font-semibold text-gray-900 dark:text-white bg-transparent">
+                                  <div className="min-w-0  flex-1 items-start flex flex-col gap-1 h-20  bg-transparent dark:bg-transparent">
+                                    <p className="truncate mt-2 text-sm  font-semibold text-gray-900 dark:text-white bg-transparent dark:bg-transparent">
                                       {post?.userId?.username}
                                     </p>
                                     <strong className=" justify-self-start  px-2 bg-gray-900 text-gray-50 rounded dark:bg-white dark:text-black text-sm">
@@ -231,7 +231,7 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                                         ? "Public"
                                         : "Private"}
                                     </strong>
-                                    <p className="truncate text-sm font-normal text-gray-500 dark:text-gray-400 bg-transparent">
+                                    <p className="truncate text-sm font-normal text-gray-500 dark:text-gray-400 bg-transparent dark:bg-transparent">
                                       {post?.createdAt
                                         ? new Date(
                                             post.createdAt
@@ -249,7 +249,7 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                                       fill="currentColor"
                                       strokeWidth="0"
                                       viewBox="0 0 20 20"
-                                      className="text-2xl bg-transparent"
+                                      className="text-2xl bg-transparent dark:bg-transparent"
                                       height="1em"
                                       width="1em"
                                       xmlns="http://www.w3.org/2000/svg"
@@ -259,7 +259,7 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                                   </a>
                                 </div>
                                 <div className="space-y-4">
-                                  <div className="flex dark:text-gray-200 flex-col gap-4 bg-white">
+                                  <div className="flex dark:text-gray-200 flex-col gap-4 bg-white dark:bg-gray-800">
                                     {post?.text ? (
                                       post.text.length > 182 ? (
                                         active === post?._id ? (
@@ -274,7 +274,7 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                                           </>
                                         ) : (
                                           <>
-                                            <p className="overflow-hidden h-12 bg-transparent">
+                                            <p className="overflow-hidden h-12 bg-transparent dark:bg-transparent">
                                               {post?.text}
                                             </p>
                                             <div className="flex gap-2">
@@ -291,7 +291,7 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                                           </>
                                         )
                                       ) : (
-                                        <p className=" bg-transparent">
+                                        <p className=" bg-transparent dark:bg-transparent">
                                           {post?.text}
                                         </p>
                                       )
@@ -301,7 +301,7 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                                     {post?.audio ? (
                                       <audio
                                         controls
-                                        className=" bg-transparent"
+                                        className=" bg-transparent dark:bg-transparent"
                                       >
                                         <source
                                           src={
@@ -316,7 +316,7 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                                     )}
 
                                     {post?.data?.length !== 0 ? (
-                                      <div className=" flex flex-col items-center object-contain bg-stone-600 rounded-xl">
+                                      <div className=" flex flex-col items-center object-contain bg-stone-600 dark:bg-stone-600 rounded-xl">
                                         <Carousel
                                           className="sm:w-[500px]"
                                           showArrows={true}
@@ -337,11 +337,13 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                                             item.includes("avi") ? (
                                               <video
                                                 key={item}
-                                                height="auto"
+                                                height={"auto"}
+                                                width={"sm:w-[500px]"}
                                                 playsInline
                                                 muted
                                                 autoPlay
                                                 controls
+                                                preload="auto"
                                               >
                                                 <source
                                                   src={
@@ -372,14 +374,14 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                                     )}
                                   </div>
                                 </div>
-                                <div className="flex space-x-3 border-y border-gray-200 py-3 dark:border-gray-700 bg-transparent">
-                                  <a className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white bg-transparent">
+                                <div className="flex space-x-3 border-y border-gray-200 py-3 dark:border-gray-700 bg-transparent dark:bg-transparent">
+                                  <a className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white bg-transparent dark:bg-transparent">
                                     <svg
                                       stroke="currentColor"
                                       fill="currentColor"
                                       strokeWidth="0"
                                       viewBox="0 0 24 24"
-                                      className="mr-2 text-lg bg-transparent"
+                                      className="mr-2 text-lg bg-transparent dark:bg-transparent"
                                       height="1em"
                                       width="1em"
                                       xmlns="http://www.w3.org/2000/svg"
@@ -397,9 +399,9 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                                       onClick={() => {
                                         setReply(!reply);
                                       }}
-                                      className=" mr-3 bg-transparent"
+                                      className=" mr-3 bg-transparent dark:bg-transparent"
                                     >
-                                      Reply
+                                      Comment
                                     </button>
                                     <LikeButton
                                       userId={session?.user?.id}
@@ -410,7 +412,7 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                                     />
                                   </a>
 
-                                  <div className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white bg-transparent">
+                                  <div className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white bg-transparent dark:bg-transparent">
                                     {post.likes.length}
                                   </div>
                                 </div>
@@ -458,7 +460,7 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                       <svg
                         width="20"
                         height="20"
-                        className="DocSearch-Search-Icon dark:text-white bg-transparent"
+                        className="DocSearch-Search-Icon dark:text-white bg-transparent dark:bg-transparent"
                         viewBox="0 0 20 20"
                       >
                         <path
