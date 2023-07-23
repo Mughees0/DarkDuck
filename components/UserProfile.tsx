@@ -169,7 +169,7 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
           </div>
         </div>
         <div className="h-full">
-          <div className="container-user w-auto mx-2 flex flex-col lg:flex-row">
+          <div className="container-user w-auto mx-2 flex flex-col lg:flex-row justify-between">
             <aside className="sm:w-2/10 lg:-mx-10 dark:bg-transparent flex flex-col items-center mb-2">
               <div className="main dark:bg-transparent">
                 <div className="html dark:bg-transparent">
@@ -260,15 +260,15 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                 </ul>
               </div>
             </aside>
-            <section className="grow sm:w-6/10 mt-3 border-t-2 lg:border-none lg:mr-10">
-              <h2 className="text-3xl font-bold col-span-2 m-auto max-w-3xl space-y-6 overflow-y-auto mt-3 lg:pt-6  dark:text-white">
+            <section className="grow sm:w-6/10 mt-3 border-t-2 lg:border-none lg:mr-10 px-[13px] sm:px-[0px]">
+              <h2 className="text-3xl font-serif font-bold col-span-2 m-auto max-w-3xl space-y-6 overflow-y-auto mt-3 lg:pt-6  dark:text-white">
                 Your Posts
               </h2>
 
               <div
                 className={
                   newPostModel
-                    ? "flex justify-center items-center bg-opacity-25 dark:bg-opacity-25 bg-gray-400 fixed top-0 z-40 h-screen w-full left-0 right-0  "
+                    ? "flex justify-center items-center bg-opacity-25 dark:bg-opacity-25 bg-gray-400 fixed top-0 z-40 h-screen w-full left-0 right-0"
                     : "hidden"
                 }
               >
@@ -339,11 +339,11 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                     posts?.map((post) => {
                       return (
                         <li key={post?._id}>
-                          <div className="col-span-2 m-auto h-full max-w-3xl space-y-6 overflow-hidden overflow-y-auto mt-3 lg:mt-6 shadow-slate-300 drop-shadow-md rounded-b-lg dark:shadow-slate-300">
+                          <div className="col-span-2 m-auto h-full max-w-3xl space-y-6 overflow-hidden overflow-y-auto mt-3 lg:mt-6 shadow-slate-300 drop-shadow-md rounded-lg dark:shadow-slate-300">
                             <div className="flex rounded-lg overflow-hidden bg-white dark:border-gray-700 dark:bg-gray-800 flex-col">
-                              <div className="flex h-full flex-col justify-center gap-3 px-6 pt-4  pb-0  bg-white dark:bg-gray-800">
+                              <div className="flex h-full flex-col justify-center gap-3 px-6 pt-4 pb-0  bg-white dark:bg-gray-800">
                                 <div className="flex items-center space-x-4 bg-transparent dark:bg-transparent">
-                                  <div className="shrink-0 bg-transparent">
+                                  <div className="shrink-0 bg-transparent dark:bg-transparent">
                                     <img
                                       alt="User Profile Picture"
                                       src={
@@ -352,7 +352,7 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                                             post?.userId?.profilePicture
                                           : "/assets/avatar.png"
                                       }
-                                      className="w-16 h-16 object-cover rounded-full bg-transparent dark:bg-transparent"
+                                      className="w-16 h-16 object-cover rounded-full bg-transparent dark:bg-transparent "
                                     />
                                   </div>
                                   <div className="min-w-0  flex-1 items-start flex flex-col gap-1 h-20 bg-transparent dark:bg-transparent">
@@ -458,7 +458,7 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                                     {post?.data?.length !== 0 ? (
                                       <div className=" flex flex-col items-center object-contain bg-stone-600 dark:bg-stone-600 rounded-xl">
                                         <Carousel
-                                          className="w-[300px] sm:w-[500px]"
+                                          className="w-[300px] sm:w-[400px]"
                                           showArrows={true}
                                           showThumbs={false}
                                           showStatus={false}
@@ -478,7 +478,7 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                                               <video
                                                 key={item}
                                                 height={"auto"}
-                                                width={"w-[300px] sm:w-[500px]"}
+                                                width={"w-[300px] sm:w-[400px]"}
                                                 playsInline
                                                 muted
                                                 autoPlay
@@ -551,7 +551,7 @@ const UserBio = ({ updatePosts, setUpdatePosts }) => {
                                       post={post}
                                     />
                                   </a>
-                                  <div className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white">
+                                  <div className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white bg-transparent dark:bg-transparent">
                                     {post.likes.length}
                                   </div>
                                 </div>

@@ -8,7 +8,7 @@ function CreatePost({ newPostModel, setNewPostModel, profileImage, username }) {
 
   return (
     <>
-      <section className=" flex items-center gap-3 px-5 pt-5 sm:pt-1 border-b pb-5 border-gray-400 bg-white dark:bg-gray-800">
+      <section className=" flex items-center gap-3 px-5 pt-5 lg:pt-1 border-b pb-5 border-gray-400 bg-white dark:bg-gray-800">
         <img
           className=" rounded-full w-16 h-16 object-cover"
           src={

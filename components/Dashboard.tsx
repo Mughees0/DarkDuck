@@ -179,7 +179,7 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                     posts?.map((post) => {
                       return (
                         <li key={post?._id}>
-                          <div className="col-span-2 m-auto h-full max-w-3xl space-y-6 overflow-hidden overflow-y-auto mt-3 lg:mt-6 shadow-slate-300 drop-shadow-md rounded-b-lg dark:shadow-slate-300 dark:drop-shadow-2xl">
+                          <div className="col-span-2 m-auto h-full max-w-3xl space-y-6 overflow-hidden overflow-y-auto mt-3 lg:mt-6 shadow-slate-300 drop-shadow-md rounded-lg dark:shadow-slate-300 dark:drop-shadow-2xl">
                             <div className="flex rounded-lg overflow-hidden bg-white dark:border-gray-700 dark:bg-gray-800 flex-col">
                               <div className="flex h-full flex-col justify-center gap-3 px-6 pt-4  pb-0  bg-white dark:bg-gray-800">
                                 <div className="flex items-center space-x-4 bg-transparent dark:bg-transparent">
