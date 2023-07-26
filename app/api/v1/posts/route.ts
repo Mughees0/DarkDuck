@@ -12,13 +12,13 @@ export async function GET(request: NextRequest, params: Params) {
   const endIndex = Number(page) * perPage;
   const startIndex = endIndex - perPage;
   try {
-    const totalCount = await Post.count();
+    const totalCount = await Post.count({ audience: "Public" });
     let pageCount = 1;
     let userPosts = {};
     if (totalCount > perPage) {
       const num = totalCount / perPage + 1;
       pageCount = Math.trunc(num);
-      userPosts = await Post.find({ audience: "public" })
+      userPosts = await Post.find({ audience: "Public" })
         .sort({ _id: -1 })
         .skip(startIndex)
         .limit(endIndex)
@@ -26,7 +26,7 @@ export async function GET(request: NextRequest, params: Params) {
         .exec();
     } else {
       page = "1";
-      userPosts = await Post.find({ audience: "public" })
+      userPosts = await Post.find({ audience: "Public" })
         .sort({ _id: -1 })
         .populate("userId")
         .exec();

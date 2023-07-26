@@ -200,9 +200,7 @@ const Dashboard = ({ setUpdatePosts, updatePosts }) => {
                                       {post?.userId?.username}
                                     </p>
                                     <strong className=" justify-self-start  px-2 bg-gray-900 text-gray-50 rounded dark:bg-white dark:text-black text-sm">
-                                      {post?.audience === "public"
-                                        ? "Public"
-                                        : "Private"}
+                                      {post?.audience}
                                     </strong>
                                     <p className="truncate text-sm font-normal text-gray-500 dark:text-gray-400 bg-transparent dark:bg-transparent">
                                       {post?.createdAt

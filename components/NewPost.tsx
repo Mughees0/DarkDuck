@@ -1,6 +1,6 @@
 "use client";
 import { useTimer } from "@/hooks/useTimer";
-import { StorageRes, UserDataResponse } from "@/types";
+import { HTMLElementEvent, StorageRes, UserDataResponse } from "@/types";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { FormEvent, useEffect, useRef, useState } from "react";
@@ -252,7 +252,9 @@ function NewPost({
     progress.set(0);
   }
   const options = ["Public", "Private"];
-  const onOptionChangeHandler = (event) => {
+  const onOptionChangeHandler = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     setMode(event.target.value);
   };
 
