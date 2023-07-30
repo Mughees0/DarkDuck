@@ -5,7 +5,8 @@ export const dynamic = "force-dynamic";
 
 export async function POST(request: NextRequest) {
   await dbConnect();
-  const { userId, audio, audience, data, text } = await request.json();
+  const { userId, audio, audience, data, text, createdAt } =
+    await request.json();
 
   // create new Post on MongoDB
   const newPost = new Post({
@@ -14,6 +15,7 @@ export async function POST(request: NextRequest) {
     audience: audience,
     data: data,
     text: text,
+    createdAt: createdAt,
   });
 
   return newPost

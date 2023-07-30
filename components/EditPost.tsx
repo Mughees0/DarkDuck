@@ -291,6 +291,7 @@ function EditPost({
           audience: mode,
           text: userText,
           data: [...previewArray, ...names],
+          createdAt: new Date(),
         },
         {
           headers: {

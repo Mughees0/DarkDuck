@@ -27,7 +27,8 @@ export async function GET(request: Request, { params }) {
 export async function POST(request: Request, { params }) {
   await dbConnect();
   const { id } = params;
-  const { userId, audio, audience, data, text } = await request.json();
+  const { userId, audio, audience, data, text, createdAt } =
+    await request.json();
 
   try {
     const userPost = await Post.findOneAndUpdate(
@@ -38,6 +39,7 @@ export async function POST(request: Request, { params }) {
         audience: audience,
         data: data,
         text: text,
+        createdAt: createdAt,
       }
     );
     return NextResponse.json({ success: true, userPost }, { status: 200 });

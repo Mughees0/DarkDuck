@@ -211,6 +211,7 @@ function NewPost({
           audience: mode,
           text: userText,
           data: names,
+          createdAt: new Date(),
         },
         {
           headers: {
