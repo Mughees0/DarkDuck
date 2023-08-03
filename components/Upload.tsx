@@ -8,11 +8,6 @@ import {
 } from "react";
 import S3 from "aws-sdk/clients/s3";
 
-const s3 = new S3({
-  accessKeyId: "AKIA2ARLEFL4TZQSFZWJ",
-  secretAccessKey: "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",
-  region: "EU(Stockholm)eu-north-1",
-});
 
 export default function Upload() {
   const [files, setFiles] = useState<FileList | null>(null);
